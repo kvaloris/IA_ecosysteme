@@ -22,8 +22,7 @@ function selection(fishes) {
     while (singles.length > 1) {
 
         // Choose the parameters
-        let r = 5; // initial radius of search for potential partner
-        const ri = 2; // increase of search radius if no fish is found within radius
+        let n = 3; // Number max of suitors for a fish
 
         // Chose a random individual among those singles 
         const firstIndex = getRandomInt(singles.length);
@@ -31,22 +30,14 @@ function selection(fishes) {
         // Remove him from the singles
         singles.splice(firstIndex, 1);
 
-        // Identidy all fishes within a radius of r of that individual
-        // If none, increase r by 2 until fishes are found or no longer anyone single
-
-        let suitors;
-
-        do {
-            suitors = singles.filter(fish => getDistance(first.x, first.y, first.z, fish.x, fish.y, fish.z) <= r);
-            r += ri; 
-        }
-        while (suitors.length === 0)
-
-        // Order by distance
-        suitors = orderByDistance(suitors, first);
+        // Get the n nearest single fishes
+        // If not enough, get what's left
+        let suitors = orderByDistance(singles, first).slice(0, n);
+        console.log(getDistances(singles, first));
         console.log(suitors);
         
         // Identidy the suitor with best fitness
+        // If same, choose the first found who is also the nearest since array ordered by distances
         const fitnesses = suitors.map(suitor => suitor.fitness);
         const partnerIndex = getIndexOfBest(fitnesses);
         const partner = suitors[partnerIndex];
@@ -85,7 +76,7 @@ function getDistances(fishes, first) {
     let distances = [];
     fishes.forEach(fish => {
         let d = getDistance(first.x, first.y, first.z, fish.x, fish.y, fish.z);
-        distances.push(d);
+        distances.push([fish.id, d]);
     });
     return distances;
 }
