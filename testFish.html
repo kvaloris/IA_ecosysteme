@@ -8,18 +8,26 @@
 
     <body>
         bla
+        poisson 1
         <div id="p1"></div>
+        poisson 2
         <div id="p2"></div>
+        poisson enfant
         <div id="pEnfant"></div>
+
+        teste
+        <div id="teste"></div>
         <script src="Fish.js"></script>
         <script>
-            poisson1 = Fish.fishRamdom(0,100,0,100);
+            poisson1 = Fish.fishRamdom(0,100,0,100,0,100);
             document.querySelector('#p1').innerHTML= poisson1.toString();
-            poisson2 = Fish.fishRamdom(0,100,0,100);
+            poisson2 = Fish.fishRamdom(0,100,0,100,0,100);
             document.querySelector('#p2').innerHTML= poisson2.toString();
 
             enfant = Fish.generateChild(poisson1,poisson2);
             document.querySelector('#pEnfant').innerHTML= enfant.toString();
+
+            document.querySelector('#teste').innerHTML= Fish.bestFishlife.toString();
         </script>
         <!-- Corps de la page -->
         
