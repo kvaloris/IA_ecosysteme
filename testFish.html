@@ -14,20 +14,29 @@
         <div id="p2"></div>
         poisson enfant
         <div id="pEnfant"></div>
+        poisson ref pour vivre
+        <div id="BTFishL"></div>
+        poisson ref pour humain
+        <div id="BTFishH"></div>
 
         teste
         <div id="teste"></div>
         <script src="Fish.js"></script>
         <script>
+            //poissson 1 random
             poisson1 = Fish.fishRamdom(0,100,0,100,0,100);
-            document.querySelector('#p1').innerHTML= poisson1.toString();
+            //document.querySelector('#p1').innerHTML= poisson1.toString();
+
+            //poissson 2 random
             poisson2 = Fish.fishRamdom(0,100,0,100,0,100);
-            document.querySelector('#p2').innerHTML= poisson2.toString();
+            //document.querySelector('#p2').innerHTML= poisson2.toString();
 
+            //enfant des 2 poisson 
             enfant = Fish.generateChild(poisson1,poisson2);
-            document.querySelector('#pEnfant').innerHTML= enfant.toString();
+            //document.querySelector('#pEnfant').innerHTML= enfant.toString();
 
-            document.querySelector('#teste').innerHTML= Fish.bestFishlife.toString();
+            document.querySelector('#BTFishL').innerHTML= Fish.bestFishlife.toString();
+            document.querySelector('#BTFishH').innerHTML= Fish.bestFishToHumain.toString();
         </script>
         <!-- Corps de la page -->
         

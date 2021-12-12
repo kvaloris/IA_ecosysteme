@@ -7,6 +7,7 @@ class Fish {
     appearance=[0,0,0]; //[yeux, queu, nagoir]
     ageMax;
     yearsOld=0;
+
     constructor(x,y,z,color,size,appearance,ageMax ){
         this.x = x;
         this.y = y;
@@ -18,7 +19,6 @@ class Fish {
         this.yearsOld=0;
     }
 
-
     toString (){
         return 'Caractéristique: <br/>' + 
                 '     - position: ('+this.x+';'+this.y+';'+this.z+')'+
@@ -28,14 +28,12 @@ class Fish {
                 '<br/>- ageMax: '+ this.ageMax+
                 '<br/>- yearsOld: '+ this.yearsOld+
                 '<br/>- scoreLife: '+this.getScoreLife()+
+                '<br/>- scoreToHumain: '+this.getScoreToHumain()+
                 '<br/>';
     }
 
-    static fishLambda(){
-        return new this(0,0,0,[0,0,0],2,'normale',10);
-    }
-
-    static fishRamdom(xMin, xMax, yMin, yMax, zMin, zMax ){
+    //retourne un poisson aléatoire
+    static fishRamdom(xMin=0, xMax=100, yMin=0, yMax=100, zMin=0, zMax=100 ){
         var minSize =1;
         var maxSize =10;
         var minAgeMax=1;
@@ -50,6 +48,7 @@ class Fish {
             Math.floor(Math.random() * (maxAgeMax - minAgeMax) + minAgeMax));
     }
 
+    //returne l'enfant des deux poissons passés en parametre
     static generateChild(fish1, fish2){
         if (fish1 instanceof Fish && fish2 instanceof Fish ){
             return new this(
@@ -61,52 +60,70 @@ class Fish {
                 mixAppearance(fish1.appearance, fish2.appearance),
                 Math.floor((fish1.ageMax+fish2.ageMax)/2));
         }
-        return "Erreur";
+        console.error(" Erreur generateChild fish1 or fish2 is not a fish; return fishRamdom ");
+        return fishRamdom();
     }
-
-    static bestFishlife = new this(0,0,0,[0,200,30],5,[2,1,2],5);
     
 
-    getScoreLife(){
+    static bestFishlife = new this(0,0,0,[0,200,30],5,[2,1,2],5);
+    static improtanceLife = { 
+        "xFacteur" : 0,
+        "yFacteur" : 0,
+        "zFacteur" : 0,
+        "colorFacteur" : 0.01,
+        "sizeFacteur" : 1,
+        "appearanceFacteur" : 3,
+        "yearsOldFacteur" : 2
+     };
+    static bestFishToHumain = new this(0,0,0,[50,60,80],10,[2,1,2],2);
+    static improtanceToHumain = { 
+        "xFacteur" : 0,
+        "yFacteur" : 0,
+        "zFacteur" : 0,
+        "colorFacteur" : 0.05,
+        "sizeFacteur" : 2,
+        "appearanceFacteur" : 3,
+        "yearsOldFacteur" : 1
+     };
+
+
+    static getScoreComparedToTheBestFish(fishToComp, bestFish, improtanceLifacteur){
         var score = 0; // meilleur score= 0
 
-        // improtance
-        var xFacteur = 0;
-        var yFacteur = 0;
-        var zFacteur = 0;
-        var colorFacteur=0.01;
-        var sizeFacteur=1;
-        var appearanceFacteur=3;
-        var yearsOldFacteur=2;
-
-        Fish.bestFishlife.yearsOld = Fish.bestFishlife.ageMax;
+        bestFish.yearsOld = bestFish.ageMax;
 
 
         //x y z
-        score = score + Math.abs(this.x - Fish.bestFishlife.x)*xFacteur //x
-        score = score + Math.abs(this.y - Fish.bestFishlife.y)*yFacteur //y
-        score = score + Math.abs(this.z - Fish.bestFishlife.z)*zFacteur //z
+        score = score + Math.abs(fishToComp.x - bestFish.x)*improtanceLifacteur["xFacteur"] //x
+        score = score + Math.abs(fishToComp.y - bestFish.y)*improtanceLifacteur["yFacteur"] //y
+        score = score + Math.abs(fishToComp.z - bestFish.z)*improtanceLifacteur["zFacteur"] //z
 
         //color
-        score = score + Math.abs(this.color[0] - Fish.bestFishlife.color[0])*colorFacteur // color[0]
-        score = score + Math.abs(this.color[1] - Fish.bestFishlife.color[1])*colorFacteur // color[1]
-        score = score + Math.abs(this.color[2] - Fish.bestFishlife.color[2])*colorFacteur // color[2]
+        score = score + Math.abs(fishToComp.color[0] - bestFish.color[0])*improtanceLifacteur["colorFacteur"] // color[0]
+        score = score + Math.abs(fishToComp.color[1] - bestFish.color[1])*improtanceLifacteur["colorFacteur"] // color[1]
+        score = score + Math.abs(fishToComp.color[2] - bestFish.color[2])*improtanceLifacteur["colorFacteur"] // color[2]
 
         //size
-        score = score + Math.abs(this.size - Fish.bestFishlife.size)*sizeFacteur
+        score = score + Math.abs(fishToComp.size - bestFish.size)*improtanceLifacteur["sizeFacteur"]
 
         //Appearance
-        score = score + Math.abs(this.appearance[0] - Fish.bestFishlife.appearance[0])*appearanceFacteur //yeux
-        score = score + Math.abs(this.appearance[1] - Fish.bestFishlife.appearance[1])*appearanceFacteur //queu
-        score = score + Math.abs(this.appearance[2] - Fish.bestFishlife.appearance[2])*appearanceFacteur //nagoires
+        score = score + Math.abs(fishToComp.appearance[0] - bestFish.appearance[0])*improtanceLifacteur["appearanceFacteur"] //yeux
+        score = score + Math.abs(fishToComp.appearance[1] - bestFish.appearance[1])*improtanceLifacteur["appearanceFacteur"] //queu
+        score = score + Math.abs(fishToComp.appearance[2] - bestFish.appearance[2])*improtanceLifacteur["appearanceFacteur"] //nagoires
         
         //age
-        score = score + Math.abs(this.yearsOld - Fish.bestFishlife.ageMax)*yearsOldFacteur
+        score = score + Math.abs(fishToComp.yearsOld - bestFish.ageMax)*improtanceLifacteur["yearsOldFacteur"]
 
         return score;
     }
 
-    
+    getScoreLife(){
+        return Fish.getScoreComparedToTheBestFish(this, Fish.bestFishlife,Fish.improtanceLife)
+    }
+
+    getScoreToHumain(){
+        return Fish.getScoreComparedToTheBestFish(this, Fish.bestFishToHumain,Fish.improtanceToHumain)
+    }
 }
 
 function colorRamdom(){
