@@ -30,15 +30,17 @@ function selection(fishes) {
         // Remove him from the singles
         singles.splice(firstIndex, 1);
 
+        console.log("Poisson choisi a pour id ", first.id);
+
         // Get the n nearest single fishes
         // If not enough, get what's left
         let suitors = orderByDistance(singles, first).slice(0, n);
-        console.log(getDistances(singles, first));
-        console.log(suitors);
+        console.log("Id, Distances, Scores avec poisson choisi : ", getDistancesAndScores(singles, first));
+        console.log("Les prétendants sont : ", suitors);
         
         // Identidy the suitor with best fitness
         // If same, choose the first found who is also the nearest since array ordered by distances
-        const fitnesses = suitors.map(suitor => suitor.fitness);
+        const fitnesses = suitors.map(suitor => suitor.getScoreLife());
         const partnerIndex = getIndexOfBest(fitnesses);
         const partner = suitors[partnerIndex];
         // Remove him from the singles
@@ -51,6 +53,8 @@ function selection(fishes) {
 
         // Add the newly formed couple to the list of happy couples
         couples.push([first, partner]);
+
+        console.log("Poisson ", first.id, " est en couple avec Poisson ", partner.id);
 
     }
 
@@ -72,11 +76,11 @@ function orderByDistance(fishes, first) {
 }
 
 // Only for verification, else useless
-function getDistances(fishes, first) {
+function getDistancesAndScores(fishes, first) {
     let distances = [];
     fishes.forEach(fish => {
         let d = getDistance(first.x, first.y, first.z, fish.x, fish.y, fish.z);
-        distances.push([fish.id, d]);
+        distances.push([fish.id, d, fish.getScoreLife()]);
     });
     return distances;
 }
@@ -97,7 +101,8 @@ function getIndexOfBest(array) {
     if (array.length === 0) throw "Le tableau est vide."
     let bestId = 0;
     for (let i = 1; i < array.length; i++) {
-        if (array[i] > array[bestId]) bestId = i;
+        // Best score is the lowest
+        if (array[i] < array[bestId]) bestId = i;
     }
     return bestId;
 }

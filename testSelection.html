@@ -15,11 +15,7 @@
     // Create fishes randomly for the test
     const fishes = [];
     for(let i=0; i<11; i++) {
-      let x = getRandomInt(10);
-      let y = getRandomInt(10);
-      let z = getRandomInt(10);
-      let fitness = getRandomInt(10);
-      fishes.push(new Fish(i, x, y, z, fitness));
+      fishes.push(Fish.fishRamdom(i));
     }
 
     console.log(fishes);
