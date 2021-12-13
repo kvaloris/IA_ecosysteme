@@ -1,7 +1,7 @@
 /**
  * EXPLANATION
  * All individuals will reproduce except one if uneven population
- * Each randomly chosen indivual will form a couple with the nearest fish with best fitness in a radius of r
+ * Each randomly chosen indivual will form a couple with the fish with best fitness among a number n of nearest fishes
  * 
  * RETURN
  * Function will return an array with the couples which are arrays of 2 Fish
