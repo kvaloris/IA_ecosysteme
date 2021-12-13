@@ -37,9 +37,9 @@ class Fish {
             Math.random() * (YMAX - YMIN) + YMIN,
             Math.random() * (ZMAX - ZMIN) + ZMIN,
             colorRamdom(),
-            Math.floor(Math.random() * (MAXSIZE - MINSIZE) + MINSIZE),
+            Math.round(Math.random() * (MAXSIZE - MINSIZE) + MINSIZE),
             appearanceRamdon(),
-            Math.floor(Math.random() * (MAXAGEMAX - MINAGEMAX) + MINAGEMAX));
+            Math.round(Math.random() * (MAXAGEMAX - MINAGEMAX) + MINAGEMAX));
     }
 
     //returne l'enfant des deux poissons passés en parametre
@@ -50,9 +50,9 @@ class Fish {
                 (fish1.y+fish2.y)/2,
                 (fish1.z+fish2.z)/2,
                 mixColor(fish1.color, fish2.color),
-                Math.floor((fish1.size+fish2.size)/2),
+                Math.round((fish1.size+fish2.size)/2),
                 mixAppearance(fish1.appearance, fish2.appearance),
-                Math.floor((fish1.ageMax+fish2.ageMax)/2));
+                Math.round((fish1.ageMax+fish2.ageMax)/2));
         }
         console.error(" Erreur generateChild fish1 or fish2 is not a fish; return fishRamdom ");
         return "Erreur";
@@ -72,36 +72,31 @@ class Fish {
 
 //retourne une couleur aléatoire
 function colorRamdom(){
-    return [
-        Math.floor(Math.random() * 255),
-        Math.floor(Math.random() * 255),
-        Math.floor(Math.random() * 255)];
+    return Math.round(Math.random() * TABColor.length);
 }
 
 //retourne le mélange des 2 couleurs
 function mixColor(color1,color2){
-    if (Array.isArray(color1)&& Array.isArray(color2)
-        && color1.length==3 &&color2.length==3){
-            return [
-                Math.floor((color1[0]+color2[0])/2),
-                Math.floor((color1[1]+color2[1])/2),
-                Math.floor((color1[2]+color2[2])/2)];
+    var aleat= Math.round(Math.random());
+    console.log(aleat);
+    if(aleat ==0){
+        return color1;
     }
-    return "Erreur";
+    return color2;
 }
 
 //retourne une apparence de poisson aléatoire
 function appearanceRamdon(){ //TODO
 
     return  [
-        Math.floor(Math.random() * MAXeye),
-        Math.floor(Math.random() * MAXtail),
-        Math.floor(Math.random() * MAXfin)];
+        Math.round(Math.random() * MAXeye),
+        Math.round(Math.random() * MAXtail),
+        Math.round(Math.random() * MAXfin)];
 }
 
 //retourne une recombinaison d'apparence avec le pivot aléatoire
 function mixAppearance(appearance1,appearance2){ //TODO
-    var indice = Math.floor(Math.random() * (appearance1.length))
+    var indice = Math.round(Math.random() * (appearance1.length))
     for (var i=0; i<indice; i++ ){
         appearance1[i]= appearance2[i];
     }
@@ -145,6 +140,7 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, improtanceLifacteur
 /*--------------------------------------------------------------------*/
 
 const XMIN=0, XMAX=100, YMIN=0, YMAX=100, ZMIN=0, ZMAX=100;
+const TABColor= [0,1,2];
 const MINSIZE =1,  MAXSIZE =10;
 const MINAGEMAX=1,  MAXAGEMAX=30;
 const MAXeye=4, MAXtail=2, MAXfin=4; //yeux, queue, nageoir
