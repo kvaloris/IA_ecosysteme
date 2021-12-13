@@ -3,7 +3,7 @@ class Fish {
     x;y;z;
     color=[0,0,0];
     size;
-    appearance=[0,0,0]; //[yeux, queu, nageoir]
+    appearance=[0,0,0]; // [eyes, tail, fin]
     ageMax;
     yearsOld=0;
 
@@ -32,7 +32,7 @@ class Fish {
                 '<br/>';
     }
 
-    //retourne un poisson aléatoire
+    // Return a random fish
     static fishRandom(id, fishes){
         
         let pos = [];
@@ -56,7 +56,7 @@ class Fish {
             Math.round(Math.random() * (MAXAGEMAX - MINAGEMAX) + MINAGEMAX));
     }
 
-    //returne l'enfant des deux poissons passés en parametre
+    // Return the child of fish 1 and fish 2
     static generateChild(id, fish1, fish2, fishes){
         if (fish1 instanceof Fish && fish2 instanceof Fish ){
 
@@ -85,23 +85,23 @@ class Fish {
     }
     
 
-    //obtenir sont score pour vivre (0 = le meilleur)
+    // Return the score for its ability to live ( 0 = best)
     getScoreLife(){
         return getScoreComparedToTheBestFish(this, bestFishlife, improtanceLife)
     }
 
-    //obtenir sont score d'interet des humains (0 = le meilleur)
+    // Return its score for human interest ( 0 = best)
     getScoreToHumain(){
         return getScoreComparedToTheBestFish(this, bestFishToHumain, improtanceToHumain)
     }
 }
 
-//retourne une couleur aléatoire
+// Return a random color
 function colorRamdom(){
     return Math.round(Math.random() * (TABColor.length - 1));
 }
 
-//retourne le mélange des 2 couleurs
+// Return the mix of 2 colors
 function mixColor(color1,color2){
     var aleat= Math.round(Math.random());
     // console.log(aleat);
@@ -111,7 +111,7 @@ function mixColor(color1,color2){
     return color2;
 }
 
-//retourne une apparence de poisson aléatoire
+// Return a random appearance 
 function appearanceRamdon(){ //TODO
 
     return  [
@@ -120,7 +120,7 @@ function appearanceRamdon(){ //TODO
         Math.round(Math.random() * MAXfin)];
 }
 
-//retourne une recombinaison d'apparence avec le pivot aléatoire
+// Return a recombination of appearance with random pivot
 function mixAppearance(appearance1,appearance2){ //TODO
     var indice = Math.round(Math.random() * (appearance1.length))
     for (var i=0; i<indice; i++ ){
@@ -129,9 +129,9 @@ function mixAppearance(appearance1,appearance2){ //TODO
     return appearance1;
 }
 
-//fonction pour comparé un poisson et une reférence avec les coef d'importance
+// Compare a fish and a reference with importance coefficients
 function getScoreComparedToTheBestFish(fishToComp, bestFish, improtanceLifacteur){
-    var score = 0; // meilleur score= 0
+    var score = 0; //  best score = 0
 
     bestFish.yearsOld = bestFish.ageMax;
 
@@ -180,7 +180,7 @@ function generateCorrectPosition(fishes) {
 
 
 /*--------------------------------------------------------------------*/
-/*--------------------        CONCTANTES          --------------------*/
+/*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
 
 const XMIN=0, XMAX=100, YMIN=0, YMAX=100, ZMIN=0, ZMAX=100;
@@ -190,11 +190,11 @@ const MINAGEMAX=1,  MAXAGEMAX=30;
 const MAXeye=4, MAXtail=2, MAXfin=4; //yeux, queue, nageoir
 
 
-/* -------------------   POISSONS POUR COMPARER   --------------------*/
+/* -------------------   FISHES FOR REFERENCE  --------------------*/
 
-// refférence pour le poisson le plus apte pour vivre
+// reference for fish most suited for living
 bestFishlife = new Fish(0,0,0,0,[0,200,30],5,[2,1,2],5);
-//facteur d'importance
+// importance coefficient
 var improtanceLife = { 
     "xFacteur" : 0,
     "yFacteur" : 0,
@@ -205,9 +205,9 @@ var improtanceLife = {
     "yearsOldFacteur" : 0
 };
 
-// refférence pour le poisson le plus apte pour etre manger
+// reference for fish most suited for being eaten by humans
 bestFishToHumain = new Fish(0,0,0,0,[50,60,80],10,[2,1,2],2);
-//facteur d'importance
+// importance coefficient
 var improtanceToHumain = { 
     "xFacteur" : 0,
     "yFacteur" : 0,

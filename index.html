@@ -149,7 +149,6 @@
 
       const couples = selection(fishesArray); // [  [fish1, fish2], ...]
       fishesArray = [];
-      console.log(couples);
 
       couples.forEach(couple => {
         let child1 = Fish.generateChild(fishesArray.length, couple[0], couple[1], fishesArray);
@@ -158,17 +157,17 @@
         fishesArray.push(child2);
       });
 
-      console.log(fishesArray);
-
-
       deleteGroup();
 
-      displayFishes();
-
       console.log("NEW GENERATION");
-      // console.log("NEW GENERATION");
+
     }
-    document.addEventListener('keydown', () => generateNewGeneration());
+    document.addEventListener('keydown', () => {
+      for(let i=0; i<100; i++) {
+        generateNewGeneration();
+      }
+      displayFishes();
+    });
 
   </script>
 

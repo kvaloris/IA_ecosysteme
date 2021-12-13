@@ -27,13 +27,9 @@ function selection(fishes) {
         // Remove him from the singles
         singles.splice(firstIndex, 1);
 
-        // console.log("Poisson choisi a pour id ", first.id);
-
         // Get the n nearest single fishes
         // If not enough, get what's left
         let suitors = orderFishesByDistanceFromChosenFish(singles, first).slice(0, n);
-        // console.log("Id, Distances, Scores avec poisson choisi : ", getDistancesAndScores(singles, first));
-        // console.log("Les prétendants sont : ", suitors);
         
         // Identidy the suitor with best fitness
         // If same, choose the first found who is also the nearest since array ordered by distances
@@ -50,8 +46,6 @@ function selection(fishes) {
 
         // Add the newly formed couple to the list of happy couples
         couples.push([first, partner]);
-
-        // console.log("Poisson ", first.id, " est en couple avec Poisson ", partner.id);
 
     }
 
