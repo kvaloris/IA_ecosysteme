@@ -12,40 +12,40 @@
 
 function selection(fishes) {
 
-    const singles = fishes.slice(0);
+    // const singles = fishes.slice(0);
     const couples = [];
 
     // As long as there is more than 1 fish, form couples
-    while (singles.length > 1) {
+    for(let i=0; i<fishes.length; i++) {
 
         // Choose the parameters
-        let n = 3; // Number max of suitors for a fish
+        let n = 5; // Number max of suitors for a fish
 
         // Chose a random individual among those singles 
-        const firstIndex = getRandomInt(singles.length);
-        const first = singles[firstIndex];
+        const first = fishes[i];
         // Remove him from the singles
-        singles.splice(firstIndex, 1);
+        // singles.splice(firstIndex, 1);
 
         // Get the n nearest single fishes
         // If not enough, get what's left
-        let suitors = orderFishesByDistanceFromChosenFish(singles, first).slice(0, n);
+        let suitors = orderFishesByDistanceFromChosenFish(fishes, first).slice(0, n);
         
         // Identidy the suitor with best fitness
         // If same, choose the first found who is also the nearest since array ordered by distances
         const fitnesses = suitors.map(suitor => suitor.getScoreLife());
         const partnerIndex = getIndexOfBestScore(fitnesses);
         const partner = suitors[partnerIndex];
-        // Remove him from the singles
-        for (let i = 0; i < singles.length; i++) {
-            if (singles[i].id === partner.id) {
-                singles.splice(i, 1);
-                break;
-            }
-        }
+        // // Remove him from the singles
+        // for (let i = 0; i < singles.length; i++) {
+        //     if (singles[i].id === partner.id) {
+        //         singles.splice(i, 1);
+        //         break;
+        //     }
+        // }
 
         // Add the newly formed couple to the list of happy couples
         couples.push([first, partner]);
+
 
     }
 

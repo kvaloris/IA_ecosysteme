@@ -142,7 +142,7 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, improtanceLifacteur
     score = score + Math.abs(fishToComp.z - bestFish.z)*improtanceLifacteur["zFacteur"]; //z
 
     //color
-    score = score + (fishToComp.color - bestFish.color ==0 ? 0 : 1*improtanceLifacteur["colorFacteur"]); // color[0]
+    score = score + (fishToComp.color === bestFish.color ? 0 : 1*improtanceLifacteur["colorFacteur"]); // color[0]
     
     //size
     score = score + Math.abs(fishToComp.size - bestFish.size)*improtanceLifacteur["sizeFacteur"];
@@ -197,8 +197,8 @@ var improtanceLife = {
     "xFacteur" : 0/XMAX,
     "yFacteur" : 0/YMAX,
     "zFacteur" : 0/ZMAX,
-    "colorFacteur" : 5,
-    "sizeFacteur" : 1/ MAXSIZE,
+    "colorFacteur" : 50,
+    "sizeFacteur" : 0, //1/ MAXSIZE,
     "appearanceFacteur" : 0,
     "yearsOldFacteur" : 0/MAXAGEMAX
 };

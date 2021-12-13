@@ -139,7 +139,7 @@
       renderer.render(scene, camera);
     }
 
-    init(100);
+    init(3);
     displayFishes();
 
     animate();
@@ -153,19 +153,17 @@
       couples.forEach(couple => {
         let child1 = Fish.generateChild(fishesArray.length, couple[0], couple[1], fishesArray);
         fishesArray.push(child1);
-        let child2 = Fish.generateChild(fishesArray.length, couple[1], couple[0], fishesArray);
-        fishesArray.push(child2);
       });
 
       deleteGroup();
 
-      console.log("NEW GENERATION");
 
     }
     document.addEventListener('keydown', () => {
-      for(let i=0; i<100; i++) {
+      for(let i=0; i<1000; i++) {
         generateNewGeneration();
       }
+      // generateNewGeneration();
       displayFishes();
     });
 
