@@ -85,18 +85,6 @@ function getDistancesAndScores(fishes, first) {
     return distances;
 }
 
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-}
-
-function containsObject(obj, list) {
-    list.some(elt => elt === obj);
-}
-
-function getDistance(x1, y1, z1, x2, y2, z2) {
-    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
-}
-
 function getIndexOfBestScore(scores) {
     if (scores.length === 0) throw "Le tableau est vide."
     let bestId = 0;
