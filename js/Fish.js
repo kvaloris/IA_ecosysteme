@@ -62,7 +62,7 @@ class Fish {
             return new this(
                 (fish1.x+fish2.x)/2,
                 (fish1.y+fish2.y)/2,
-                (fish1.z+fish2.z)/2,
+                fish1.z+30,
                 mixColor(fish1.color, fish2.color),
                 Math.round((fish1.size+fish2.size)/2),
                 mixAppearance(fish1.appearance, fish2.appearance),
@@ -86,7 +86,7 @@ class Fish {
 
 //retourne une couleur aléatoire
 function colorRamdom(){
-    return Math.round(Math.random() * TABColor.length);
+    return Math.round(Math.random() * (TABColor.length - 1));
 }
 
 //retourne le mélange des 2 couleurs
@@ -155,7 +155,7 @@ function generateCorrectPosition(z, fishes) {
     let y = getRandomFloat(YMIN, YMAX);
 
     fishes.forEach(fish => {
-        while(getDistance(x, y, z, fish.x, fish.y, fish.z) <= 2*Fish.MAXSIZE) {
+        while(getDistance(x, y, z, fish.x, fish.y, fish.z) <= 1 + Fish.MAXSIZE) {
             x = getRandomFloat(XMIN, XMAX);
             y = getRandomFloat(YMIN, YMAX);
         }
@@ -171,7 +171,7 @@ function generateCorrectPosition(z, fishes) {
 
 const XMIN=0, XMAX=100, YMIN=0, YMAX=100, ZMIN=0, ZMAX=100;
 const TABColor= [0,1,2];
-const MINSIZE =1,  MAXSIZE =10;
+const MINSIZE =3,  MAXSIZE =10;
 const MINAGEMAX=1,  MAXAGEMAX=30;
 const MAXeye=4, MAXtail=2, MAXfin=4; //yeux, queue, nageoir
 

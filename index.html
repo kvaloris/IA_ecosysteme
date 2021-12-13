@@ -25,7 +25,9 @@
       /*near*/ 0.1,
       /*far*/ 1000
     );
-    camera.position.z = 5;
+    camera.position.z = 100;
+    // camera.position.x = 50;
+    // camera.position.z = 50;
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
@@ -88,13 +90,15 @@
     //affiche un certain nombre de poissons
     function displayFishes(){
         for(let i=0; i< fishesArray.length; i++){
-          selectFish(
-            fishesArray[i].size, 
-            fishesArray[i].color, 
-            fishesArray[i].x, 
-            fishesArray[i].y, 
-            fishesArray[i].z
-          );
+
+            selectFish(
+              fishesArray[i].size, 
+              fishesArray[i].color, 
+              fishesArray[i].x, 
+              fishesArray[i].y, 
+              fishesArray[i].z
+            );
+          
         }
     }
 
@@ -135,6 +139,19 @@
 
     animate();
 
+    function generateNewGeneration(z) {
+      const couples = selection(fishesArray); // [  [fish1, fish2], ...]
+
+      couples.forEach(couple => {
+        let child1 = Fish.generateChild(couple[0], couple[1]);
+        let child2 = Fish.generateChild(couple[1], couple[0]);
+        fishesArray.push(child1);
+        fishesArray.push(child2);
+      });
+
+      displayFishes(z);
+    }
+    document.addEventListener('keydown', () => generateNewGeneration());
 
   </script>
 
