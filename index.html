@@ -5,6 +5,7 @@
 <head>
   <meta charset="utf-8">
   <title>Poissons</title>
+  <!--<script type="text/javascript" src="Fish.js"></script>-->
 </head>
 
 <body>
@@ -16,7 +17,6 @@
 
 
     const scene = new THREE.Scene();
-    //scene.background = new THREE.Color(0x006699);
     var camera = new THREE.PerspectiveCamera(
       /*fov*/ 75,
       /*aspect ratio*/ window.innerWidth / window.innerHeight,
@@ -53,12 +53,14 @@
         
     }
 
+    //permet de supprimer le groupe de poissons
     function deleteGroup(){
       for (var i = fishes.children.length - 1; i >= 0; i--) {
           fishes.remove(fishes.children[i]);
       }
     }
 
+    //selectionne un modele 3D de poisson en fonction de sa couleur
     function selectFish(size, color, x, y, z){
 
       switch(color){
@@ -74,21 +76,17 @@
       }
     }
 
+    //donne un entier aléatoire en fonction d'une valeur maximum
     function getRandomInt(max){
       return Math.floor(Math.random() * max);
     }
 
- function displayFishes(number){
+    //affiche un certain nombre de poissons
+    function displayFishes(number){
         for(let i=0; i< number; i++){
           selectFish(getRandomInt(5), getRandomInt(3), -10+i, 0, 0);
         }
     }
-
-    /*const size = 10;
-    const divisions = 10;
-
-    const gridHelper = new THREE.GridHelper( size, divisions );
-    scene.add( gridHelper );*/
 
     scene.add(fishes);
 
