@@ -85,7 +85,7 @@
       return Math.floor(Math.random() * max);
     }
 
-    const fishesArray = [];
+    let fishesArray = [];
 
     //affiche un certain nombre de poissons
     function displayFishes(){
@@ -104,9 +104,8 @@
 
     function init(number) {
       for(let i=0; i< number; i++){
-        fishesArray.push(Fish.fishRandom(i, 0, fishesArray));
+        fishesArray.push(Fish.fishRandom(i, fishesArray));
       }
-      console.log(fishesArray);
     }
 
     scene.add(fishes);
@@ -134,22 +133,34 @@
       renderer.render(scene, camera);
     }
 
-    init(10);
+    init(100);
     displayFishes();
 
     animate();
 
-    function generateNewGeneration(z) {
+    function generateNewGeneration() {
+
+
       const couples = selection(fishesArray); // [  [fish1, fish2], ...]
+      fishesArray = [];
+      console.log(couples);
 
       couples.forEach(couple => {
-        let child1 = Fish.generateChild(couple[0], couple[1]);
-        let child2 = Fish.generateChild(couple[1], couple[0]);
+        let child1 = Fish.generateChild(fishesArray.length, couple[0], couple[1], fishesArray);
         fishesArray.push(child1);
+        let child2 = Fish.generateChild(fishesArray.length, couple[1], couple[0], fishesArray);
         fishesArray.push(child2);
       });
 
-      displayFishes(z);
+      console.log(fishesArray);
+
+
+      deleteGroup();
+
+      displayFishes();
+
+      console.log("NEW GENERATION");
+      // console.log("NEW GENERATION");
     }
     document.addEventListener('keydown', () => generateNewGeneration());
 

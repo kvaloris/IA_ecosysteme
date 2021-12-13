@@ -33,16 +33,16 @@ class Fish {
     }
 
     //retourne un poisson aléatoire
-    static fishRandom(id, z, fishes){
+    static fishRandom(id, fishes){
         
         let pos = [];
         if(id === 0) {
             pos.push(Math.random() * (XMAX - XMIN) + XMIN);
             pos.push(Math.random() * (YMAX - YMIN) + YMIN);
-            pos.push(z);
+            pos.push(Math.random() * (ZMAX - ZMIN) + ZMIN);
         }
         else {
-            pos = generateCorrectPosition(z, fishes);
+            pos = generateCorrectPosition(fishes);
         }
 
         return new this(
@@ -57,12 +57,24 @@ class Fish {
     }
 
     //returne l'enfant des deux poissons passés en parametre
-    static generateChild(fish1, fish2){
+    static generateChild(id, fish1, fish2, fishes){
         if (fish1 instanceof Fish && fish2 instanceof Fish ){
+
+            let pos = [];
+            if(id === 0) {
+                pos.push(Math.random() * (XMAX - XMIN) + XMIN);
+                pos.push(Math.random() * (YMAX - YMIN) + YMIN);
+                pos.push(Math.random() * (ZMAX - ZMIN) + ZMIN);
+            }
+            else {
+                pos = generateCorrectPosition(fishes);
+            }
+
             return new this(
-                (fish1.x+fish2.x)/2,
-                (fish1.y+fish2.y)/2,
-                fish1.z+30,
+                id,
+                pos[0],
+                pos[1],
+                pos[2],
                 mixColor(fish1.color, fish2.color),
                 Math.round((fish1.size+fish2.size)/2),
                 mixAppearance(fish1.appearance, fish2.appearance),
@@ -92,7 +104,7 @@ function colorRamdom(){
 //retourne le mélange des 2 couleurs
 function mixColor(color1,color2){
     var aleat= Math.round(Math.random());
-    console.log(aleat);
+    // console.log(aleat);
     if(aleat ==0){
         return color1;
     }
@@ -148,16 +160,18 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, improtanceLifacteur
     return score;
 }
 
-function generateCorrectPosition(z, fishes) {
+function generateCorrectPosition(fishes) {
 
     // Generate random coordinates
     let x = getRandomFloat(XMIN, XMAX);
     let y = getRandomFloat(YMIN, YMAX);
+    let z = getRandomFloat(ZMIN, ZMAX);
 
     fishes.forEach(fish => {
         while(getDistance(x, y, z, fish.x, fish.y, fish.z) <= 1 + Fish.MAXSIZE) {
             x = getRandomFloat(XMIN, XMAX);
             y = getRandomFloat(YMIN, YMAX);
+            z = getRandomFloat(ZMIN, ZMAX);
         }
     });
 
@@ -185,10 +199,10 @@ var improtanceLife = {
     "xFacteur" : 0,
     "yFacteur" : 0,
     "zFacteur" : 0,
-    "colorFacteur" : 0.01,
+    "colorFacteur" : 1,
     "sizeFacteur" : 1,
-    "appearanceFacteur" : 3,
-    "yearsOldFacteur" : 2
+    "appearanceFacteur" : 0,
+    "yearsOldFacteur" : 0
 };
 
 // refférence pour le poisson le plus apte pour etre manger
