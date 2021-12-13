@@ -137,25 +137,23 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, improtanceLifacteur
 
 
     //x y z
-    score = score + Math.abs(fishToComp.x - bestFish.x)*improtanceLifacteur["xFacteur"] //x
-    score = score + Math.abs(fishToComp.y - bestFish.y)*improtanceLifacteur["yFacteur"] //y
-    score = score + Math.abs(fishToComp.z - bestFish.z)*improtanceLifacteur["zFacteur"] //z
+    score = score + Math.abs(fishToComp.x - bestFish.x)*improtanceLifacteur["xFacteur"]; //x
+    score = score + Math.abs(fishToComp.y - bestFish.y)*improtanceLifacteur["yFacteur"]; //y
+    score = score + Math.abs(fishToComp.z - bestFish.z)*improtanceLifacteur["zFacteur"]; //z
 
     //color
-    score = score + Math.abs(fishToComp.color[0] - bestFish.color[0])*improtanceLifacteur["colorFacteur"] // color[0]
-    score = score + Math.abs(fishToComp.color[1] - bestFish.color[1])*improtanceLifacteur["colorFacteur"] // color[1]
-    score = score + Math.abs(fishToComp.color[2] - bestFish.color[2])*improtanceLifacteur["colorFacteur"] // color[2]
-
+    score = score + (fishToComp.color - bestFish.color ==0 ? 0 : 1*improtanceLifacteur["colorFacteur"]); // color[0]
+    
     //size
-    score = score + Math.abs(fishToComp.size - bestFish.size)*improtanceLifacteur["sizeFacteur"]
+    score = score + Math.abs(fishToComp.size - bestFish.size)*improtanceLifacteur["sizeFacteur"];
 
     //Appearance
-    score = score + Math.abs(fishToComp.appearance[0] - bestFish.appearance[0])*improtanceLifacteur["appearanceFacteur"] //yeux
-    score = score + Math.abs(fishToComp.appearance[1] - bestFish.appearance[1])*improtanceLifacteur["appearanceFacteur"] //queu
-    score = score + Math.abs(fishToComp.appearance[2] - bestFish.appearance[2])*improtanceLifacteur["appearanceFacteur"] //nageoires
+    score = score + Math.abs(fishToComp.appearance[0] - bestFish.appearance[0])*improtanceLifacteur["appearanceFacteur"]; //yeux
+    score = score + Math.abs(fishToComp.appearance[1] - bestFish.appearance[1])*improtanceLifacteur["appearanceFacteur"]; //queu
+    score = score + Math.abs(fishToComp.appearance[2] - bestFish.appearance[2])*improtanceLifacteur["appearanceFacteur"]; //nageoires
     
     //age
-    score = score + Math.abs(fishToComp.yearsOld - bestFish.ageMax)*improtanceLifacteur["yearsOldFacteur"]
+    score = score + Math.abs(fishToComp.yearsOld - bestFish.ageMax)*improtanceLifacteur["yearsOldFacteur"];
 
     return score;
 }
@@ -196,13 +194,13 @@ const MAXeye=4, MAXtail=2, MAXfin=4; //yeux, queue, nageoir
 bestFishlife = new Fish(0,0,0,0,[0,200,30],5,[2,1,2],5);
 // importance coefficient
 var improtanceLife = { 
-    "xFacteur" : 0,
-    "yFacteur" : 0,
-    "zFacteur" : 0,
-    "colorFacteur" : 1,
-    "sizeFacteur" : 1,
+    "xFacteur" : 0/XMAX,
+    "yFacteur" : 0/YMAX,
+    "zFacteur" : 0/ZMAX,
+    "colorFacteur" : 5,
+    "sizeFacteur" : 1/ MAXSIZE,
     "appearanceFacteur" : 0,
-    "yearsOldFacteur" : 0
+    "yearsOldFacteur" : 0/MAXAGEMAX
 };
 
 // reference for fish most suited for being eaten by humans
