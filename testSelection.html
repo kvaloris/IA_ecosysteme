@@ -10,17 +10,24 @@
 <body>
   <script src="js/Fish.js" ></script>
   <script src="js/selection.js" ></script>
+  <script src="js/placeFish.js" ></script>
   <script>
 
     // Create fishes randomly for the test
     const fishes = [];
+
     for(let i=0; i<11; i++) {
-      fishes.push(Fish.fishRamdom(i));
+      let pos = generateCorrectPosition(10, fishes);
+      let fish = Fish.fishRamdom(i);
+      fish.x = pos[0]; fish.y = pos[1]; fish.z = pos[2]; 
+      fishes.push(fish);
     }
 
     console.log(fishes);
 
     console.log(selection(fishes));
+
+
 
   </script>
 

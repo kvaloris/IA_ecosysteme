@@ -34,14 +34,14 @@ function selection(fishes) {
 
         // Get the n nearest single fishes
         // If not enough, get what's left
-        let suitors = orderByDistance(singles, first).slice(0, n);
+        let suitors = orderFishesByDistanceFromChosenFish(singles, first).slice(0, n);
         console.log("Id, Distances, Scores avec poisson choisi : ", getDistancesAndScores(singles, first));
         console.log("Les prétendants sont : ", suitors);
         
         // Identidy the suitor with best fitness
         // If same, choose the first found who is also the nearest since array ordered by distances
         const fitnesses = suitors.map(suitor => suitor.getScoreLife());
-        const partnerIndex = getIndexOfBest(fitnesses);
+        const partnerIndex = getIndexOfBestScore(fitnesses);
         const partner = suitors[partnerIndex];
         // Remove him from the singles
         for (let i = 0; i < singles.length; i++) {
@@ -61,7 +61,7 @@ function selection(fishes) {
     return couples;
 }
 
-function orderByDistance(fishes, first) {
+function orderFishesByDistanceFromChosenFish(fishes, first) {
     let ordered = [];
     ordered.push(fishes[0]);
     for(let i=1; i<fishes.length; i++) {
@@ -97,12 +97,12 @@ function getDistance(x1, y1, z1, x2, y2, z2) {
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
 }
 
-function getIndexOfBest(array) {
-    if (array.length === 0) throw "Le tableau est vide."
+function getIndexOfBestScore(scores) {
+    if (scores.length === 0) throw "Le tableau est vide."
     let bestId = 0;
-    for (let i = 1; i < array.length; i++) {
+    for (let i = 1; i < scores.length; i++) {
         // Best score is the lowest
-        if (array[i] < array[bestId]) bestId = i;
+        if (scores[i] < scores[bestId]) bestId = i;
     }
     return bestId;
 }
