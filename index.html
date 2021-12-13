@@ -4,77 +4,21 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Eponge de Menger</title>
-  <style>
-
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&display=swap');
-    
-    body {
-      font-family: 'Noto Sans Mono', monospace;
-    }
-    #container {
-      height: 30vh;
-      flex-direction: column;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    #title {
-      text-align: center;
-    }
-
-  </style>
+  <title>Poissons</title>
 </head>
 
 <body>
 
   <div id="container">
-    <h1 id="title">Éponge de Menger</h1>
-
-    <form id="form-level">
-      <span>Sélectionner le niveau : </span>
-      <input type="radio" name="level" value="1" checked>
-      <label for="1">1</label>
-      <input type="radio" name="level" value="2">
-      <label for="2">2</label>
-      <input type="radio" name="level" value="3">
-      <label for="3">3</label>
-      <input type="radio" name="level" value="4">
-      <label for="4">4</label>
-    </form>
+    <h1 id="title">Poisson</h1>
   </div>
 
   <script type="module">
 
     import * as THREE from './node_modules/three/build/three.module.js';
     import { OrbitControls } from './vendor_mods/three/examples/jsm/controls/OrbitControls.js';
+    import { GLTFLoader } from './vendor_mods/three/examples/jsm/loaders/GLTFLoader.js';
 
-    // RECUPERER LE NIVEAU
-
-    var boutons = document.getElementsByName('level');
-    var level = 1;
-
-    function updateLevel() {
-
-      // Récupère et met à jour la valeur de level
-      boutons = document.getElementsByName('level');
-      for (var i = 0; i < boutons.length; i++) {
-        if (boutons[i].checked) level = boutons[i].value;
-      }
-
-      // Vide le groupe MengerSponge
-      for (var i = MengerSponge.children.length - 1; i >= 0; i--) {
-          MengerSponge.remove(MengerSponge.children[i]);
-      }
-
-      // Recrée l'éponge de Menger
-      fractal(0, 0, 0, 3, level);
-    }
-    for (var i = 0; i < boutons.length; i++) {
-      boutons[i].addEventListener('click', updateLevel, false);
-    }
-
-    // CREER LA SCENE
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xFFFFFF);
@@ -88,45 +32,46 @@
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight*70/100);
     document.body.appendChild(renderer.domElement);
-
-    // CREER L'EPONGE DE MENGER
-
-    const MengerSponge = new THREE.Group();
-    const material = new THREE.MeshLambertMaterial({ color: 0xc46487, emissive: 0x0000ff, emissiveIntensity: 0.5 });
-
-    function cube(x, y, z, size) {
-      const geometry = new THREE.BoxGeometry(size, size, size);
-      const cube = new THREE.Mesh(geometry, material);
-      cube.position.set(x, y, z);
-      MengerSponge.add(cube);
-    }
-
-    function fractal(x, y, z, size, level) {
-      const cubeSize = size / 3;
-
-      // Crée un cube
-      if (level <= 0) {
-        cube(x, y, z, size);
-      }
-      // Découpe le cube en 3*3*3 petits cubes
-      else {
-        for (let i = -1; i < 2; i++) {
-          for (let j = -1; j < 2; j++) {
-            for (let k = -1; k < 2; k++) {
-              // Les cubes centraux sont ignorés
-              if (Math.abs(i) + Math.abs(j) + Math.abs(k) > 1) {
-                fractal(x + i * cubeSize, y + j * cubeSize, z + k * cubeSize, cubeSize, level - 1);
-              }
-            }
-          }
-        }
-      }
-    }
-
-    fractal(0, 0, 0, 3, level);
-    scene.add(MengerSponge);
-
     
+    var loader = new GLTFLoader();
+
+   
+    // Charge l'objet poisson en 3D à la taille demandée
+    function loadObject(size, nomPoisson, x, y, z){
+         loader.load('./3dobjects/'+ nomPoisson, function (gltf)
+      {
+          let poisson = gltf.scene;
+
+          poisson.scale.set(size,size,size);
+          poisson.position.set(x,y,z);
+          
+          scene.add(poisson);
+          
+      }, undefined, function (error) {
+        console.error(error);
+      });
+
+        
+    }
+
+    function selectFish(size, color){
+      if(color=="red"){
+        loadObject(size, "poisson2.glb");
+      }
+
+      else if(color=="yellow"){
+        loadObject(size, "poisson3.glb");
+      }
+
+      else{
+        loadObject(size, "poisson.glb");
+      }
+    }
+
+    // CONTROLE
+    
+    var controls = new OrbitControls(camera, renderer.domElement);
+
     // LUMIERE
 
     const pointLight = new THREE.PointLight(0x00ff00, 2, 50);
@@ -135,10 +80,6 @@
     scene.add(ambientLight);
     scene.add(pointLight);
     scene.add(directionalLight);
-
-    // CONTROLE
-    
-    var controls = new OrbitControls(camera, renderer.domElement);
 
     // ANIMATION
 
@@ -150,6 +91,8 @@
       
       renderer.render(scene, camera);
     }
+
+    selectFish(5, "blue");
     animate();
 
   </script>
