@@ -33,12 +33,23 @@ class Fish {
     }
 
     //retourne un poisson aléatoire
-    static fishRamdom(id){
+    static fishRandom(id, z, fishes){
+        
+        let pos = [];
+        if(id === 0) {
+            pos.push(Math.random() * (XMAX - XMIN) + XMIN);
+            pos.push(Math.random() * (YMAX - YMIN) + YMIN);
+            pos.push(z);
+        }
+        else {
+            pos = generateCorrectPosition(z, fishes);
+        }
+
         return new this(
             id,
-            Math.random() * (XMAX - XMIN) + XMIN,
-            Math.random() * (YMAX - YMIN) + YMIN,
-            Math.random() * (ZMAX - ZMIN) + ZMIN,
+            pos[0],
+            pos[1],
+            pos[2],
             colorRamdom(),
             Math.round(Math.random() * (MAXSIZE - MINSIZE) + MINSIZE),
             appearanceRamdon(),
@@ -57,7 +68,7 @@ class Fish {
                 mixAppearance(fish1.appearance, fish2.appearance),
                 Math.round((fish1.ageMax+fish2.ageMax)/2));
         }
-        console.error(" Erreur generateChild fish1 or fish2 is not a fish; return fishRamdom ");
+        console.error(" Erreur generateChild fish1 or fish2 is not a fish; return fishRandom ");
         return "Erreur";
     }
     
@@ -137,6 +148,22 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, improtanceLifacteur
     return score;
 }
 
+function generateCorrectPosition(z, fishes) {
+
+    // Generate random coordinates
+    let x = getRandomFloat(XMIN, XMAX);
+    let y = getRandomFloat(YMIN, YMAX);
+
+    fishes.forEach(fish => {
+        while(getDistance(x, y, z, fish.x, fish.y, fish.z) <= 2*Fish.MAXSIZE) {
+            x = getRandomFloat(XMIN, XMAX);
+            y = getRandomFloat(YMIN, YMAX);
+        }
+    });
+
+    return [x, y, z];
+}
+
 
 /*--------------------------------------------------------------------*/
 /*--------------------        CONCTANTES          --------------------*/
@@ -176,3 +203,5 @@ var improtanceToHumain = {
     "appearanceFacteur" : 3,
     "yearsOldFacteur" : 1
 };
+
+

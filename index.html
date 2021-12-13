@@ -5,7 +5,9 @@
 <head>
   <meta charset="utf-8">
   <title>Poissons</title>
-  <!--<script type="text/javascript" src="Fish.js"></script>-->
+  <script type="text/javascript" src="js/utils.js"></script>
+  <script type="text/javascript" src="js/Fish.js"></script>
+  <script type="text/javascript" src="js/selection.js"></script>
 </head>
 
 <body>
@@ -81,11 +83,26 @@
       return Math.floor(Math.random() * max);
     }
 
+    const fishesArray = [];
+
     //affiche un certain nombre de poissons
-    function displayFishes(number){
-        for(let i=0; i< number; i++){
-          selectFish(getRandomInt(5), getRandomInt(3), -10+i, 0, 0);
+    function displayFishes(){
+        for(let i=0; i< fishesArray.length; i++){
+          selectFish(
+            fishesArray[i].size, 
+            fishesArray[i].color, 
+            fishesArray[i].x, 
+            fishesArray[i].y, 
+            fishesArray[i].z
+          );
         }
+    }
+
+    function init(number) {
+      for(let i=0; i< number; i++){
+        fishesArray.push(Fish.fishRandom(i, 0, fishesArray));
+      }
+      console.log(fishesArray);
     }
 
     scene.add(fishes);
@@ -113,7 +130,11 @@
       renderer.render(scene, camera);
     }
 
+    init(10);
+    displayFishes();
+
     animate();
+
 
   </script>
 
