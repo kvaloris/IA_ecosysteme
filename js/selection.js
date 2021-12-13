@@ -8,9 +8,6 @@
  * 
  * PARAMETERS
  * fishes : array of Fish
- *
- * FISH STRUCTURE
- * Fish is a class with following attributes : id, x, y, z, fitness
  */
 
 function selection(fishes) {
