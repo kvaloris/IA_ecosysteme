@@ -1,8 +1,4 @@
 /**
- * EXPLANATION
- * All individuals will reproduce except one if uneven population
- * Each randomly chosen indivual will form a couple with the fish with best fitness among a number n of nearest fishes
- * 
  * RETURN
  * Function will return an array with the couples which are arrays of 2 Fish
  * 
@@ -12,42 +8,39 @@
 
 function selection(fishes) {
 
-    // const singles = fishes.slice(0);
     const couples = [];
 
-    // As long as there is more than 1 fish, form couples
     for(let i=0; i<fishes.length; i++) {
 
         // Choose the parameters
         let n = 5; // Number max of suitors for a fish
 
-        // Chose a random individual among those singles 
         const first = fishes[i];
-        // Remove him from the singles
-        // singles.splice(firstIndex, 1);
+
+        // A fish can't be coupled with itself
+        let others = fishes.slice(0);
+        others.splice(i, 1);
 
         // Get the n nearest single fishes
-        // If not enough, get what's left
-        let suitors = orderFishesByDistanceFromChosenFish(fishes, first).slice(0, n);
+        let suitors = orderFishesByDistanceFromChosenFish(others, first).slice(0, n);
         
         // Identidy the suitor with best fitness
         // If same, choose the first found who is also the nearest since array ordered by distances
         const fitnesses = suitors.map(suitor => suitor.getScoreLife());
         const partnerIndex = getIndexOfBestScore(fitnesses);
         const partner = suitors[partnerIndex];
-        // // Remove him from the singles
-        // for (let i = 0; i < singles.length; i++) {
-        //     if (singles[i].id === partner.id) {
-        //         singles.splice(i, 1);
-        //         break;
-        //     }
-        // }
 
         // Add the newly formed couple to the list of happy couples
         couples.push([first, partner]);
 
-
+        // console.log("FISH : ", first.id);
+        // console.log("ID, DISTANCES, SCORES : " ,getDistancesAndScores(others, first));
+        // console.log("PRETENDANTS : ", suitors);
+        // console.log("PARTNER : ", partner.id);
+        
     }
+    
+    // console.log(couples);
 
     return couples;
 }

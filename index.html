@@ -139,7 +139,7 @@
       renderer.render(scene, camera);
     }
 
-    init(3);
+    init(100);
     displayFishes();
 
     animate();
@@ -160,10 +160,7 @@
 
     }
     document.addEventListener('keydown', () => {
-      for(let i=0; i<1000; i++) {
-        generateNewGeneration();
-      }
-      // generateNewGeneration();
+      generateNewGeneration();
       displayFishes();
     });
 

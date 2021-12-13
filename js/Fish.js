@@ -146,7 +146,7 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, improtanceLifacteur
     
     //size
     score = score + Math.abs(fishToComp.size - bestFish.size)*improtanceLifacteur["sizeFacteur"];
-
+    
     //Appearance
     score = score + Math.abs(fishToComp.appearance[0] - bestFish.appearance[0])*improtanceLifacteur["appearanceFacteur"]; //yeux
     score = score + Math.abs(fishToComp.appearance[1] - bestFish.appearance[1])*improtanceLifacteur["appearanceFacteur"]; //queu
@@ -191,14 +191,15 @@ const MAXeye=4, MAXtail=2, MAXfin=4; //yeux, queue, nageoir
 /* -------------------   FISHES FOR REFERENCE  --------------------*/
 
 // reference for fish most suited for living
-bestFishlife = new Fish(0,0,0,0,[0,200,30],5,[2,1,2],5);
+bestFishlife = new Fish(0,0,0,0,1,5,[2,1,2],5);
+
 // importance coefficient
 var improtanceLife = { 
     "xFacteur" : 0/XMAX,
     "yFacteur" : 0/YMAX,
     "zFacteur" : 0/ZMAX,
-    "colorFacteur" : 50,
-    "sizeFacteur" : 0, //1/ MAXSIZE,
+    "colorFacteur" : 5,
+    "sizeFacteur" : 1/ MAXSIZE,
     "appearanceFacteur" : 0,
     "yearsOldFacteur" : 0/MAXAGEMAX
 };
