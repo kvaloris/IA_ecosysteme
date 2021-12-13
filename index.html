@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Poissons</title>
+  <!--<script type="text/javascript" src="Fish.js"></script>-->
+</head>
+
+<body>
+<script type="module">
+
+    import * as THREE from './node_modules/three/build/three.module.js';
+    import { OrbitControls } from './vendor_mods/three/examples/jsm/controls/OrbitControls.js';
+    import { GLTFLoader } from './vendor_mods/three/examples/jsm/loaders/GLTFLoader.js';
+
+
+    const scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(
+      /*fov*/ 75,
+      /*aspect ratio*/ window.innerWidth / window.innerHeight,
+      /*near*/ 0.1,
+      /*far*/ 1000
+    );
+    camera.position.z = 5;
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const fishes = new THREE.Group();
+  
+
+    const loader = new THREE.TextureLoader();
+    scene.background = loader.load('./images/sea.jpg');
+
+   
+    // Charge l'objet poisson en 3D à la taille demandée et à la position demandée
+    function loadObject(size, nomPoisson, x, y, z){
+      var loader = new GLTFLoader();
+         loader.load('./3dobjects/'+ nomPoisson, function (gltf)
+      {
+          let poisson = gltf.scene;
+          poisson.scale.set(size,size,size);
+          poisson.position.set(x,y,z);
+          
+          fishes.add(poisson);
+          
+      }, undefined, function (error) {
+        console.error(error);
+      });
+
+        
+    }
+
+    //permet de supprimer le groupe de poissons
+    function deleteGroup(){
+      for (var i = fishes.children.length - 1; i >= 0; i--) {
+          fishes.remove(fishes.children[i]);
+      }
+    }
+
+    //selectionne un modele 3D de poisson en fonction de sa couleur
+    function selectFish(size, color, x, y, z){
+
+      switch(color){
+        case 0: 
+          loadObject(size, "poisson2.glb", x, y, z);
+          break;
+        case 1:
+          loadObject(size, "poisson3.glb", x, y, z);
+          break;
+        default:
+          loadObject(size, "poisson.glb", x, y, z);
+          break;
+      }
+    }
+
+    //donne un entier aléatoire en fonction d'une valeur maximum
+    function getRandomInt(max){
+      return Math.floor(Math.random() * max);
+    }
+
+    //affiche un certain nombre de poissons
+    function displayFishes(number){
+        for(let i=0; i< number; i++){
+          selectFish(getRandomInt(5), getRandomInt(3), -10+i, 0, 0);
+        }
+    }
+
+    scene.add(fishes);
+
+    // CONTROLE
+    
+    var controls = new OrbitControls(camera, renderer.domElement);
+
+    // LUMIERE
+
+    const pointLight = new THREE.PointLight(0x00ff00, 2, 50);
+    const directionalLight = new THREE.DirectionalLight(0xffffff);
+    const ambientLight = new THREE.AmbientLight(0x111111);
+    scene.add(ambientLight);
+    scene.add(pointLight);
+    scene.add(directionalLight);
+
+    // ANIMATION
+
+    function animate() {
+      
+      requestAnimationFrame(animate);
+
+      // Ici, le code de l'animation
+      renderer.render(scene, camera);
+    }
+
+    displayFishes(25);
+    animate();
+
+  </script>
+
+</body>
+
+</html>
