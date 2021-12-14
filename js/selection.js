@@ -32,16 +32,9 @@ function selection(fishes) {
 
         // Add the newly formed couple to the list of happy couples
         couples.push([first, partner]);
-
-        // console.log("FISH : ", first.id);
-        // console.log("ID, DISTANCES, SCORES : " ,getDistancesAndScores(others, first));
-        // console.log("PRETENDANTS : ", suitors);
-        // console.log("PARTNER : ", partner.id);
         
     }
     
-    // console.log(couples);
-
     return couples;
 }
 
