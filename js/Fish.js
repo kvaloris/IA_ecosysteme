@@ -20,30 +20,20 @@ class Fish {
     }
 
     toString (){
-        return 'Caractéristique: <br/>' + 
-                '     - position: ('+this.x+';'+this.y+';'+this.z+')'+
-                '<br/>- color: '+this.color+
-                '<br/>- size: '+this.size+
-                '<br/>- appearance: '+this.appearance+
-                '<br/>- ageMax: '+ this.ageMax+
-                '<br/>- yearsOld: '+ this.yearsOld+
-                '<br/>- scoreLife: '+this.getScoreLife()+
-                '<br/>- scoreToHumain: '+this.getScoreToHumain()+
-                '<br/>';
+        return 'Poisson id:'+ this.id+'; ('+this.x+','+this.y+','+this.z+'); ' + 
+                ' color: '+this.color+';'+
+                ' size: '+this.size+';'+
+                ' appearance: '+this.appearance+';'+
+                ' ageMax: '+ this.ageMax+';'+
+                ' yearsOld: '+ this.yearsOld+';'+
+                ' scoreLife: '+this.getScoreLife()+';'+
+                ' scoreToHumain: '+this.getScoreToHumain()+';';
     }
 
     // Return a random fish
     static fishRandom(id, fishes){
         
-        let pos = [];
-        if(id === 0) {
-            pos.push(Math.random() * (XMAX - XMIN) + XMIN);
-            pos.push(Math.random() * (YMAX - YMIN) + YMIN);
-            pos.push(Math.random() * (ZMAX - ZMIN) + ZMIN);
-        }
-        else {
-            pos = generateCorrectPosition(fishes);
-        }
+        let pos = generateCorrectPosition(fishes);
 
         return new this(
             id,
@@ -60,15 +50,7 @@ class Fish {
     static generateChild(id, fish1, fish2, fishes){
         if (fish1 instanceof Fish && fish2 instanceof Fish ){
 
-            let pos = [];
-            if(id === 0) {
-                pos.push(Math.random() * (XMAX - XMIN) + XMIN);
-                pos.push(Math.random() * (YMAX - YMIN) + YMIN);
-                pos.push(Math.random() * (ZMAX - ZMIN) + ZMIN);
-            }
-            else {
-                pos = generateCorrectPosition(fishes);
-            }
+            let pos =  generateCorrectPosition(fishes);
 
             return new this(
                 id,
@@ -94,6 +76,27 @@ class Fish {
     getScoreToHumain(){
         return getScoreComparedToTheBestFish(this, bestFishToHumain, improtanceToHumain)
     }
+}
+
+//Return an array of correct coordinates 
+function generateCorrectPosition(fishes) {
+
+    // Generate random coordinates
+    let x = getRandomFloat(XMIN, XMAX);
+    let y = getRandomFloat(YMIN, YMAX);
+    let z = getRandomFloat(ZMIN, ZMAX);
+
+    if(fishes.length != 0) {
+        fishes.forEach(fish => {
+            while(getDistance(x, y, z, fish.x, fish.y, fish.z) <= 1 + Fish.MAXSIZE) {
+                x = getRandomFloat(XMIN, XMAX);
+                y = getRandomFloat(YMIN, YMAX);
+                z = getRandomFloat(ZMIN, ZMAX);
+            }
+        });
+    }
+
+    return [x, y, z];
 }
 
 // Return a random color
@@ -142,7 +145,7 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, improtanceLifacteur
     score = score + Math.abs(fishToComp.z - bestFish.z)*improtanceLifacteur["zFacteur"]; //z
 
     //color
-    score = score + (fishToComp.color === bestFish.color ? 0 : 1*improtanceLifacteur["colorFacteur"]); // color[0]
+    score = score + (fishToComp.color === bestFish.color ? 0 : 1*improtanceLifacteur["colorFacteur"]); // color
     
     //size
     score = score + Math.abs(fishToComp.size - bestFish.size)*improtanceLifacteur["sizeFacteur"];
@@ -158,23 +161,7 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, improtanceLifacteur
     return score;
 }
 
-function generateCorrectPosition(fishes) {
 
-    // Generate random coordinates
-    let x = getRandomFloat(XMIN, XMAX);
-    let y = getRandomFloat(YMIN, YMAX);
-    let z = getRandomFloat(ZMIN, ZMAX);
-
-    fishes.forEach(fish => {
-        while(getDistance(x, y, z, fish.x, fish.y, fish.z) <= 1 + Fish.MAXSIZE) {
-            x = getRandomFloat(XMIN, XMAX);
-            y = getRandomFloat(YMIN, YMAX);
-            z = getRandomFloat(ZMIN, ZMAX);
-        }
-    });
-
-    return [x, y, z];
-}
 
 
 /*--------------------------------------------------------------------*/
@@ -208,13 +195,13 @@ var improtanceLife = {
 bestFishToHumain = new Fish(0,0,0,0,[50,60,80],10,[2,1,2],2);
 // importance coefficient
 var improtanceToHumain = { 
-    "xFacteur" : 0,
-    "yFacteur" : 0,
-    "zFacteur" : 0,
+    "xFacteur" : 0/XMAX,
+    "yFacteur" : 0/YMAX,
+    "zFacteur" : 0/ZMAX,
     "colorFacteur" : 0.05,
-    "sizeFacteur" : 2,
+    "sizeFacteur" : 2/ MAXSIZE,
     "appearanceFacteur" : 3,
-    "yearsOldFacteur" : 1
+    "yearsOldFacteur" : 10/MAXAGEMAX
 };
 
 
