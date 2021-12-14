@@ -27,7 +27,7 @@ class Fish {
                 ' ageMax: '+ this.ageMax+';'+
                 ' yearsOld: '+ this.yearsOld+';'+
                 ' scoreLife: '+this.getScoreLife()+';'+
-                ' scoreToHumain: '+this.getScoreToHumain()+';';
+                ' scoreToHuman: '+this.getScoreToHuman()+';';
     }
 
     // Return a random fish
@@ -40,7 +40,7 @@ class Fish {
             pos[0],
             pos[1],
             pos[2],
-            colorRamdom(),
+            colorRandom(),
             Math.round(Math.random() * (MAXSIZE - MINSIZE) + MINSIZE),
             appearanceRamdon(),
             Math.round(Math.random() * (MAXAGEMAX - MINAGEMAX) + MINAGEMAX));
@@ -69,16 +69,16 @@ class Fish {
 
     // Return the score for its ability to live ( 0 = best)
     getScoreLife(){
-        return getScoreComparedToTheBestFish(this, bestFishlife, improtanceLife)
+        return getScoreComparedToTheBestFish(this, bestFishlife, importanceLife)
     }
 
     // Return its score for human interest ( 0 = best)
-    getScoreToHumain(){
-        return getScoreComparedToTheBestFish(this, bestFishToHumain, improtanceToHumain)
+    getScoreToHuman(){
+        return getScoreComparedToTheBestFish(this, bestFishToHuman, importanceToHuman)
     }
 }
 
-//Return an array of correct coordinates 
+// Return an array of correct coordinates 
 function generateCorrectPosition(fishes) {
 
     // Generate random coordinates
@@ -100,15 +100,14 @@ function generateCorrectPosition(fishes) {
 }
 
 // Return a random color
-function colorRamdom(){
+function colorRandom(){
     return Math.round(Math.random() * (TABColor.length - 1));
 }
 
 // Return the mix of 2 colors
 function mixColor(color1,color2){
-    var aleat= Math.round(Math.random());
-    // console.log(aleat);
-    if(aleat ==0){
+    var aleat = Math.round(Math.random());
+    if(aleat == 0){
         return color1;
     }
     return color2;
@@ -133,30 +132,30 @@ function mixAppearance(appearance1,appearance2){ //TODO
 }
 
 // Compare a fish and a reference with importance coefficients
-function getScoreComparedToTheBestFish(fishToComp, bestFish, improtanceLifacteur){
+function getScoreComparedToTheBestFish(fishToComp, bestFish, importanceFactor){
     var score = 0; //  best score = 0
 
     bestFish.yearsOld = bestFish.ageMax;
 
 
     //x y z
-    score = score + Math.abs(fishToComp.x - bestFish.x)*improtanceLifacteur["xFacteur"]; //x
-    score = score + Math.abs(fishToComp.y - bestFish.y)*improtanceLifacteur["yFacteur"]; //y
-    score = score + Math.abs(fishToComp.z - bestFish.z)*improtanceLifacteur["zFacteur"]; //z
+    score = score + Math.abs(fishToComp.x - bestFish.x)*importanceFactor["xFactor"]; //x
+    score = score + Math.abs(fishToComp.y - bestFish.y)*importanceFactor["yFactor"]; //y
+    score = score + Math.abs(fishToComp.z - bestFish.z)*importanceFactor["zFactor"]; //z
 
     //color
-    score = score + (fishToComp.color === bestFish.color ? 0 : 1*improtanceLifacteur["colorFacteur"]); // color
+    score = score + (fishToComp.color === bestFish.color ? 0 : 1*importanceFactor["colorFactor"]); // color
     
     //size
-    score = score + Math.abs(fishToComp.size - bestFish.size)*improtanceLifacteur["sizeFacteur"];
+    score = score + Math.abs(fishToComp.size - bestFish.size)*importanceFactor["sizeFactor"];
     
     //Appearance
-    score = score + Math.abs(fishToComp.appearance[0] - bestFish.appearance[0])*improtanceLifacteur["appearanceFacteur"]; //yeux
-    score = score + Math.abs(fishToComp.appearance[1] - bestFish.appearance[1])*improtanceLifacteur["appearanceFacteur"]; //queu
-    score = score + Math.abs(fishToComp.appearance[2] - bestFish.appearance[2])*improtanceLifacteur["appearanceFacteur"]; //nageoires
+    score = score + Math.abs(fishToComp.appearance[0] - bestFish.appearance[0])*importanceFactor["appearanceFactor"]; //yeux
+    score = score + Math.abs(fishToComp.appearance[1] - bestFish.appearance[1])*importanceFactor["appearanceFactor"]; //queu
+    score = score + Math.abs(fishToComp.appearance[2] - bestFish.appearance[2])*importanceFactor["appearanceFactor"]; //nageoires
     
     //age
-    score = score + Math.abs(fishToComp.yearsOld - bestFish.ageMax)*improtanceLifacteur["yearsOldFacteur"];
+    score = score + Math.abs(fishToComp.yearsOld - bestFish.ageMax)*importanceFactor["yearsOldFactor"];
 
     return score;
 }
@@ -181,27 +180,27 @@ const MAXeye=4, MAXtail=2, MAXfin=4; //yeux, queue, nageoir
 bestFishlife = new Fish(0,0,0,0,1,5,[2,1,2],5);
 
 // importance coefficient
-var improtanceLife = { 
-    "xFacteur" : 0/XMAX,
-    "yFacteur" : 0/YMAX,
-    "zFacteur" : 0/ZMAX,
-    "colorFacteur" : 5,
-    "sizeFacteur" : 1/ MAXSIZE,
-    "appearanceFacteur" : 0,
-    "yearsOldFacteur" : 0/MAXAGEMAX
+var importanceLife = { 
+    "xFactor" : 0/XMAX,
+    "yFactor" : 0/YMAX,
+    "zFactor" : 0/ZMAX,
+    "colorFactor" : 5,
+    "sizeFactor" : 1/MAXSIZE,
+    "appearanceFactor" : 0,
+    "yearsOldFactor" : 0/MAXAGEMAX
 };
 
 // reference for fish most suited for being eaten by humans
-bestFishToHumain = new Fish(0,0,0,0,[50,60,80],10,[2,1,2],2);
+bestFishToHuman = new Fish(0,0,0,0,[50,60,80],10,[2,1,2],2);
 // importance coefficient
-var improtanceToHumain = { 
-    "xFacteur" : 0/XMAX,
-    "yFacteur" : 0/YMAX,
-    "zFacteur" : 0/ZMAX,
-    "colorFacteur" : 0.05,
-    "sizeFacteur" : 2/ MAXSIZE,
-    "appearanceFacteur" : 3,
-    "yearsOldFacteur" : 10/MAXAGEMAX
+var importanceToHuman = { 
+    "xFactor" : 0/XMAX,
+    "yFactor" : 0/YMAX,
+    "zFactor" : 0/ZMAX,
+    "colorFactor" : 0.05,
+    "sizeFactor" : 2/MAXSIZE,
+    "appearanceFactor" : 3,
+    "yearsOldFactor" : 10/MAXAGEMAX
 };
 
 
