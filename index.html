@@ -38,14 +38,14 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    const fishes = new THREE.Group();
+    const fishesGroup = new THREE.Group();
   
 
     const loader = new THREE.TextureLoader();
     scene.background = loader.load('./images/sea.jpg');
 
    
-    // Charge l'objet poisson en 3D à la taille demandée et à la position demandée
+    // Load 3D object fish at the size asked and at the position asked
     function loadObject(size, nomPoisson, x, y, z){
       var loader = new GLTFLoader();
          loader.load('./3dobjects/'+ nomPoisson, function (gltf)
@@ -54,7 +54,7 @@
           poisson.scale.set(size,size,size);
           poisson.position.set(x,y,z);
           
-          fishes.add(poisson);
+          fishesGroup.add(poisson);
           
       }, undefined, function (error) {
         console.error(error);
@@ -63,14 +63,14 @@
         
     }
 
-    //permet de supprimer le groupe de poissons
+    // Allow to empty a group of fishes
     function deleteGroup(){
-      for (var i = fishes.children.length - 1; i >= 0; i--) {
-          fishes.remove(fishes.children[i]);
+      for (var i = fishesGroup.children.length - 1; i >= 0; i--) {
+          fishesGroup.remove(fishesGroup.children[i]);
       }
     }
 
-    //displays the fish passed in parameter 
+    // Display the fish passed in parameter 
     function displayFish(fish){
       var fichierName;
       
@@ -79,24 +79,19 @@
         fichierName = "poisson2.glb";
           break;
         case 1:
-        fichierName = "poisson3.glb";
+        fichierName = "poisson.glb";
           break;
         default:
-        fichierName = "poisson.glb";
+        fichierName = "poisson3.glb";
           break;
       }
 
       loadObject(fish.size, fichierName, fish.x, fish.y, fish.z);
     }
 
-    //donne un entier aléatoire en fonction d'une valeur maximum
-    function getRandomInt(max){
-      return Math.floor(Math.random() * max);
-    }
-
     let fishesArray = [];
 
-    //affiche un certain nombre de poissons
+    // Display a certain number of fishes
     function displayFishes(){
         for(let i=0; i< fishesArray.length; i++){
           displayFish(fishesArray[i]);
@@ -109,13 +104,13 @@
       }
     }
 
-    scene.add(fishes);
+    scene.add(fishesGroup);
 
-    // CONTROLE
+    // CONTROL
     
     var controls = new OrbitControls(camera, renderer.domElement);
 
-    // LUMIERE
+    // LIGHT
 
     const pointLight = new THREE.PointLight(0x00ff00, 2, 50);
     const directionalLight = new THREE.DirectionalLight(0xffffff);
@@ -130,7 +125,7 @@
       
       requestAnimationFrame(animate);
 
-      // Ici, le code de l'animation
+      // Here, the code for animation
       renderer.render(scene, camera);
     }
 
@@ -139,8 +134,8 @@
 
     animate();
 
+    // Generate a new generation of fishes and delete the previous generations
     function generateNewGeneration() {
-
 
       const couples = selection(fishesArray); // [  [fish1, fish2], ...]
       fishesArray = [];
@@ -151,8 +146,6 @@
       });
 
       deleteGroup();
-
-
     }
     document.addEventListener('keydown', () => {
       generateNewGeneration();
