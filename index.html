@@ -70,20 +70,23 @@
       }
     }
 
-    //selectionne un modele 3D de poisson en fonction de sa couleur
-    function selectFish(size, color, x, y, z){
-
-      switch(color){
+    //displays the fish passed in parameter 
+    function displayFish(fish){
+      var fichierName;
+      
+      switch(fish.color){
         case 0: 
-          loadObject(size, "poisson2.glb", x, y, z);
+        fichierName = "poisson2.glb";
           break;
         case 1:
-          loadObject(size, "poisson3.glb", x, y, z);
+        fichierName = "poisson3.glb";
           break;
         default:
-          loadObject(size, "poisson.glb", x, y, z);
+        fichierName = "poisson.glb";
           break;
       }
+
+      loadObject(fish.size, fichierName, fish.x, fish.y, fish.z);
     }
 
     //donne un entier aléatoire en fonction d'une valeur maximum
@@ -96,15 +99,7 @@
     //affiche un certain nombre de poissons
     function displayFishes(){
         for(let i=0; i< fishesArray.length; i++){
-
-            selectFish(
-              fishesArray[i].size, 
-              fishesArray[i].color, 
-              fishesArray[i].x, 
-              fishesArray[i].y, 
-              fishesArray[i].z
-            );
-          
+          displayFish(fishesArray[i]);
         }
     }
 
