@@ -157,7 +157,7 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, importanceFactor){
     //age
     score = score + Math.abs(fishToComp.yearsOld - bestFish.ageMax)*importanceFactor["yearsOldFactor"];
 
-    return score;
+    return score; 
 }
 
 
