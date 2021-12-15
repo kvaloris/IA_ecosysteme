@@ -126,27 +126,13 @@
       renderer.render(scene, camera);
     }
 
-    FishShoal.init(100);
+    FishShoal.init(2);
     displayFishes();
 
     animate();
-
-    // Generate a new generation of fishes and delete the previous generations
-    /*function generateNewGeneration() {
-
-      const couples = selection(fishesArray); // [  [fish1, fish2], ...]
-      fishesArray = [];
-
-      couples.forEach(couple => {
-        let child1 = Fish.generateChild(fishesArray.length, couple[0], couple[1], fishesArray);
-        fishesArray.push(child1);
-      });
-
-      deleteGroup();
-    }
-    */
     document.addEventListener('keydown', () => {
-      generateNewGeneration();
+      FishShoal.nextYear();
+      deleteGroup();
       displayFishes();
     });
 
