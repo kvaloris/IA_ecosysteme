@@ -21,11 +21,15 @@
 
         teste
         <div id="teste"></div>
-        <script src="Fish.js"></script>
+        <script src="js/Fish.js"></script>
+        <script src="js/FishShoal.js"></script>
+        <script type="text/javascript" src="js/utils.js"></script>
         <script>
+            /*
             //poissson 1 random
             poisson1 = Fish.fishRamdom();
             document.querySelector('#p1').innerHTML= poisson1.toString();
+            
 
             //poissson 2 random
             poisson2 = Fish.fishRamdom();
@@ -37,6 +41,21 @@
 
             document.querySelector('#BTFishL').innerHTML= bestFishlife.toString();
             document.querySelector('#BTFishH').innerHTML= bestFishToHumain.toString();
+            */
+
+            FishShoal.init(2);
+            document.querySelector('#p1').innerHTML= FishShoal.toString();
+            FishShoal.nextYear();
+            FishShoal.nextYear();
+            FishShoal.nextYear();
+            FishShoal.nextYear();
+            FishShoal.nextYear();
+            FishShoal.nextYear();
+            FishShoal.nextYear();
+            FishShoal.nextYear();
+            FishShoal.nextYear();
+            document.querySelector('#p2').innerHTML= FishShoal.toString();
+          
         </script>
         <!-- Corps de la page -->
         
