@@ -82,10 +82,9 @@ class Fish {
 
     // Separation
 
-    separate(fishes) {
+    separate(fishes, c) {
 
         const dmin = 30;
-        const c = 0.0005;
 
         let v = { x: 0, y: 0, z: 0 };
 
@@ -107,9 +106,8 @@ class Fish {
 
     // Alignement
 
-    align(fishes) {
+    align(fishes, c) {
 
-        const c = 0.0005;
         let v = { x: 0, y: 0, z: 0 };
 
         // Operate on all fishes other than this
@@ -126,9 +124,7 @@ class Fish {
 
     // cohesion
 
-    aggregate(fishes) {
-
-        const c = 0.0005;
+    aggregate(fishes, c) {
 
         let v = { x: 0, y: 0, z: 0 };
 
@@ -174,8 +170,10 @@ class Fish {
 
     // Move the position
     
-    move(fishes) {
-        this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes)), this.separate(fishes)), this.bound()), this.align(fishes));
+    move(fishes, c_ag, c_s, c_al) {
+        this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));
+        // this.velocity = addV3(this.velocity, this.aggregate(fishes, c_ag));
+        
         this.limitSpeed();
         let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
         this.x = position.x;

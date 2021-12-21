@@ -13,10 +13,29 @@
     body {
       overflow: hidden;
     }
+    .sliders {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
   </style>
 </head>
 
 <body>
+
+  <div class="sliders">
+    
+    <label for="slider-cohesion">Cohésion</label>
+    <input name="slider-cohesion" class="slider-cohesion" type="range" min="0" max="0.01" value="0.0005" step="0.0005">
+
+    <label for="slider-separation">Separation</label>
+    <input name="slider-separation" class="slider-separation" type="range" min="0" max="0.01" value="0.0005" step="0.0005">
+
+    <label for="slider-alignment">Alignement</label>
+    <input name="slider-alignment" class="slider-alignment" type="range" min="0" max="0.01" value="0.0005" step="0.0005">
+
+  </div>
+
 <script type="module">
 
     import * as THREE from './node_modules/three/build/three.module.js';
@@ -119,6 +138,24 @@
     scene.add(pointLight);
     scene.add(directionalLight);
 
+    // SLIDERS
+
+    const slider_s = document.querySelector(".slider-separation");
+    const slider_ag = document.querySelector(".slider-cohesion");
+    const slider_al = document.querySelector(".slider-alignment");
+    
+    slider_ag.addEventListener('change', () => {
+      c_ag = slider_ag.value;
+    })
+    slider_s.addEventListener('change', () => {
+      c_s = slider_s.value;
+    })
+    slider_al.addEventListener('change', () => {
+      c_al = slider_al.value;
+    })
+
+    let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value;
+
     // ANIMATION
 
     function animate() {
@@ -128,7 +165,8 @@
       // Here, the code for animation
 
       renderer.render(scene, camera);
-      fishesArray.forEach(fish => fish.move(fishesArray));
+      console.log("c_ag = ", c_ag, " / c_s = ", c_s, " / c_al = ", c_al);
+      fishesArray.forEach(fish => fish.move(fishesArray, c_ag, c_s, c_al));
       for (let i = 0; i < fishesGroup.children.length; i++) {
         let x = fishesArray[i].x;
         let y = fishesArray[i].y;
@@ -161,6 +199,7 @@
     //   generateNewGeneration();
     //   displayFishes();
     // });
+
 
   </script>
 
