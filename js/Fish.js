@@ -76,6 +76,10 @@ class Fish {
     getScoreToHuman(){
         return getScoreComparedToTheBestFish(this, bestFishToHuman, importanceToHuman)
     }
+
+    getPosition(){
+        return [this.x,this.y,this.z];
+    }
 }
 
 // Return an array of correct coordinates 
