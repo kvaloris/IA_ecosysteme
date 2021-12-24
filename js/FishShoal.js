@@ -18,11 +18,16 @@ class FishShoal{
     }
 
 
-    static updatePosition(){
-        for(var i=0; i< this.fishesArray.length; i++){
-            //this.fishesArray[i].updatePosition;
-            
-            
+    static updatePosition(c_ag, c_s,c_al,fishesGroup){
+        console.log("c_ag = ", c_ag, " / c_s = ", c_s, " / c_al = ", c_al);
+        this.fishesArray.forEach(fish => fish.move(this.fishesArray, c_ag, c_s, c_al));
+        for (let i = 0; i < fishesGroup.children.length; i++) {
+            let x = this.fishesArray[i].x;
+            let y = this.fishesArray[i].y;
+            let z = this.fishesArray[i].z;
+            fishesGroup.children[i].position.x = x;
+            fishesGroup.children[i].position.y = y;
+            fishesGroup.children[i].position.z = z;
         }
     }
 
@@ -50,23 +55,6 @@ function generateNewGeneration(fishesTab) {
         }
     });
     return fishesTab;
-}
-
-function shoalCenter(fishesTab){
-    let center = { x: 0, y: 0, z: 0 };
-    for(var i=0; i< fishesTab.length; i++){
-        center.x += fishesTab[i].getPosition()[0];
-        center.y += fishesTab[i].getPosition()[1];
-        center.z += fishesTab[i].getPosition()[2];
-    }
-    center = divideV3(center, fishesTab.length);
-
-    return center;
-}
-
-//Temporaire TODO
-function divideV3(v, c) {
-    return { x: v.x / c, y: v.y / c, z: v.z / c};
 }
 
 
