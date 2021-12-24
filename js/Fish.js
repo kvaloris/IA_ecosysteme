@@ -8,7 +8,7 @@ class Fish {
     yearsOld = 0;
     velocity = { x: 0, y: 0, z: 0 }
 
-    constructor(id, x, y, z, color, size, appearance, ageMax) {
+    constructor(id, x, y, z, color, size, appearance, ageMax, yearsOld=0 ) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -17,7 +17,7 @@ class Fish {
         this.size = size;
         this.appearance = appearance;
         this.ageMax = ageMax;
-        this.yearsOld = 0;
+        this.yearsOld = yearsOld;
     }
 
     toString() {
@@ -35,7 +35,7 @@ class Fish {
     static fishRandom(id, fishes) {
 
         let pos = generateCorrectPosition(fishes);
-
+        let newMaxAge=Math.round(Math.random() * (MAXAGEMAX - MINAGEMAX) + MINAGEMAX);
         return new this(
             id,
             pos[0],
@@ -44,7 +44,8 @@ class Fish {
             colorRandom(),
             Math.round(Math.random() * (MAXSIZE - MINSIZE) + MINSIZE),
             appearanceRamdon(),
-            Math.round(Math.random() * (MAXAGEMAX - MINAGEMAX) + MINAGEMAX));
+            newMaxAge,
+            Math.round(Math.random() * (newMaxAge-1)));
     }
 
     // Return the child of fish 1 and fish 2
@@ -272,7 +273,7 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, importanceFactor) {
 const XMIN = 0, XMAX = 200, YMIN = 0, YMAX = 200, ZMIN = 0, ZMAX = 200;
 const TABColor = [0, 1, 2];
 const MINSIZE = 3, MAXSIZE = 10;
-const MINAGEMAX = 1, MAXAGEMAX = 30;
+const MINAGEMAX = 1, MAXAGEMAX = 6;
 const MAXeye = 4, MAXtail = 2, MAXfin = 4; //yeux, queue, nageoir
 
 
