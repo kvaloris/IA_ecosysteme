@@ -50,6 +50,7 @@ class Fish {
 
     // Return the child of fish 1 and fish 2
     static generateChild(id, fish1, fish2, fishes, mutChance) {
+        console.log(mutChance);
         if (fish1 instanceof Fish && fish2 instanceof Fish) {
 
             let pos = generateCorrectPosition(fishes);
@@ -250,7 +251,7 @@ function ageMaxRandom(){
 
 function mutFish(fishInit){
     var parameter = Math.floor(Math.random() * 4) //return 0, 1, 2, 3
-    console.log(parameter);
+    //console.log(parameter);
     switch (parameter) {
         case 0:
           fishInit.color= colorRandom();

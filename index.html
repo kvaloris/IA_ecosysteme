@@ -58,7 +58,7 @@
   <div class="buttons">
     <label for="slider-mutChance">chance to mut</label>
     <input name="slider-mutChance" class="slider-mutChance" type="range" min="0" max="1" value="0.01" step="0.005">
-    
+
     <input type="button" value="next Year" id="button-next-year" class="button-next-year">
   </div>
 
@@ -178,13 +178,14 @@
 
     slider_mutChance.addEventListener('change', () => {
       FishShoal.setMutChance(slider_mutChance.value);
+      console.log("val slider"+slider_mutChance.value);
     })
 
     let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value;
 
     //BUTTONS
     var  btnNextYear = document.querySelector(".button-next-year");
-    console.log(btnNextYear);
+    //console.log(btnNextYear);
     if (btnNextYear!= null){
       btnNextYear.addEventListener('click', () => {
         FishShoal.nextYear();
@@ -218,6 +219,7 @@
       displayFishes();
     });
 
+    FishShoal.setMutChance(slider_mutChance.value);
     //TEXT INFORMATION
     document.querySelector('.nbPoisson').innerHTML= FishShoal.getNbFishToString() ;
 

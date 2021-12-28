@@ -2,7 +2,7 @@ class FishShoal{
 
     static fishesArray = [];
     static nbFishInit;
-    static MUTchance= 0.1;
+    static mutChance= 0.1;
 
     static init(number) {
         for(let i=0; i< number; i++){
@@ -21,7 +21,31 @@ class FishShoal{
     }
 
     static getNbFishToString(){
-        return "Number of fish in the band: " + this.fishesArray.length;
+        var text="Number of fish in the band: " + this.fishesArray.length+ "</br>";
+
+        //calculation of the number of fish per color, mean ageMax and mean size
+        var nbColor= [0];
+        var meanAgeMax=0;
+        var meanSize=0;
+        this.fishesArray.forEach(fish => {
+            while ((nbColor.length-1) < fish.color){
+                nbColor.push(0);
+            }
+            nbColor[fish.color]++;
+            meanAgeMax+=fish.ageMax;
+            meanSize+=fish.size;
+        });
+
+        meanAgeMax= meanAgeMax/this.fishesArray.length;
+        meanSize= meanSize/this.fishesArray.length;
+        text+= "Average life expectancy "+meanAgeMax+"</br>"
+        text+= "Average size "+meanSize+"</br>"
+
+        for(var i=0; i< nbColor.length; i++){
+            text+= "nb fish "+ i+" color: "+ nbColor[i]+"</br>";
+        }
+
+        return text;
     }
     
 
@@ -46,11 +70,12 @@ class FishShoal{
                 this.fishesArray.splice(i,1);
             }
         }
-        this.fishesArray = generateNewGeneration(this.fishesArray, this.nbFishInit, this.MUTchance);
+        this.fishesArray = generateNewGeneration(this.fishesArray, this.nbFishInit, this.mutChance);
     }
 
     static setMutChance(newFloat){
         this.mutChance=newFloat;
+        console.log("set mut "+ this.mutChance);
     }
 }
 
