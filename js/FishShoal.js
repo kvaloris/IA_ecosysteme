@@ -2,6 +2,7 @@ class FishShoal{
 
     static fishesArray = [];
     static nbFishInit;
+    static MUTchance= 0.1;
 
     static init(number) {
         for(let i=0; i< number; i++){
@@ -45,18 +46,22 @@ class FishShoal{
                 this.fishesArray.splice(i,1);
             }
         }
-        this.fishesArray = generateNewGeneration(this.fishesArray, this.nbFishInit);
+        this.fishesArray = generateNewGeneration(this.fishesArray, this.nbFishInit, this.MUTchance);
+    }
+
+    static setMutChance(newFloat){
+        this.mutChance=newFloat;
     }
 }
 
 // Generate a new generation of fishes
-function generateNewGeneration(fishesTab, nbFInit) {
+function generateNewGeneration(fishesTab, nbFInit, mutChance) {
 
     const couples = selection(fishesTab); // [  [fish1, fish2], ...]
 
     couples.forEach(couple => {
         if(Math.random() < getChanceReproduction(fishesTab,nbFInit)){
-            let child1 = Fish.generateChild(fishesTab.length, couple[0], couple[1], fishesTab);
+            let child1 = Fish.generateChild(fishesTab.length, couple[0], couple[1], fishesTab, mutChance);
             fishesTab.push(child1);
         }
     });

@@ -56,6 +56,9 @@
   </div>
 
   <div class="buttons">
+    <label for="slider-mutChance">chance to mut</label>
+    <input name="slider-mutChance" class="slider-mutChance" type="range" min="0" max="1" value="0.01" step="0.005">
+    
     <input type="button" value="next Year" id="button-next-year" class="button-next-year">
   </div>
 
@@ -161,6 +164,7 @@
     const slider_s = document.querySelector(".slider-separation");
     const slider_ag = document.querySelector(".slider-cohesion");
     const slider_al = document.querySelector(".slider-alignment");
+    const slider_mutChance = document.querySelector(".slider-mutChance");
     
     slider_ag.addEventListener('change', () => {
       c_ag = slider_ag.value;
@@ -170,6 +174,10 @@
     })
     slider_al.addEventListener('change', () => {
       c_al = slider_al.value;
+    })
+
+    slider_mutChance.addEventListener('change', () => {
+      FishShoal.setMutChance(slider_mutChance.value);
     })
 
     let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value;

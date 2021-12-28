@@ -49,7 +49,7 @@ class Fish {
     }
 
     // Return the child of fish 1 and fish 2
-    static generateChild(id, fish1, fish2, fishes) {
+    static generateChild(id, fish1, fish2, fishes, mutChance) {
         if (fish1 instanceof Fish && fish2 instanceof Fish) {
 
             let pos = generateCorrectPosition(fishes);
@@ -62,10 +62,11 @@ class Fish {
                 mixColor(fish1.color, fish2.color),
                 Math.round((fish1.size + fish2.size) / 2),
                 mixAppearance(fish1.appearance, fish2.appearance),
-                Math.round((fish1.ageMax + fish2.ageMax) / 2));
-                if(Math.random() <MUTchance){
-                    child= mutFish(child);
-                }
+                Math.round((fish1.ageMax + fish2.ageMax) / 2)
+            );
+            if(Math.random() <mutChance){
+                child= mutFish(child);
+            }
             return child;
         }
         console.error(" Erreur generateChild fish1 or fish2 is not a fish; return fishRandom ");
@@ -306,7 +307,6 @@ const TABColor = [0, 1, 2];
 const MINSIZE = 3, MAXSIZE = 10;
 const MINAGEMAX = 1, MAXAGEMAX = 6;
 const MAXeye = 4, MAXtail = 2, MAXfin = 4; //yeux, queue, nageoir
-const MUTchance= 0.1;
 
 
 /* -------------------   FISHES FOR REFERENCE  --------------------*/
