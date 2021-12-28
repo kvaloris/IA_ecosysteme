@@ -19,6 +19,10 @@
       position: absolute;
       top: 20px;
       left: 20px;
+      font-family: Verdana, Geneva, sans-serif;
+      font-size: 25px;
+      color: #ffffff;
+      font-weight: 700;
     }
 
     .sliders {
@@ -37,7 +41,7 @@
 
 <body>
 
-  <div class="nbPoisson">tpm</div>
+  <div class="nbPoisson"></div>
   <div class="sliders">
     
     <label for="slider-cohesion">Cohésion</label>
@@ -151,6 +155,7 @@
     scene.add(pointLight);
     scene.add(directionalLight);
 
+    
     // SLIDERS
 
     const slider_s = document.querySelector(".slider-separation");
@@ -177,6 +182,7 @@
         FishShoal.nextYear();
         deleteGroup();
         displayFishes();
+        document.querySelector('.nbPoisson').innerHTML= FishShoal.getNbFishToString() ;
       });
     }
     
@@ -203,6 +209,9 @@
       deleteGroup();
       displayFishes();
     });
+
+    //TEXT INFORMATION
+    document.querySelector('.nbPoisson').innerHTML= FishShoal.getNbFishToString() ;
 
   </script>
 

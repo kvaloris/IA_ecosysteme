@@ -19,6 +19,10 @@ class FishShoal{
         return text;
     }
 
+    static getNbFishToString(){
+        return "Number of fish in the band: " + this.fishesArray.length;
+    }
+    
 
     static updatePosition(c_ag, c_s,c_al,fishesGroup){
         //console.log("c_ag = ", c_ag, " / c_s = ", c_s, " / c_al = ", c_al);
@@ -42,7 +46,6 @@ class FishShoal{
             }
         }
         this.fishesArray = generateNewGeneration(this.fishesArray, this.nbFishInit);
-        console.log(this.fishesArray.length);
     }
 }
 
