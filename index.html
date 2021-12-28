@@ -14,9 +14,22 @@
     body {
       overflow: hidden;
     }
+
+    .nbPoisson{
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
     .sliders {
       position: absolute;
       top: 20px;
+      right: 20px;
+    }
+
+    .buttons{
+      position: absolute;
+      top: 60px;
       right: 20px;
     }
   </style>
@@ -24,6 +37,7 @@
 
 <body>
 
+  <div class="nbPoisson">tpm</div>
   <div class="sliders">
     
     <label for="slider-cohesion">Cohésion</label>
@@ -35,6 +49,10 @@
     <label for="slider-alignment">Alignement</label>
     <input name="slider-alignment" class="slider-alignment" type="range" min="0" max="0.01" value="0.0005" step="0.0005">
 
+  </div>
+
+  <div class="buttons">
+    <input type="button" value="next Year" id="button-next-year" class="button-next-year">
   </div>
 
 <script type="module">
@@ -150,6 +168,18 @@
     })
 
     let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value;
+
+    //BUTTONS
+    var  btnNextYear = document.querySelector(".button-next-year");
+    console.log(btnNextYear);
+    if (btnNextYear!= null){
+      btnNextYear.addEventListener('click', () => {
+        FishShoal.nextYear();
+        deleteGroup();
+        displayFishes();
+      });
+    }
+    
 
     // ANIMATION
 
