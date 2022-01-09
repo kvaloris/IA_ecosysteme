@@ -81,7 +81,6 @@ class Fish {
     // BOIDS
 
     // Separation
-
     separate(fishes, c) {
 
         const dmin = 30;
@@ -105,7 +104,6 @@ class Fish {
     }
 
     // Alignement
-
     align(fishes, c) {
 
         let v = { x: 0, y: 0, z: 0 };
@@ -122,8 +120,7 @@ class Fish {
         return v;
     }
 
-    // cohesion
-
+    // Cohesion
     aggregate(fishes, c) {
 
         let v = { x: 0, y: 0, z: 0 };
@@ -140,6 +137,7 @@ class Fish {
         return v;
     }
 
+    // Keep the flock within a certain area
     bound() {
         const xmin = XMIN; const xmax = XMAX;
         const ymin = YMIN; const ymax = YMAX;
@@ -159,6 +157,7 @@ class Fish {
         return v;
     }
 
+    // Limit the speed of the boid
     limitSpeed() {
         const vlim = 1;
 
@@ -168,12 +167,9 @@ class Fish {
         }
     }
 
-    // Move the position
-    
+    // Update the position of fish
     move(fishes, c_ag, c_s, c_al) {
-        this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));
-        // this.velocity = addV3(this.velocity, this.aggregate(fishes, c_ag));
-        
+        this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));        
         this.limitSpeed();
         let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
         this.x = position.x;
@@ -247,18 +243,18 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, importanceFactor) {
     score = score + Math.abs(fishToComp.y - bestFish.y) * importanceFactor["yFactor"]; //y
     score = score + Math.abs(fishToComp.z - bestFish.z) * importanceFactor["zFactor"]; //z
 
-    //color
+    // Color
     score = score + (fishToComp.color === bestFish.color ? 0 : 1 * importanceFactor["colorFactor"]); // color
 
-    //size
+    // Size
     score = score + Math.abs(fishToComp.size - bestFish.size) * importanceFactor["sizeFactor"];
 
-    //Appearance
+    // Appearance
     score = score + Math.abs(fishToComp.appearance[0] - bestFish.appearance[0]) * importanceFactor["appearanceFactor"]; //yeux
     score = score + Math.abs(fishToComp.appearance[1] - bestFish.appearance[1]) * importanceFactor["appearanceFactor"]; //queu
     score = score + Math.abs(fishToComp.appearance[2] - bestFish.appearance[2]) * importanceFactor["appearanceFactor"]; //nageoires
 
-    //age
+    // Age
     score = score + Math.abs(fishToComp.yearsOld - bestFish.ageMax) * importanceFactor["yearsOldFactor"];
 
     return score;
@@ -278,10 +274,10 @@ const MAXeye = 4, MAXtail = 2, MAXfin = 4; //yeux, queue, nageoir
 
 /* -------------------   FISHES FOR REFERENCE  --------------------*/
 
-// reference for fish most suited for living
+// Reference for fish most suited for living
 bestFishlife = new Fish(0, 0, 0, 0, 1, 5, [2, 1, 2], 5);
 
-// importance coefficient
+// Importance coefficient
 var importanceLife = {
     "xFactor": 0 / XMAX,
     "yFactor": 0 / YMAX,
@@ -292,9 +288,9 @@ var importanceLife = {
     "yearsOldFactor": 0 / MAXAGEMAX
 };
 
-// reference for fish most suited for being eaten by humans
+// Reference for fish most suited for being eaten by humans
 bestFishToHuman = new Fish(0, 0, 0, 0, [50, 60, 80], 10, [2, 1, 2], 2);
-// importance coefficient
+// Importance coefficient
 var importanceToHuman = {
     "xFactor": 0 / XMAX,
     "yFactor": 0 / YMAX,
