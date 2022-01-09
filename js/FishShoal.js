@@ -13,7 +13,7 @@ class FishShoal{
         
     static getNbFishToString(){
         var text="Number of fish in the band: " + this.fishesArray.length+ "</br>";
-        //calculation of the number of fish per color, mean ageMax and mean size
+        // Calculation of the number of fish per color, mean ageMax and mean size
         var nbColor= [0];
         var meanAgeMax=0;
         var meanSize=0;
@@ -27,12 +27,16 @@ class FishShoal{
         });
 
         meanSize= meanSize/this.fishesArray.length;
-        text+= "Average life expectancy "+meanAgeMax+"</br>"
+        text+= "Average life expectancy: "+meanAgeMax+"</br>"
         meanAgeMax= meanAgeMax/this.fishesArray.length;
-        text+= "Average size "+meanSize+"</br>"
+        text+= "Average size: "+meanSize+"</br>"
 
         for(var i=0; i< nbColor.length; i++){
-            text+= "nb fish "+ i+" color: "+ nbColor[i]+"</br>";
+            let color;
+            if(i===0) color = "red";
+            else if(i===1) color = "blue";
+            else color = "yellow";
+            text+= "Nb of "+color+" fish: "+ nbColor[i]+"</br>";
         }
 
         return text;

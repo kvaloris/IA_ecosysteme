@@ -13,11 +13,13 @@
   <style>
     body {
       overflow: hidden;
+      margin: 0;
     }
 
     .nbPoisson{
       position: absolute;
-      top: 80px;
+      width: 35vw;
+      top: 20px;
       left: 20px;
       font-family: Verdana, Geneva, sans-serif;
       font-size: 15px;
@@ -27,12 +29,20 @@
 
     .sliders {
       position: absolute;
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      width: 60vw;
       top: 20px;
       right: 20px;
     }
 
     .buttons{
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
       position: absolute;
+      width: 60vw;
       top: 60px;
       right: 20px;
     }
@@ -119,13 +129,13 @@
       
       switch(fish.color){
         case 0: 
-        fichierName = "poisson2.glb";
+        fichierName = "poisson2.glb"; // red
           break;
         case 1:
-        fichierName = "poisson.glb";
+        fichierName = "poisson.glb"; // blue
           break;
         default:
-        fichierName = "poisson3.glb";
+        fichierName = "poisson3.glb"; // yellow
           break;
       }
 
