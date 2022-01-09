@@ -31,6 +31,7 @@ class FishShoal{
             let dir = this.fishesArray[i].velocity;
             dir = addV3(dir, {x: x, y: y, z: z});
             fishesGroup.children[i].lookAt(dir.x, dir.y, dir.z);
+            fishesGroup.children[i].rotateY(Math.PI / 2);
         }
     }
 
