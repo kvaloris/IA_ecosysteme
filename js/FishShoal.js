@@ -10,19 +10,9 @@ class FishShoal{
         }
         this.nbFishInit =number;
     }
-
-    
-    static toString(){
-        var text ="";
-        for(var i=0; i< this.fishesArray.length; i++){
-            text = text + this.fishesArray[i].toString()+ '</br>';
-        }
-        return text;
-    }
-
-        var text="Number of fish in the band: " + this.fishesArray.length+ "</br>";
+        
     static getNbFishToString(){
-
+        var text="Number of fish in the band: " + this.fishesArray.length+ "</br>";
         //calculation of the number of fish per color, mean ageMax and mean size
         var nbColor= [0];
         var meanAgeMax=0;
@@ -99,7 +89,7 @@ function generateNewGeneration(fishesTab, nbFInit, mutChance) {
 }
 
 function getChanceReproduction(fishesTab, nbFInit){
-    if(fishesTab.length>nbFInit*2){
+    if(fishesTab.length>nbFInit){
         return CHANCEreproductionInitial/GROWpopulation;
     }
     return CHANCEreproductionInitial;
