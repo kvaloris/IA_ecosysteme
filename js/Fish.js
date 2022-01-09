@@ -8,7 +8,7 @@ class Fish {
     yearsOld = 0;
     velocity = { x: 0, y: 0, z: 0 }
 
-    constructor(id, x, y, z, color, size, appearance, ageMax) {
+    constructor(id, x, y, z, color, size, appearance, ageMax, yearsOld=0 ) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -17,7 +17,7 @@ class Fish {
         this.size = size;
         this.appearance = appearance;
         this.ageMax = ageMax;
-        this.yearsOld = 0;
+        this.yearsOld = yearsOld;
     }
 
     toString() {
@@ -35,25 +35,27 @@ class Fish {
     static fishRandom(id, fishes) {
 
         let pos = generateCorrectPosition(fishes);
-
+        let newMaxAge=ageMaxRandom();
         return new this(
             id,
             pos[0],
             pos[1],
             pos[2],
             colorRandom(),
-            Math.round(Math.random() * (MAXSIZE - MINSIZE) + MINSIZE),
+            sizeRandom(),
             appearanceRamdon(),
-            Math.round(Math.random() * (MAXAGEMAX - MINAGEMAX) + MINAGEMAX));
+            newMaxAge,
+            Math.round(Math.random() * (newMaxAge-1)));
     }
 
     // Return the child of fish 1 and fish 2
-    static generateChild(id, fish1, fish2, fishes) {
+    static generateChild(id, fish1, fish2, fishes, mutChance) {
+        console.log(mutChance);
         if (fish1 instanceof Fish && fish2 instanceof Fish) {
 
             let pos = generateCorrectPosition(fishes);
-
-            return new this(
+            
+            var child = new this(
                 id,
                 pos[0],
                 pos[1],
@@ -61,7 +63,12 @@ class Fish {
                 mixColor(fish1.color, fish2.color),
                 Math.round((fish1.size + fish2.size) / 2),
                 mixAppearance(fish1.appearance, fish2.appearance),
-                Math.round((fish1.ageMax + fish2.ageMax) / 2));
+                Math.round((fish1.ageMax + fish2.ageMax) / 2)
+            );
+            if(Math.random() <mutChance){
+                child= mutFish(child);
+            }
+            return child;
         }
         console.error(" Erreur generateChild fish1 or fish2 is not a fish; return fishRandom ");
         return "Erreur";
@@ -213,6 +220,9 @@ function mixColor(color1, color2) {
     return color2;
 }
 
+function sizeRandom(){
+    return Math.round(Math.random() * (MAXSIZE - MINSIZE) + MINSIZE);
+}
 // Return a random appearance 
 function appearanceRamdon() { //TODO
 
@@ -229,6 +239,30 @@ function mixAppearance(appearance1, appearance2) { //TODO
         appearance1[i] = appearance2[i];
     }
     return appearance1;
+}
+
+function ageMaxRandom(){
+    return Math.round(Math.random() * (MAXAGEMAX - MINAGEMAX) + MINAGEMAX);
+}
+
+function mutFish(fishInit){
+    var parameter = Math.floor(Math.random() * 4) //return 0, 1, 2, 3
+    //console.log(parameter);
+    switch (parameter) {
+        case 0:
+          fishInit.color= colorRandom();
+          break;
+        case 1:
+            fishInit.size= sizeRandom();
+            break;
+        case 2:
+            fishInit.appearance=appearanceRamdon();
+          break;
+        default:
+            fishInit.ageMax=ageMaxRandom();
+            break;
+    }
+    return fishInit;
 }
 
 // Compare a fish and a reference with importance coefficients
@@ -268,7 +302,7 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, importanceFactor) {
 const XMIN = 0, XMAX = 200, YMIN = 0, YMAX = 200, ZMIN = 0, ZMAX = 200;
 const TABColor = [0, 1, 2];
 const MINSIZE = 3, MAXSIZE = 10;
-const MINAGEMAX = 1, MAXAGEMAX = 30;
+const MINAGEMAX = 1, MAXAGEMAX = 6;
 const MAXeye = 4, MAXtail = 2, MAXfin = 4; //yeux, queue, nageoir
 
 

@@ -1,11 +1,14 @@
 class FishShoal{
 
     static fishesArray = [];
+    static nbFishInit;
+    static mutChance= 0.1;
 
     static init(number) {
         for(let i=0; i< number; i++){
             this.fishesArray.push(Fish.fishRandom(i, this.fishesArray));
         }
+        this.nbFishInit =number;
     }
 
     
@@ -16,6 +19,35 @@ class FishShoal{
         }
         return text;
     }
+
+        var text="Number of fish in the band: " + this.fishesArray.length+ "</br>";
+    static getNbFishToString(){
+
+        //calculation of the number of fish per color, mean ageMax and mean size
+        var nbColor= [0];
+        var meanAgeMax=0;
+        var meanSize=0;
+        this.fishesArray.forEach(fish => {
+            while ((nbColor.length-1) < fish.color){
+                nbColor.push(0);
+            }
+            nbColor[fish.color]++;
+            meanAgeMax+=fish.ageMax;
+            meanSize+=fish.size;
+        });
+
+        meanSize= meanSize/this.fishesArray.length;
+        text+= "Average life expectancy "+meanAgeMax+"</br>"
+        meanAgeMax= meanAgeMax/this.fishesArray.length;
+        text+= "Average size "+meanSize+"</br>"
+
+        for(var i=0; i< nbColor.length; i++){
+            text+= "nb fish "+ i+" color: "+ nbColor[i]+"</br>";
+        }
+
+        return text;
+    }
+    
 
     // Update the positions of the fishes and rotate them correctly
     static updatePosition(c_ag, c_s,c_al,fishesGroup){
@@ -43,28 +75,39 @@ class FishShoal{
                 this.fishesArray.splice(i,1);
             }
         }
-        this.fishesArray = generateNewGeneration(this.fishesArray);
+        this.fishesArray = generateNewGeneration(this.fishesArray, this.nbFishInit, this.mutChance);
+    }
+
+    static setMutChance(newFloat){
+        this.mutChance=newFloat;
+        console.log("set mut "+ this.mutChance);
     }
 }
 
 // Generate a new generation of fishes
-function generateNewGeneration(fishesTab) {
+function generateNewGeneration(fishesTab, nbFInit, mutChance) {
 
     const couples = selection(fishesTab); // [  [fish1, fish2], ...]
 
     couples.forEach(couple => {
-        if(Math.random() < CHANCEreproduction){
-            let child1 = Fish.generateChild(fishesTab.length, couple[0], couple[1], fishesTab);
+        if(Math.random() < getChanceReproduction(fishesTab,nbFInit)){
+            let child1 = Fish.generateChild(fishesTab.length, couple[0], couple[1], fishesTab, mutChance);
             fishesTab.push(child1);
         }
     });
     return fishesTab;
 }
 
-
+function getChanceReproduction(fishesTab, nbFInit){
+    if(fishesTab.length>nbFInit*2){
+        return CHANCEreproductionInitial/GROWpopulation;
+    }
+    return CHANCEreproductionInitial;
+}
 
 /*--------------------------------------------------------------------*/
 /*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
 
-const CHANCEreproduction= 0.1;
+const CHANCEreproductionInitial= 0.2;
+const GROWpopulation=2; //tolérence du nombre de membre (multiplicateur)
