@@ -19,7 +19,6 @@ class FishShoal{
 
 
     static updatePosition(c_ag, c_s,c_al,fishesGroup){
-        console.log("c_ag = ", c_ag, " / c_s = ", c_s, " / c_al = ", c_al);
         this.fishesArray.forEach(fish => fish.move(this.fishesArray, c_ag, c_s, c_al));
         for (let i = 0; i < fishesGroup.children.length; i++) {
             let x = this.fishesArray[i].x;
@@ -28,6 +27,11 @@ class FishShoal{
             fishesGroup.children[i].position.x = x;
             fishesGroup.children[i].position.y = y;
             fishesGroup.children[i].position.z = z;
+
+            let dir = this.fishesArray[i].velocity;
+            dir = addV3(dir, {x: x, y: y, z: z});
+            fishesGroup.children[i].lookAt(dir.x, dir.y, dir.z);
+            fishesGroup.children[i].rotateY(Math.PI / 2);
         }
     }
 
