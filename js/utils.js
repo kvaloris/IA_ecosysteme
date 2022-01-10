@@ -10,6 +10,28 @@ function getRandomFloat(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-// function containsObject(obj, list) {
-//     list.some(elt => elt === obj);
-// }
+// Add two vectors v1 and v2
+function addV3(v1, v2) {
+    return { x: v1.x + v2.x, y: v1.y + v2.y, z: v1.z + v2.z};
+}
+
+// Substract two vectors v1 and v2
+function substractV3(v1, v2) {
+    return { x: v1.x - v2.x, y: v1.y - v2.y, z: v1.z - v2.z};
+}
+
+// Multiply a vector v by a constant c
+function multiplyV3(v, c) {
+    return { x: v.x * c, y: v.y * c, z: v.z * c};
+}
+
+// Divide a vector v by a constant c
+function divideV3(v, c) {
+    return { x: v.x / c, y: v.y / c, z: v.z / c};
+}
+
+// Calculate module
+
+function moduleV3(v) {
+    return Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2));
+}
