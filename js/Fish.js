@@ -183,6 +183,24 @@ class Fish {
         this.y = position.y;
         this.z = position.z;
     }
+
+    // TO BE REPLACED
+    getSpecie() {
+        switch (this.color) {
+            case 0:
+                return SPECIES[0];
+                break;
+            case 1:
+                return SPECIES[1];
+                break;
+            case 2:
+                return SPECIES[2];
+                break;
+            default:
+                throw "Not a color";
+                break;
+        }
+    }
 }
 
 // Return an array of correct coordinates 

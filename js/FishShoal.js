@@ -76,6 +76,23 @@ class FishShoal{
         this.mutChance=newFloat;
         console.log("set mut "+ this.mutChance);
     }
+
+    static getFishesBySpecies() {
+
+        // Create an object with species names as keys and arrays as values
+        const species = new Object();
+        SPECIES.forEach(specie => {
+            species[specie] = [];
+        });
+        
+        // Fill species arrays with corresponding fishes
+        this.fishesArray.forEach(fish => {
+            let specie = fish.getSpecie();
+            species[specie].push(fish);
+        })
+
+        return species;
+    }
 }
 
 // Generate a new generation of fishes
@@ -105,3 +122,4 @@ function getChanceReproduction(fishesTab, nbFInit){
 
 const CHANCEreproductionInitial= 0.2;
 const GROWpopulation=2; //tolérence du nombre de membre (multiplicateur)
+const SPECIES = ["Specie A", "Specie B",  "Specie C"];
