@@ -37,7 +37,39 @@ body {
 #species-display {
   width: 100vw;
   height: 100vh;
-  background-color: aliceblue;
   position: absolute;
   display: none;
+  background-color: aquamarine;
+  z-index: -2;
+}
+
+.grid-fishes {
+  width: 100vw;
+  height: 100vh;
+}
+
+
+
+#list-fishes {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: -1;
+}
+.diagram {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  border: 1px solid black;
+}
+.left {
+  float: left;
+  margin-right: .25em;
+}
+.right {
+  float: right;
+  margin-left: .25em;
 }

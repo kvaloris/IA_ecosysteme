@@ -40,6 +40,8 @@
 
   <canvas id="sea"></canvas>
 
+  <canvas id="list-fishes"></canvas>
+
   <div id="species-display">
     <div class="grid-fishes"></div>
   </div>
@@ -50,6 +52,7 @@
     import { OrbitControls } from './vendor_mods/three/examples/jsm/controls/OrbitControls.js';
     import { GLTFLoader } from './vendor_mods/three/examples/jsm/loaders/GLTFLoader.js';
     // import { displaySpecies } from './js/displaySpecies.js';
+    import { TrackballControls } from './vendor_mods/three/examples/jsm/controls/TrackballControls.js';
 
     const scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -83,7 +86,6 @@
         poisson.position.set(x, y, z);
         
         group.add(poisson);
-
       }, undefined, function (error) {
         console.error(error);
       });
@@ -216,33 +218,122 @@
       const grid = document.querySelector('.grid-fishes');
       div.style.display = "inherit";
 
+      canvas.style.display = "none";
+      document.querySelector('.buttons').style.display = "none";
+      document.querySelector('.nbPoisson').style.display = "none";
+      document.querySelector('.sliders').style.display = "none";
+      const canvasFish = document.querySelector('#list-fishes');
+      const rendererFish = new THREE.WebGLRenderer({canvas: canvasFish, alpha: true});
 
-      
-      for (let i = 0; i < 15; i++) {
-        displayFishInSpeciesDisplay(FishShoal.fishesArray[i], grid);
+      const sceneElements = [];
+      function addScene(elem, fn) {
+        sceneElements.push({elem, fn});
       }
-    }
 
-    function displayFishInSpeciesDisplay(fish, node) {
+      function makeScene(elem) {
+        const sceneFish = new THREE.Scene();
+        sceneFish.background = new THREE.Color( 0xff0000 ); // TEST
 
-      const fishCanvas = document.createElement('canvas');
-      fishCanvas.classList.add('fish-display');
-      node.appendChild(fishCanvas);
-
-      const sceneFish = new THREE.Scene();
-      const cameraFish = new THREE.PerspectiveCamera(75, 1, 0.1, 10);
-      cameraFish.position.z = 0.8;
-
-      const rendererFish = new THREE.WebGLRenderer({ canvas : fishCanvas, antialias: true });
-      rendererFish.setSize(100, 100);
-      node.appendChild(rendererFish.domElement);
-
-      const ambientLightFish = new THREE.AmbientLight(0x999999);
-      sceneFish.add(ambientLightFish);
+        const fov = 45;
+        const aspect = 2;  // the canvas default
+        const near = 0.1;
+        const far = 5;
+        const cameraFish = new THREE.PerspectiveCamera(fov, aspect, near, far);
+        cameraFish.position.set(0, 1, 2);
+        cameraFish.lookAt(0, 0, 0);
+        sceneFish.add(cameraFish);
     
-      displayFishAt(fish, sceneFish, fish.size / MAXSIZE, 0, 0, 0);
+        const controlsFish = new TrackballControls(cameraFish, elem);
+        controlsFish.noZoom = true;
+        controlsFish.noPan = true;
 
-      animate2(rendererFish, sceneFish, cameraFish);
+        {
+          const color = 0xFFFFFF;
+          const intensity = 1;
+          const light = new THREE.DirectionalLight(color, intensity);
+          light.position.set(-1, 2, 4);
+          cameraFish.add(light);
+        }
+
+        return {sceneFish, cameraFish, controlsFish};
+      }
+
+      for(let i=0; i<FishShoal.fishesArray.length; i++) {
+        let fish = FishShoal.fishesArray[i];
+        // displayFishInSpeciesDisplay(FishShoal.fishesArray[i], grid);
+
+        // Create div for each fish
+        const elem = document.createElement('span');
+        elem.classList.add('diagram');
+        elem.id = 'list-fish-' + i;
+        grid.appendChild(elem);
+
+        const {sceneFish, cameraFish, controlsFish} = makeScene(elem);
+        displayFishAt(fish, sceneFish, 1, 0, 0, 0);
+        // const geometry = new THREE.BoxGeometry(1, 1, 1);
+        // const material = new THREE.MeshPhongMaterial({color: 'red'});
+        // const mesh = new THREE.Mesh(geometry, material);
+        // sceneFish.add(mesh);
+
+        addScene(elem, (time, rect) => {
+          cameraFish.aspect = rect.width / rect.height;
+          cameraFish.updateProjectionMatrix();
+          controlsFish.handleResize();
+          controlsFish.update();
+          // mesh.rotation.y = time * .1;
+          rendererFish.render(sceneFish, cameraFish);
+        });
+      }
+
+      function resizeRendererToDisplaySize(renderer) {
+        const canvasFish = renderer.domElement;
+        const width = canvasFish.clientWidth;
+        const height = canvasFish.clientHeight;
+        const needResize = canvasFish.width !== width || canvasFish.height !== height;
+        if (needResize) {
+          renderer.setSize(width, height, false);
+        }
+        return needResize;
+      }
+
+      const clearColor = new THREE.Color('#000');
+      function render(time) {
+        time *= 0.001;
+
+        resizeRendererToDisplaySize(rendererFish);
+
+        rendererFish.setScissorTest(false);
+        rendererFish.setClearColor(clearColor, 0);
+        rendererFish.clear(true, true);
+        rendererFish.setScissorTest(true);
+
+        const transform = `translateY(${window.scrollY}px)`;
+        rendererFish.domElement.style.transform = transform;
+
+        for (const {elem, fn} of sceneElements) {
+          // get the viewport relative position of this element
+          const rect = elem.getBoundingClientRect();
+          const {left, right, top, bottom, width, height} = rect;
+
+          const isOffscreen =
+              bottom < 0 ||
+              top > rendererFish.domElement.clientHeight ||
+              right < 0 ||
+              left > rendererFish.domElement.clientWidth;
+
+          if (!isOffscreen) {
+            const positiveYUpBottom = rendererFish.domElement.clientHeight - bottom;
+            rendererFish.setScissor(left, positiveYUpBottom, width, height);
+            rendererFish.setViewport(left, positiveYUpBottom, width, height);
+
+            fn(time, rect);
+          }
+        }
+
+        requestAnimationFrame(render);
+      }
+
+      requestAnimationFrame(render);
     }
 
     // Display the fish passed in parameter 
