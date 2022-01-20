@@ -45,11 +45,8 @@ class NeuralNetwork{
 
 		//input activations
 		for (var i=0; i<this.nInput-1; i++) {
-            //console.log("   ",this.aInput[i]);
-            //console.log("   ",inputs[i]);
 		    this.aInput[i]= inputs[i]; //TODO ca ne marchhe pas
 		}
-        console.log(tabToString(this.aInput[i]));
 
         
 		//hidden activations
@@ -126,7 +123,8 @@ class NeuralNetwork{
 
     test( patterns){
         for (var p=0; p<patterns.length; p++) {
-            console.log(tabToString(patterns[p]), '->', tabToString(this.update(patterns[p])));
+            console.log(patterns[p]);
+            console.log(tabToString(patterns[p][0]), '->', tabToString(this.update(patterns[p][0])));
         }
     }
 
