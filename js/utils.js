@@ -37,15 +37,20 @@ function moduleV3(v) {
 }
 
 function makeRandMatrix (I , J){
-	var matrix= new Array();
+	var matrix= new Array(I);
  
 	for (var i=0; i<I; i++) {
+	   matrix[i] = new Array(J); 
 	  for (var j=0; j<J; j++) {
-		if (!matrix[i]) matrix[i] = new Array(); 
 		matrix[i][j] = getRandomFloat(-2.0,2.0);
+		console.log("matrix[i][j]",matrix[i][j]);
 	  }
+	  console.log("matrix[i]",matrix[i]);
 	} 
- 
+	console.log (I,J);
+	console.log("matrix[0]",matrix[0]);
+	console.log ("matrix",matrix);
+   
 	return matrix;
 }
 
@@ -58,6 +63,6 @@ function makeMatrix (I , J){
 		matrix[i][j] = 0;
 	  }
 	} 
- 
+  console.log ("matrix",matrix);
 	return matrix;
 }

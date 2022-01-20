@@ -31,6 +31,7 @@ class NeuralNetwork{
 		this.aOutput= (new Array (nOutput)).fill(1.0);
 
 		this.wInput = makeRandMatrix (this.nInput , this.nHidden);
+        console.log ("wInput",this.wInput);
 		this.wOutput = makeRandMatrix (this.nHidden , this.nOutput);
 
 		this.cInput = makeMatrix (this.nInput , this.nHidden);
@@ -45,9 +46,11 @@ class NeuralNetwork{
 
 		//input activations
 		for (var i=0; i<this.nInput-1; i++) {
-		    this.aInput[i]= inputs[i]; //TODO ca ne marchhe pas
+            //console.log()
+		    this.aInput[i]= inputs[i];
 		}
-
+        console.log ("aInput",this.aInput);
+        console.log ("wInput",this.wInput);
         
 		//hidden activations
 		for (var j=0; j<this.nHidden; j++) {
@@ -55,15 +58,18 @@ class NeuralNetwork{
 			for (var i=0; i<this.nInput; i++) {
 				sum=sum +this.aInput[i]*this.wInput[i][j];
 			}
-			this.aHidden[j]= Math.tanh(sum)
+			this.aHidden[j]= Math.tanh(sum);
 		} 
+        console.log ("aHidden",this.aHidden);
 
+        //console.log(this.aHidden[j]);
 		//output activations
 		for (var j=0; j<this.nOutput; j++) {
 			var sum = 0.0;
 			for (var i=0; i<this.nHidden; i++) {
 				sum=sum +this.aHidden[i]*this.wOutput[i][j];
 			}
+            //console.log(sum)
 			this.aOutput[j]= Math.tanh(sum)
 		}
 
@@ -123,7 +129,7 @@ class NeuralNetwork{
 
     test( patterns){
         for (var p=0; p<patterns.length; p++) {
-            console.log(patterns[p]);
+            //console.log(patterns[p]);
             console.log(tabToString(patterns[p][0]), '->', tabToString(this.update(patterns[p][0])));
         }
     }
