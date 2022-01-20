@@ -8,30 +8,30 @@ class NeuralNetwork{
 	nOutput;
 
 	//activations for nodes
-	aInput= [];
-	aHidden= [];
-	aOutput= [];
+	aInput;
+	aHidden;
+	aOutput;
 
 	// weights
-	wInput= [];
-	wOutput= [];
+	wInput;
+	wOutput;
 
 	//last change in weights for momentum
-	cInput= [];
-	cOutput= [];
+	cInput;
+	cOutput;
 
 	constructor(nInput, nHidden, nOutput){
 		this.nInput=nInput+1; //for bias node
 		this.nHidden=nHidden;
 		this.nOutput=nOutput;
 
-		this.aInput= new Array (nInput);
+		this.aInput= new Array (this.nInput);
         this.aInput=this.aInput.fill(1.0);
 		this.aHidden=(new Array (nHidden)).fill(1.0);
 		this.aOutput= (new Array (nOutput)).fill(1.0);
 
 		this.wInput = makeRandMatrix (this.nInput , this.nHidden);
-        console.log ("wInput",this.wInput);
+        //console.log ("wInput",this.wInput);
 		this.wOutput = makeRandMatrix (this.nHidden , this.nOutput);
 
 		this.cInput = makeMatrix (this.nInput , this.nHidden);
@@ -46,11 +46,10 @@ class NeuralNetwork{
 
 		//input activations
 		for (var i=0; i<this.nInput-1; i++) {
-            //console.log()
 		    this.aInput[i]= inputs[i];
 		}
-        console.log ("aInput",this.aInput);
-        console.log ("wInput",this.wInput);
+        //console.log ("aInput",this.aInput);
+        //console.log ("inputs",inputs);
         
 		//hidden activations
 		for (var j=0; j<this.nHidden; j++) {
@@ -60,7 +59,7 @@ class NeuralNetwork{
 			}
 			this.aHidden[j]= Math.tanh(sum);
 		} 
-        console.log ("aHidden",this.aHidden);
+        //console.log ("aHidden",this.aHidden);
 
         //console.log(this.aHidden[j]);
 		//output activations
@@ -87,7 +86,7 @@ class NeuralNetwork{
         var outputDeltas = (new Array (this.nOutput)).fill(0.0);
         for (var k=0; k<this.nOutput; k++) {
             var error = targets[k]-this.aOutput[k];
-            outputDeltas[k] = Math.tanh(this.aOutput[k]) * error;
+            outputDeltas[k] = DTanh(this.aOutput[k]) * error;
         }
 
         // calculate error terms for hidden
@@ -97,7 +96,7 @@ class NeuralNetwork{
             for (var k=0; k<this.nOutput; k++) {
                 error = error + outputDeltas[k]*this.wOutput[j][k];
             }
-            hiddenDeltas[j] = Math.tanh(this.aHidden[j]) * error;
+            hiddenDeltas[j] = DTanh(this.aHidden[j]) * error;
         }
 
         // update output weights
@@ -122,7 +121,7 @@ class NeuralNetwork{
         // calculate error
         var error = 0.0;
         for (var k=0; k<targets.length; k++) {
-            error = error + 0.5*(targets[k]- Math.pow(this.aOutput[k]),2);
+            error = error + 0.5* Math.pow(targets[k]-this.aOutput[k],2);
         }
         return error;
     }
@@ -145,7 +144,7 @@ class NeuralNetwork{
         }
     }
 
-    train(patterns, iterations=1, N=0.5, M=0.1){
+    train(patterns, iterations=1000, N=0.5, M=0.1){
         // N: learning rate
         // M: momentum factor
 
@@ -159,7 +158,7 @@ class NeuralNetwork{
                 error = error + this.backPropagate(targets, N, M);
             }
             if (i % 100 == 0){
-                console.log ("error ",error, "-14f");
+                console.log ("error ",error);
             }
         }
         
@@ -175,7 +174,7 @@ class NeuralNetwork{
             [[1,0], [0]],
             [[1,1], [1]]
         ];
-        console.log(tabToString(pat));
+        //console.log(tabToString(pat));
         // create a network with two input, two hidden, and one output nodes
         var n =  new NeuralNetwork(2, 2, 1);
         // train it with some patterns
@@ -204,4 +203,8 @@ function tabToString(tab){
     }
     text+="] ";
     return text;
+}
+
+function DTanh(y){
+    return 1.0-y*y;
 }
