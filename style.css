@@ -1,7 +1,7 @@
 body {
-    overflow: hidden;
+    /* overflow: hidden; */
     margin: 0;
-  }
+}
 
 .nbPoisson{
     position: absolute;
@@ -35,22 +35,18 @@ body {
 }
 
 #species-display {
-  width: 100vw;
-  height: 100vh;
+  max-width: 100%;
+  min-height: 100vh;
   position: absolute;
   display: none;
   background-color: aquamarine;
-  z-index: -2;
+  z-index: 0;
+  flex-direction: column;
+  gap: 40px;
+  /* padding: 0 10%; */
 }
 
-.grid-fishes {
-  width: 100vw;
-  height: 100vh;
-}
-
-
-
-#list-fishes {
+#list-fishes, #sea {
   position: absolute;
   left: 0;
   top: 0;
@@ -59,17 +55,52 @@ body {
   display: block;
   z-index: -1;
 }
+.grid-fishes {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 .diagram {
   display: inline-block;
-  width: 100px;
-  height: 100px;
-  border: 1px solid black;
+  width: 150px;
+  height: 150px;
+  border-radius: 20px;
 }
-.left {
-  float: left;
-  margin-right: .25em;
+
+.close {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.right {
-  float: right;
-  margin-left: .25em;
+
+.close-1, .close-2 {
+  background-color: black;
+  transform: rotateZ(45deg);
+}
+
+.close-1 {
+  position: absolute;
+  width: 100%;
+  height: 10%;
+}
+.close-2 {
+  position: absolute;
+  width: 10%;
+  height: 100%;
+}
+
+h1 {
+  text-align: center;
+}
+
+.species-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
 }

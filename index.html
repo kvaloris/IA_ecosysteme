@@ -40,10 +40,13 @@
 
   <canvas id="sea"></canvas>
 
-  <canvas id="list-fishes"></canvas>
-
   <div id="species-display">
-    <div class="grid-fishes"></div>
+    <h1>Espèces de poissons</h1>
+    <div class="species-tabs"></div>
+    <div id="close-species-display" class="close">
+      <div class="close-1"></div>
+      <div class="close-2"></div>
+    </div>
   </div>
 
   <script type="module">
@@ -183,21 +186,23 @@
 
     // ANIMATION
 
+    let idAnim;
+
     function animate() {
 
-      requestAnimationFrame(animate);
+      idAnim = requestAnimationFrame(animate);
       FishShoal.updatePosition(c_ag, c_s, c_al, fishesGroup);
 
       // Here, the code for animation
 
       renderer.render(scene, camera);
-
     }
 
     FishShoal.init(100);
     displayFishes(fishesGroup);
 
     animate();
+    console.log(idAnim);
     document.addEventListener('keydown', () => {
       FishShoal.nextYear();
       deleteGroup();
@@ -209,20 +214,42 @@
     document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
 
     const speciesButton = document.getElementById('display-species');
-    speciesButton.addEventListener('click', displaySpecies);
+    speciesButton.addEventListener('click', () => displaySpecies());
+
+    let idAnim2;
 
     function displaySpecies() {
-      console.log(FishShoal.getFishesBySpecies());
+      cancelAnimationFrame(idAnim);
 
       const div = document.querySelector('#species-display');
-      const grid = document.querySelector('.grid-fishes');
-      div.style.display = "inherit";
+      div.style.display = "flex";
 
-      canvas.style.display = "none";
-      document.querySelector('.buttons').style.display = "none";
-      document.querySelector('.nbPoisson').style.display = "none";
-      document.querySelector('.sliders').style.display = "none";
-      const canvasFish = document.querySelector('#list-fishes');
+      createSpeciesTab();
+
+      const firstSpecie = Object.keys(FishShoal.getFishesBySpecies())[0];
+      const fishesOfFirstSpecie = FishShoal.getFishesBySpecies()[firstSpecie];
+
+      displayFishesAsItems(fishesOfFirstSpecie);
+    }
+
+    function displayFishesAsItems(fishes) {
+      
+      let prevGridFish = document.querySelector('.grid-fishes');
+      if(prevGridFish) {
+        console.log("remove grid");
+        prevGridFish.remove()
+      };
+      
+      const div = document.querySelector('#species-display');
+
+      
+      const grid = document.createElement('div');
+      grid.classList.add('grid-fishes');
+      div.appendChild(grid);
+
+      const canvasFish = document.createElement('canvas');
+      canvasFish.id = 'list-fishes';
+      grid.appendChild(canvasFish);
       const rendererFish = new THREE.WebGLRenderer({canvas: canvasFish, alpha: true});
 
       const sceneElements = [];
@@ -232,7 +259,7 @@
 
       function makeScene(elem) {
         const sceneFish = new THREE.Scene();
-        sceneFish.background = new THREE.Color( 0xff0000 ); // TEST
+        sceneFish.background = new THREE.Color( 0xffffff );
 
         const fov = 45;
         const aspect = 2;  // the canvas default
@@ -258,22 +285,16 @@
         return {sceneFish, cameraFish, controlsFish};
       }
 
-      for(let i=0; i<FishShoal.fishesArray.length; i++) {
-        let fish = FishShoal.fishesArray[i];
-        // displayFishInSpeciesDisplay(FishShoal.fishesArray[i], grid);
+      for(let i=0; i<fishes.length; i++) {
+        let fish = fishes[i];
 
-        // Create div for each fish
         const elem = document.createElement('span');
         elem.classList.add('diagram');
         elem.id = 'list-fish-' + i;
         grid.appendChild(elem);
 
         const {sceneFish, cameraFish, controlsFish} = makeScene(elem);
-        displayFishAt(fish, sceneFish, 1, 0, 0, 0);
-        // const geometry = new THREE.BoxGeometry(1, 1, 1);
-        // const material = new THREE.MeshPhongMaterial({color: 'red'});
-        // const mesh = new THREE.Mesh(geometry, material);
-        // sceneFish.add(mesh);
+        displayFishAt(fish, sceneFish, (fish.size - MINSIZE) / (MAXSIZE - MINSIZE) * (3 - 1) + 1, 0, 0, 0);
 
         addScene(elem, (time, rect) => {
           cameraFish.aspect = rect.width / rect.height;
@@ -330,9 +351,8 @@
           }
         }
 
-        requestAnimationFrame(render);
+        idAnim2 = requestAnimationFrame(render);
       }
-
       requestAnimationFrame(render);
     }
 
@@ -355,12 +375,28 @@
       loadObject(size, fichierName, x, y, z, group);
     }
 
-    function animate2(renderer, scene, camera) {
-
-      requestAnimationFrame(() => animate2(renderer, scene, camera));
-      renderer.render(scene, camera);
-
+    function createSpeciesTab() {
+      const div = document.querySelector('.species-tabs');
+      div.innerHTML = "";
+      const species = Object.keys(FishShoal.getFishesBySpecies());
+      species.forEach(specie => {
+        let span = document.createElement('span');
+        span.innerText = specie;
+        div.appendChild(span);
+        let fishes = FishShoal.getFishesBySpecies()[specie];
+        span.addEventListener('click', () => {
+          displayFishesAsItems(fishes);
+        })
+      })
     }
+
+    function closeSpeciesDisplay() {
+      cancelAnimationFrame(idAnim2);
+      const div = document.querySelector('#species-display');
+      div.style.display = "none";
+      animate();
+    }
+    document.querySelector('#close-species-display').addEventListener('click', closeSpeciesDisplay);
 
   </script>
 
