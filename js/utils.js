@@ -35,3 +35,29 @@ function divideV3(v, c) {
 function moduleV3(v) {
     return Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2));
 }
+
+function makeRandMatrix (I , J){
+	var matrix= new Array();
+ 
+	for (var i=0; i<I; i++) {
+	  for (var j=0; j<J; j++) {
+		if (!matrix[i]) matrix[i] = new Array(); 
+		matrix[i][j] = getRandomFloat(-2.0,2.0);
+	  }
+	} 
+ 
+	return matrix;
+}
+
+function makeMatrix (I , J){
+	var matrix= new Array();
+ 
+	for (var i=0; i<I; i++) {
+	  for (var j=0; j<J; j++) {
+		if (!matrix[i]) matrix[i] = new Array(); 
+		matrix[i][j] = 0;
+	  }
+	} 
+ 
+	return matrix;
+}

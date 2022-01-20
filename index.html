@@ -9,6 +9,7 @@
   <script type="text/javascript" src="js/Fish.js"></script>
   <script type="text/javascript" src="js/FishShoal.js"></script>
   <script type="text/javascript" src="js/selection.js"></script>
+  <script type="text/javascript" src="js/NeuralNetwork.js"></script>
 
   <style>
     body {
@@ -232,6 +233,8 @@
     FishShoal.setMutChance(slider_mutChance.value);
     //TEXT INFORMATION
     document.querySelector('.nbPoisson').innerHTML= FishShoal.getNbFishToString() ;
+
+    NeuralNetwork.demo();
 
   </script>
 
