@@ -14,391 +14,53 @@
 
 <body>
 
-  <div class="nbPoisson"></div>
-  <div class="sliders">
+  <div id="display-1">
+    <div class="nbPoisson"></div>
+    <div class="inputs">
 
-    <label for="slider-cohesion">Cohésion</label>
-    <input name="slider-cohesion" class="slider-cohesion" type="range" min="0" max="0.01" value="0.0005" step="0.0005">
+      <div class="slider">
+        <label for="slider-cohesion">Cohesion</label>
+        <input name="slider-cohesion" class="slider-cohesion" type="range" min="0" max="0.01" value="0.0005" step="0.0005">
+  
+      </div>
 
-    <label for="slider-separation">Separation</label>
-    <input name="slider-separation" class="slider-separation" type="range" min="0" max="0.01" value="0.0005"
-      step="0.0005">
+      <div class="slider">
+        <label for="slider-separation">Separation</label>
+        <input name="slider-separation" class="slider-separation" type="range" min="0" max="0.01" value="0.0005"
+          step="0.0005">
+      </div>
 
-    <label for="slider-alignment">Alignement</label>
-    <input name="slider-alignment" class="slider-alignment" type="range" min="0" max="0.01" value="0.0005"
-      step="0.0005">
+      <div class="slider">
+        <label for="slider-alignment">Alignment</label>
+        <input name="slider-alignment" class="slider-alignment" type="range" min="0" max="0.01" value="0.0005"
+          step="0.0005">
+  
+      </div>
+
+      <div class="slider">
+        <label for="slider-mutChance">Mutation rate</label>
+        <input name="slider-mutChance" class="slider-mutChance" type="range" min="0" max="1" value="0.01" step="0.005">  
+      </div>
+  
+      <input type="button" value="Next Year" id="button-next-year" class="button-next-year">
+      
+      <input type="button" value="Display Species" id="display-species">
+
+    </div>
+
+    <canvas id="canvas-1"></canvas>
 
   </div>
 
-  <div class="buttons">
-    <label for="slider-mutChance">chance to mut</label>
-    <input name="slider-mutChance" class="slider-mutChance" type="range" min="0" max="1" value="0.01" step="0.005">
-
-    <input type="button" value="next Year" id="button-next-year" class="button-next-year">
-    <input type="button" value="Display Species" id="display-species">
-  </div>
-
-  <canvas id="sea"></canvas>
-
-  <div id="species-display">
-    <h1>Espèces de poissons</h1>
-    <div class="species-tabs"></div>
-    <div id="close-species-display" class="close">
-      <div class="close-1"></div>
-      <div class="close-2"></div>
+  <div id="display-2">
+    <div id="container-2">
+      <h1>Espèces de poissons</h1>
+      <div class="species-tabs"></div>
+      <div id="close-display-2" class="close"></div>
     </div>
   </div>
 
-  <script type="module">
-
-    import * as THREE from './node_modules/three/build/three.module.js';
-    import { OrbitControls } from './vendor_mods/three/examples/jsm/controls/OrbitControls.js';
-    import { GLTFLoader } from './vendor_mods/three/examples/jsm/loaders/GLTFLoader.js';
-    // import { displaySpecies } from './js/displaySpecies.js';
-    import { TrackballControls } from './vendor_mods/three/examples/jsm/controls/TrackballControls.js';
-
-    const scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(
-      /*fov*/ 75,
-      /*aspect ratio*/ window.innerWidth / window.innerHeight,
-      /*near*/ 0.1,
-      /*far*/ 1000
-    );
-    camera.position.z = 550;
-    camera.position.x = 100;
-    camera.position.y = 100;
-
-    const canvas = document.querySelector('#sea');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    const fishesGroup = new THREE.Group();
-
-
-    const loader = new THREE.TextureLoader();
-    scene.background = loader.load('./images/sea.jpg');
-
-
-    // Load 3D object fish at the size asked and at the position asked
-    function loadObject(size, nomPoisson, x, y, z, group) {
-      var loader = new GLTFLoader();
-      loader.load('./3dobjects/' + nomPoisson, function (gltf) {
-        let poisson = gltf.scene;
-        poisson.scale.set(size, size, size);
-        poisson.position.set(x, y, z);
-        
-        group.add(poisson);
-      }, undefined, function (error) {
-        console.error(error);
-      });
-    }
-
-    // Allow to empty a group of fishes
-    function deleteGroup() {
-      for (var i = fishesGroup.children.length - 1; i >= 0; i--) {
-        fishesGroup.remove(fishesGroup.children[i]);
-      }
-    }
-
-    // Display the fish passed in parameter 
-    function displayFish(fish, group) {
-      var fichierName;
-
-      switch (fish.color) {
-        case 0:
-          fichierName = "poisson2.glb"; // red
-          break;
-        case 1:
-          fichierName = "poisson.glb"; // blue
-          break;
-        default:
-          fichierName = "poisson3.glb"; // yellow
-          break;
-      }
-
-      loadObject(fish.size, fichierName, fish.x, fish.y, fish.z, group);
-    }
-
-
-
-    // Display a certain number of fishes
-    function displayFishes(group) {
-      for (let i = 0; i < FishShoal.fishesArray.length; i++) {
-        displayFish(FishShoal.fishesArray[i], group);
-      }
-    }
-
-
-
-    scene.add(fishesGroup);
-
-    // CONTROL
-
-    var controls = new OrbitControls(camera, renderer.domElement);
-
-    // LIGHT
-
-    const pointLight = new THREE.PointLight(0x00ff00, 2, 50);
-    const directionalLight = new THREE.DirectionalLight(0xffffff);
-    const ambientLight = new THREE.AmbientLight(0x111111);
-    scene.add(ambientLight);
-    scene.add(pointLight);
-    scene.add(directionalLight);
-
-
-    // SLIDERS
-
-    const slider_s = document.querySelector(".slider-separation");
-    const slider_ag = document.querySelector(".slider-cohesion");
-    const slider_al = document.querySelector(".slider-alignment");
-    const slider_mutChance = document.querySelector(".slider-mutChance");
-
-    slider_ag.addEventListener('change', () => {
-      c_ag = slider_ag.value;
-    })
-    slider_s.addEventListener('change', () => {
-      c_s = slider_s.value;
-    })
-    slider_al.addEventListener('change', () => {
-      c_al = slider_al.value;
-    })
-
-    slider_mutChance.addEventListener('change', () => {
-      FishShoal.setMutChance(slider_mutChance.value);
-      console.log("val slider" + slider_mutChance.value);
-    })
-
-    let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value;
-
-    //BUTTONS
-    var btnNextYear = document.querySelector(".button-next-year");
-    //console.log(btnNextYear);
-    if (btnNextYear != null) {
-      btnNextYear.addEventListener('click', () => {
-        FishShoal.nextYear();
-        deleteGroup();
-        displayFishes(fishesGroup);
-        document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
-      });
-    }
-
-
-    // ANIMATION
-
-    let idAnim;
-
-    function animate() {
-
-      idAnim = requestAnimationFrame(animate);
-      FishShoal.updatePosition(c_ag, c_s, c_al, fishesGroup);
-
-      // Here, the code for animation
-
-      renderer.render(scene, camera);
-    }
-
-    FishShoal.init(100);
-    displayFishes(fishesGroup);
-
-    animate();
-    console.log(idAnim);
-    document.addEventListener('keydown', () => {
-      FishShoal.nextYear();
-      deleteGroup();
-      displayFishes(fishesGroup);
-    });
-
-    FishShoal.setMutChance(slider_mutChance.value);
-    //TEXT INFORMATION
-    document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
-
-    const speciesButton = document.getElementById('display-species');
-    speciesButton.addEventListener('click', () => displaySpecies());
-
-    let idAnim2;
-
-    function displaySpecies() {
-      cancelAnimationFrame(idAnim);
-
-      const div = document.querySelector('#species-display');
-      div.style.display = "flex";
-
-      createSpeciesTab();
-
-      const firstSpecie = Object.keys(FishShoal.getFishesBySpecies())[0];
-      const fishesOfFirstSpecie = FishShoal.getFishesBySpecies()[firstSpecie];
-
-      displayFishesAsItems(fishesOfFirstSpecie);
-    }
-
-    function displayFishesAsItems(fishes) {
-      
-      let prevGridFish = document.querySelector('.grid-fishes');
-      if(prevGridFish) {
-        console.log("remove grid");
-        prevGridFish.remove()
-      };
-      
-      const div = document.querySelector('#species-display');
-
-      
-      const grid = document.createElement('div');
-      grid.classList.add('grid-fishes');
-      div.appendChild(grid);
-
-      const canvasFish = document.createElement('canvas');
-      canvasFish.id = 'list-fishes';
-      grid.appendChild(canvasFish);
-      const rendererFish = new THREE.WebGLRenderer({canvas: canvasFish, alpha: true});
-
-      const sceneElements = [];
-      function addScene(elem, fn) {
-        sceneElements.push({elem, fn});
-      }
-
-      function makeScene(elem) {
-        const sceneFish = new THREE.Scene();
-        sceneFish.background = new THREE.Color( 0xffffff );
-
-        const fov = 45;
-        const aspect = 2;  // the canvas default
-        const near = 0.1;
-        const far = 5;
-        const cameraFish = new THREE.PerspectiveCamera(fov, aspect, near, far);
-        cameraFish.position.set(0, 1, 2);
-        cameraFish.lookAt(0, 0, 0);
-        sceneFish.add(cameraFish);
-    
-        const controlsFish = new TrackballControls(cameraFish, elem);
-        controlsFish.noZoom = true;
-        controlsFish.noPan = true;
-
-        {
-          const color = 0xFFFFFF;
-          const intensity = 1;
-          const light = new THREE.DirectionalLight(color, intensity);
-          light.position.set(-1, 2, 4);
-          cameraFish.add(light);
-        }
-
-        return {sceneFish, cameraFish, controlsFish};
-      }
-
-      for(let i=0; i<fishes.length; i++) {
-        let fish = fishes[i];
-
-        const elem = document.createElement('span');
-        elem.classList.add('diagram');
-        elem.id = 'list-fish-' + i;
-        grid.appendChild(elem);
-
-        const {sceneFish, cameraFish, controlsFish} = makeScene(elem);
-        displayFishAt(fish, sceneFish, (fish.size - MINSIZE) / (MAXSIZE - MINSIZE) * (3 - 1) + 1, 0, 0, 0);
-
-        addScene(elem, (time, rect) => {
-          cameraFish.aspect = rect.width / rect.height;
-          cameraFish.updateProjectionMatrix();
-          controlsFish.handleResize();
-          controlsFish.update();
-          // mesh.rotation.y = time * .1;
-          rendererFish.render(sceneFish, cameraFish);
-        });
-      }
-
-      function resizeRendererToDisplaySize(renderer) {
-        const canvasFish = renderer.domElement;
-        const width = canvasFish.clientWidth;
-        const height = canvasFish.clientHeight;
-        const needResize = canvasFish.width !== width || canvasFish.height !== height;
-        if (needResize) {
-          renderer.setSize(width, height, false);
-        }
-        return needResize;
-      }
-
-      const clearColor = new THREE.Color('#000');
-      function render(time) {
-        time *= 0.001;
-
-        resizeRendererToDisplaySize(rendererFish);
-
-        rendererFish.setScissorTest(false);
-        rendererFish.setClearColor(clearColor, 0);
-        rendererFish.clear(true, true);
-        rendererFish.setScissorTest(true);
-
-        const transform = `translateY(${window.scrollY}px)`;
-        rendererFish.domElement.style.transform = transform;
-
-        for (const {elem, fn} of sceneElements) {
-          // get the viewport relative position of this element
-          const rect = elem.getBoundingClientRect();
-          const {left, right, top, bottom, width, height} = rect;
-
-          const isOffscreen =
-              bottom < 0 ||
-              top > rendererFish.domElement.clientHeight ||
-              right < 0 ||
-              left > rendererFish.domElement.clientWidth;
-
-          if (!isOffscreen) {
-            const positiveYUpBottom = rendererFish.domElement.clientHeight - bottom;
-            rendererFish.setScissor(left, positiveYUpBottom, width, height);
-            rendererFish.setViewport(left, positiveYUpBottom, width, height);
-
-            fn(time, rect);
-          }
-        }
-
-        idAnim2 = requestAnimationFrame(render);
-      }
-      requestAnimationFrame(render);
-    }
-
-    // Display the fish passed in parameter 
-    function displayFishAt(fish, group, size, x, y, z) {
-      var fichierName;
-
-      switch (fish.color) {
-        case 0:
-          fichierName = "poisson2.glb"; // red
-          break;
-        case 1:
-          fichierName = "poisson.glb"; // blue
-          break;
-        default:
-          fichierName = "poisson3.glb"; // yellow
-          break;
-      }
-
-      loadObject(size, fichierName, x, y, z, group);
-    }
-
-    function createSpeciesTab() {
-      const div = document.querySelector('.species-tabs');
-      div.innerHTML = "";
-      const species = Object.keys(FishShoal.getFishesBySpecies());
-      species.forEach(specie => {
-        let span = document.createElement('span');
-        span.innerText = specie;
-        div.appendChild(span);
-        let fishes = FishShoal.getFishesBySpecies()[specie];
-        span.addEventListener('click', () => {
-          displayFishesAsItems(fishes);
-        })
-      })
-    }
-
-    function closeSpeciesDisplay() {
-      cancelAnimationFrame(idAnim2);
-      const div = document.querySelector('#species-display');
-      div.style.display = "none";
-      animate();
-    }
-    document.querySelector('#close-species-display').addEventListener('click', closeSpeciesDisplay);
-
-  </script>
+  <script type="module" src="main.js"></script>
 
 </body>
 
