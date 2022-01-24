@@ -1,6 +1,6 @@
-import * as THREE from './../node_modules/three/build/three.module.js';
+import * as THREE from 'three/build/three.module.js';
 import { loadObject, animate, resizeRendererToDisplaySize } from './../main.js';
-import { TrackballControls } from './../vendor_mods/three/examples/jsm/controls/TrackballControls.js';
+import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
 
 let idAnim2;
 

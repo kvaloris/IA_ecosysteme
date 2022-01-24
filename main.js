@@ -1,8 +1,8 @@
-import * as THREE from './node_modules/three/build/three.module.js';
-import { OrbitControls } from './vendor_mods/three/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from './vendor_mods/three/examples/jsm/loaders/GLTFLoader.js';
+import * as THREE from 'three/build/three.module.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
-// import { GUI } from 'dat.gui';
+import { GUI } from 'dat.gui';
 
 const scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(
@@ -172,3 +172,4 @@ speciesButton.addEventListener('click', () => displaySpecies(idAnim));
 
 document.querySelector('#close-display-2').addEventListener('click', closeSpeciesDisplay);
 
+NeuralNetwork.demo();
