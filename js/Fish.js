@@ -1,3 +1,14 @@
+const pat = [
+    [[0, 1, 1], [0 / (SPECIES.length - 1)]], // Specie A
+    [[0.5, 1, 1], [1 / (SPECIES.length - 1)]], // Specie B
+    [[1, 1, 1], [2 / (SPECIES.length - 1)]], // Specie C
+];
+
+const neuralNetwork = new NeuralNetwork(3, 2, 1);
+neuralNetwork.train(pat);
+console.log("TEST");
+neuralNetwork.test(pat);
+
 class Fish {
     id;
     x; y; z;
@@ -7,8 +18,9 @@ class Fish {
     ageMax;
     yearsOld = 0;
     velocity = { x: 0, y: 0, z: 0 }
+    specie = SPECIES[0];
 
-    constructor(id, x, y, z, color, size, appearance, ageMax, yearsOld=0 ) {
+    constructor(id, x, y, z, color, size, appearance, ageMax, yearsOld = 0) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -18,6 +30,7 @@ class Fish {
         this.appearance = appearance;
         this.ageMax = ageMax;
         this.yearsOld = yearsOld;
+        this.specie = this.getSpecie();
     }
 
     toString() {
@@ -35,7 +48,7 @@ class Fish {
     static fishRandom(id, fishes) {
 
         let pos = generateCorrectPosition(fishes);
-        let newMaxAge=ageMaxRandom();
+        let newMaxAge = ageMaxRandom();
         return new this(
             id,
             pos[0],
@@ -45,7 +58,7 @@ class Fish {
             sizeRandom(),
             appearanceRamdon(),
             newMaxAge,
-            Math.round(Math.random() * (newMaxAge-1)));
+            Math.round(Math.random() * (newMaxAge - 1)));
     }
 
     // Return the child of fish 1 and fish 2
@@ -54,7 +67,7 @@ class Fish {
         if (fish1 instanceof Fish && fish2 instanceof Fish) {
 
             let pos = generateCorrectPosition(fishes);
-            
+
             var child = new this(
                 id,
                 pos[0],
@@ -65,8 +78,8 @@ class Fish {
                 mixAppearance(fish1.appearance, fish2.appearance),
                 Math.round((fish1.ageMax + fish2.ageMax) / 2)
             );
-            if(Math.random() <mutChance){
-                child= mutFish(child);
+            if (Math.random() < mutChance) {
+                child = mutFish(child);
             }
             return child;
         }
@@ -154,12 +167,12 @@ class Fish {
 
         let v = { x: 0, y: 0, z: 0 };
 
-        if(this.x < xmin) v.x = d;
-        else if(this.x > xmax) v.x = -d;
-        if(this.y < ymin) v.y = d;
-        else if(this.y > ymax) v.y = -d;
-        if(this.z < zmin) v.z = d;
-        else if(this.z > zmax) v.z = -d;
+        if (this.x < xmin) v.x = d;
+        else if (this.x > xmax) v.x = -d;
+        if (this.y < ymin) v.y = d;
+        else if (this.y > ymax) v.y = -d;
+        if (this.z < zmin) v.z = d;
+        else if (this.z > zmax) v.z = -d;
 
         return v;
     }
@@ -168,7 +181,7 @@ class Fish {
     limitSpeed() {
         const vlim = 1;
 
-        if(moduleV3(this.velocity) > vlim) {
+        if (moduleV3(this.velocity) > vlim) {
             this.velocity = divideV3(this.velocity, moduleV3(this.velocity));
             this.velocity = multiplyV3(this.velocity, vlim);
         }
@@ -176,7 +189,7 @@ class Fish {
 
     // Update the position of fish
     move(fishes, c_ag, c_s, c_al) {
-        this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));        
+        this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));
         this.limitSpeed();
         let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
         this.x = position.x;
@@ -186,20 +199,15 @@ class Fish {
 
     // TO BE REPLACED
     getSpecie() {
-        switch (this.color) {
-            case 0:
-                return SPECIES[0];
-                break;
-            case 1:
-                return SPECIES[1];
-                break;
-            case 2:
-                return SPECIES[2];
-                break;
-            default:
-                throw "Not a color";
-                break;
-        }
+        // Normalize
+        console.log("FISH ID : " + this.id);
+        const size = map(this.size, [MINSIZE, MAXSIZE], [0, 1]);
+        const ageMax = map(this.ageMax, [MINAGEMAX, MAXAGEMAX], [0, 1]);
+        const color = map(this.color, [0, TABColor.length - 1], [0, 1]);
+        console.log("color : " + color + " / size : " + size + " / ageMax : " + ageMax);
+        const index = neuralNetwork.output([color, size, ageMax]);
+        console.log("Species index (0, 1 or 2) : " + index);
+        return SPECIES[index];
     }
 }
 
@@ -238,7 +246,7 @@ function mixColor(color1, color2) {
     return color2;
 }
 
-function sizeRandom(){
+function sizeRandom() {
     return Math.round(Math.random() * (MAXSIZE - MINSIZE) + MINSIZE);
 }
 // Return a random appearance 
@@ -259,25 +267,25 @@ function mixAppearance(appearance1, appearance2) { //TODO
     return appearance1;
 }
 
-function ageMaxRandom(){
+function ageMaxRandom() {
     return Math.round(Math.random() * (MAXAGEMAX - MINAGEMAX) + MINAGEMAX);
 }
 
-function mutFish(fishInit){
+function mutFish(fishInit) {
     var parameter = Math.floor(Math.random() * 4) //return 0, 1, 2, 3
     //console.log(parameter);
     switch (parameter) {
         case 0:
-          fishInit.color= colorRandom();
-          break;
+            fishInit.color = colorRandom();
+            break;
         case 1:
-            fishInit.size= sizeRandom();
+            fishInit.size = sizeRandom();
             break;
         case 2:
-            fishInit.appearance=appearanceRamdon();
-          break;
+            fishInit.appearance = appearanceRamdon();
+            break;
         default:
-            fishInit.ageMax=ageMaxRandom();
+            fishInit.ageMax = ageMaxRandom();
             break;
     }
     return fishInit;

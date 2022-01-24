@@ -87,7 +87,7 @@ class FishShoal{
         
         // Fill species arrays with corresponding fishes
         this.fishesArray.forEach(fish => {
-            let specie = fish.getSpecie();
+            let specie = fish.specie;
             species[specie].push(fish);
         })
 

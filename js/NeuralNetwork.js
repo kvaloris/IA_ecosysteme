@@ -182,6 +182,13 @@ class NeuralNetwork{
         // test it
         n.test(pat);
     }
+    
+    output(pat) {
+        this.test([[pat]]);
+        const output = Math.round(this.update(pat)*2)/2; // return a result between 0 and 1
+        const specieIndex = output * (SPECIES.length-1);
+        return specieIndex;
+    }
 }
 
 function tabToString(tab){

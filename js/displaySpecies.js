@@ -5,13 +5,13 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 let idAnim2;
 
 
-export function displaySpecies(idAnim) {
+export function displaySpecies(idAnim, neuralNetwork) {
     cancelAnimationFrame(idAnim);
 
     const display = document.querySelector('#display-2');
     display.style.display = "inherit";
 
-    createSpeciesTab();
+    createSpeciesTab(neuralNetwork);
 
     const firstSpecie = Object.keys(FishShoal.getFishesBySpecies())[0];
     const fishesOfFirstSpecie = FishShoal.getFishesBySpecies()[firstSpecie];
@@ -76,7 +76,7 @@ function displayFishesAsItems(fishes) {
         grid.appendChild(elem);
 
         const { scene, camera, controlsFish } = makeScene(elem);
-        displayFishAt(fish, scene, (fish.size - MINSIZE) / (MAXSIZE - MINSIZE) * (3 - 1) + 1, 0, 0, 0);
+        displayFishAt(fish, scene, map(fish.size, [MINSIZE, MAXSIZE], [1, 3]), 0, 0, 0);
 
         addScene(elem, (time, rect) => {
             camera.aspect = rect.width / rect.height;
@@ -146,7 +146,7 @@ function displayFishAt(fish, group, size, x, y, z) {
     loadObject(size, fichierName, x, y, z, group);
 }
 
-function createSpeciesTab() {
+function createSpeciesTab(neuralNetwork ) {
     const div = document.querySelector('.species-tabs');
     div.innerHTML = "";
     const species = Object.keys(FishShoal.getFishesBySpecies());

@@ -167,9 +167,11 @@ export function resizeRendererToDisplaySize(renderer) {
   return needResize;
 }
 
+// NeuralNetwork.demo();
+
+
+
 const speciesButton = document.getElementById('display-species');
 speciesButton.addEventListener('click', () => displaySpecies(idAnim));
 
 document.querySelector('#close-display-2').addEventListener('click', closeSpeciesDisplay);
-
-NeuralNetwork.demo();
