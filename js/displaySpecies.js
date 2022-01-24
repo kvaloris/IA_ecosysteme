@@ -150,8 +150,9 @@ function createSpeciesTab() {
     const div = document.querySelector('.species-tabs');
     div.innerHTML = "";
     const species = Object.keys(FishShoal.getFishesBySpecies());
-    species.forEach(specie => {
+    species.forEach((specie, i) => {
         let span = document.createElement('span');
+        if(i===0) span.classList.add("selected");
         span.innerText = specie;
         div.appendChild(span);
         let fishes = FishShoal.getFishesBySpecies()[specie];
