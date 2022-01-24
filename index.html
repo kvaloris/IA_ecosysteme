@@ -7,152 +7,73 @@
   <title>Poissons</title>
   <script type="text/javascript" src="js/utils.js"></script>
   <script type="text/javascript" src="js/Fish.js"></script>
+  <script type="text/javascript" src="js/FishShoal.js"></script>
   <script type="text/javascript" src="js/selection.js"></script>
+  <script type="text/javascript" src="js/NeuralNetwork.js"></script>
 
   <style>
     body {
       overflow: hidden;
+      margin: 0;
+    }
+
+    .nbPoisson{
+      position: absolute;
+      width: 35vw;
+      top: 20px;
+      left: 20px;
+      font-family: Verdana, Geneva, sans-serif;
+      font-size: 15px;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .sliders {
+      position: absolute;
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      width: 60vw;
+      top: 20px;
+      right: 20px;
+    }
+
+    .buttons{
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      position: absolute;
+      width: 60vw;
+      top: 60px;
+      right: 20px;
     }
   </style>
 </head>
 
 <body>
-<script type="module">
 
-    import * as THREE from './node_modules/three/build/three.module.js';
-    import { OrbitControls } from './vendor_mods/three/examples/jsm/controls/OrbitControls.js';
-    import { GLTFLoader } from './vendor_mods/three/examples/jsm/loaders/GLTFLoader.js';
-
-
-    const scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera(
-      /*fov*/ 75,
-      /*aspect ratio*/ window.innerWidth / window.innerHeight,
-      /*near*/ 0.1,
-      /*far*/ 1000
-    );
-    camera.position.z = 150;
-    camera.position.x = 100;
-    camera.position.y = 100;
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-
-    const fishesGroup = new THREE.Group();
-  
-
-    const loader = new THREE.TextureLoader();
-    scene.background = loader.load('./images/sea.jpg');
-
-   
-    // Load 3D object fish at the size asked and at the position asked
-    function loadObject(size, nomPoisson, x, y, z){
-      var loader = new GLTFLoader();
-         loader.load('./3dobjects/'+ nomPoisson, function (gltf)
-      {
-          let poisson = gltf.scene;
-          poisson.scale.set(size,size,size);
-          poisson.position.set(x,y,z);
-          
-          fishesGroup.add(poisson);
-          
-      }, undefined, function (error) {
-        console.error(error);
-      });
-
-        
-    }
-
-    // Allow to empty a group of fishes
-    function deleteGroup(){
-      for (var i = fishesGroup.children.length - 1; i >= 0; i--) {
-          fishesGroup.remove(fishesGroup.children[i]);
-      }
-    }
-
-    // Display the fish passed in parameter 
-    function displayFish(fish){
-      var fichierName;
-      
-      switch(fish.color){
-        case 0: 
-        fichierName = "poisson2.glb";
-          break;
-        case 1:
-        fichierName = "poisson.glb";
-          break;
-        default:
-        fichierName = "poisson3.glb";
-          break;
-      }
-
-      loadObject(fish.size, fichierName, fish.x, fish.y, fish.z);
-    }
-
-    let fishesArray = [];
-
-    // Display a certain number of fishes
-    function displayFishes(){
-        for(let i=0; i< fishesArray.length; i++){
-          displayFish(fishesArray[i]);
-        }
-    }
-
-    function init(number) {
-      for(let i=0; i< number; i++){
-        fishesArray.push(Fish.fishRandom(i, fishesArray));
-      }
-    }
-
-    scene.add(fishesGroup);
-
-    // CONTROL
+  <div class="nbPoisson"></div>
+  <div class="sliders">
     
-    var controls = new OrbitControls(camera, renderer.domElement);
+    <label for="slider-cohesion">Cohésion</label>
+    <input name="slider-cohesion" class="slider-cohesion" type="range" min="0" max="0.01" value="0.0005" step="0.0005">
 
-    // LIGHT
+    <label for="slider-separation">Separation</label>
+    <input name="slider-separation" class="slider-separation" type="range" min="0" max="0.01" value="0.0005" step="0.0005">
 
-    const pointLight = new THREE.PointLight(0x00ff00, 2, 50);
-    const directionalLight = new THREE.DirectionalLight(0xffffff);
-    const ambientLight = new THREE.AmbientLight(0x111111);
-    scene.add(ambientLight);
-    scene.add(pointLight);
-    scene.add(directionalLight);
+    <label for="slider-alignment">Alignement</label>
+    <input name="slider-alignment" class="slider-alignment" type="range" min="0" max="0.01" value="0.0005" step="0.0005">
 
-    // ANIMATION
+  </div>
 
-    function animate() {
-      
-      requestAnimationFrame(animate);
+  <div class="buttons">
+    <label for="slider-mutChance">chance to mut</label>
+    <input name="slider-mutChance" class="slider-mutChance" type="range" min="0" max="1" value="0.01" step="0.005">
 
-      // Here, the code for animation
-      renderer.render(scene, camera);
-    }
+    <input type="button" value="next Year" id="button-next-year" class="button-next-year">
+  </div>
 
-    init(100);
-    displayFishes();
-
-    animate();
-
-    // Generate a new generation of fishes and delete the previous generations
-    function generateNewGeneration() {
-
-      const couples = selection(fishesArray); // [  [fish1, fish2], ...]
-      fishesArray = [];
-
-      couples.forEach(couple => {
-        let child1 = Fish.generateChild(fishesArray.length, couple[0], couple[1], fishesArray);
-        fishesArray.push(child1);
-      });
-
-      deleteGroup();
-    }
-    document.addEventListener('keydown', () => {
-      generateNewGeneration();
-      displayFishes();
-    });
-
-  </script>
+<script type="module" src="js/Three.js"></script>
 
 </body>
 
