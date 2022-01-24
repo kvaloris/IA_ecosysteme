@@ -1,4 +1,4 @@
-const pat = [
+const pat = [ //modif
     [[0], [0 / (SPECIES.length - 1)]], // Specie A
     [[0.5], [1 / (SPECIES.length - 1)]], // Specie B
     [[1], [2 / (SPECIES.length - 1)]], // Specie C
@@ -200,13 +200,13 @@ class Fish {
     // TO BE REPLACED
     getSpecie() {
         // Normalize
-        console.log("FISH ID : " + this.id);
+        //console.log("FISH ID : " + this.id);
         const size = map(this.size, [MINSIZE, MAXSIZE], [0, 1]);
         const ageMax = map(this.ageMax, [MINAGEMAX, MAXAGEMAX], [0, 1]);
         const color = map(this.color, [0, TABColor.length - 1], [0, 1]);
-        console.log("color : " + color + " / size : " + size + " / ageMax : " + ageMax);
-        const index = neuralNetwork.output([color]);
-        console.log("Species index (0, 1 or 2) : " + index);
+        //console.log("color : " + color + " / size : " + size + " / ageMax : " + ageMax);
+        const index = neuralNetwork.output([color]); //modif
+        //console.log("Species index (0, 1 or 2) : " + index);
         return SPECIES[index];
     }
 }
