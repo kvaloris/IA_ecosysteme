@@ -186,6 +186,7 @@ class NeuralNetwork{
     output(pat) {
         this.test([[pat]]);
         const output = Math.round(this.update(pat)*2)/2; // return a result between 0 and 1
+        if(output<0 || output>1) throw "output is negative or greater than 1";
         const specieIndex = output * (SPECIES.length-1);
         return specieIndex;
     }

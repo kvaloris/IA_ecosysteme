@@ -169,9 +169,11 @@ export function resizeRendererToDisplaySize(renderer) {
 
 // NeuralNetwork.demo();
 
-
+// Create renderer for display of species
+const canvas2 = document.querySelector('#canvas-2');
+const renderer2 = new THREE.WebGLRenderer({ canvas: canvas2, alpha: true });
 
 const speciesButton = document.getElementById('display-species');
-speciesButton.addEventListener('click', () => displaySpecies(idAnim));
+speciesButton.addEventListener('click', () => displaySpecies(idAnim, renderer2));
 
 document.querySelector('#close-display-2').addEventListener('click', closeSpeciesDisplay);

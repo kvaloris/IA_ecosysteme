@@ -5,35 +5,36 @@ import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls
 let idAnim2;
 
 
-export function displaySpecies(idAnim, neuralNetwork) {
+export function displaySpecies(idAnim, renderer) {
+
+    console.log(renderer);
     cancelAnimationFrame(idAnim);
 
     const display = document.querySelector('#display-2');
     display.style.display = "inherit";
 
-    createSpeciesTab(neuralNetwork);
+    createSpeciesTab(renderer);
 
     const firstSpecie = Object.keys(FishShoal.getFishesBySpecies())[0];
     const fishesOfFirstSpecie = FishShoal.getFishesBySpecies()[firstSpecie];
 
-    displayFishesAsItems(fishesOfFirstSpecie);
+    displayFishesAsItems(fishesOfFirstSpecie, renderer);
 }
 
-function displayFishesAsItems(fishes) {
+function displayFishesAsItems(fishes, renderer) {
 
-    let prevGridFish = document.querySelector('.grid-fishes');
-    if (prevGridFish) prevGridFish.remove();
+    const grid = document.querySelector('.grid-fishes');
+    grid.innerHTML = "";
+    // const prevCanvas = document.querySelector('#canvas-2');
+    // let canvas; let renderer;
+    // if(!prevCanvas) {
+    //     console.log("No canvas for fish items yet");
+    //     canvas = document.createElement('canvas');
+    //     canvas.id = 'canvas-2';
+    //     renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+    //     container.appendChild(canvas);
+    // }
 
-    const container = document.querySelector('#container-2');
-
-    const grid = document.createElement('div');
-    grid.classList.add('grid-fishes');
-    container.appendChild(grid);
-
-    const canvas = document.createElement('canvas');
-    canvas.id = 'canvas-2';
-    grid.appendChild(canvas);
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
 
     const sceneElements = [];
     function addScene(elem, fn) {
@@ -52,9 +53,9 @@ function displayFishesAsItems(fishes) {
         camera.lookAt(0, 0, 0);
         scene.add(camera);
 
-        const controlsFish = new TrackballControls(camera, elem);
-        controlsFish.noZoom = true;
-        controlsFish.noPan = true;
+        const controls = new TrackballControls(camera, elem);
+        controls.noZoom = true;
+        controls.noPan = true;
 
         {
             const color = 0xFFFFFF;
@@ -64,8 +65,10 @@ function displayFishesAsItems(fishes) {
             camera.add(light);
         }
 
-        return { scene, camera, controlsFish };
+        return { scene, camera, controls };
     }
+
+    // Create and add fishes to scene
 
     for (let i = 0; i < fishes.length; i++) {
         let fish = fishes[i];
@@ -75,22 +78,22 @@ function displayFishesAsItems(fishes) {
         elem.id = 'list-fish-' + i;
         grid.appendChild(elem);
 
-        const { scene, camera, controlsFish } = makeScene(elem);
+        const { scene, camera, controls } = makeScene(elem);
         displayFishAt(fish, scene, map(fish.size, [MINSIZE, MAXSIZE], [1, 3]), 0, 0, 0);
 
-        addScene(elem, (time, rect) => {
+        addScene(elem, (renderer, rect) => {
             camera.aspect = rect.width / rect.height;
             camera.updateProjectionMatrix();
-            controlsFish.handleResize();
-            controlsFish.update();
+            controls.handleResize();
+            controls.update();
             // mesh.rotation.y = time * .1;
             renderer.render(scene, camera);
         });
     }
 
     const clearColor = new THREE.Color('#000');
-    function render(time) {
-        time *= 0.001;
+    function render(renderer) {
+        // time *= 0.001;
 
         resizeRendererToDisplaySize(renderer);
 
@@ -118,13 +121,14 @@ function displayFishesAsItems(fishes) {
                 renderer.setScissor(left, positiveYUpBottom, width, height);
                 renderer.setViewport(left, positiveYUpBottom, width, height);
 
-                fn(time, rect);
+                // fn(time, rect);
+                fn(renderer, rect);
             }
         }
 
-        idAnim2 = requestAnimationFrame(render);
+        idAnim2 = requestAnimationFrame(() => render(renderer));
     }
-    requestAnimationFrame(render);
+    requestAnimationFrame(() => render(renderer));
 }
 
 // Display the fish passed in parameter 
@@ -146,7 +150,7 @@ function displayFishAt(fish, group, size, x, y, z) {
     loadObject(size, fichierName, x, y, z, group);
 }
 
-function createSpeciesTab(neuralNetwork ) {
+function createSpeciesTab(renderer) {
     const div = document.querySelector('.species-tabs');
     div.innerHTML = "";
     const species = Object.keys(FishShoal.getFishesBySpecies());
@@ -160,7 +164,7 @@ function createSpeciesTab(neuralNetwork ) {
             const tabs = div.childNodes;
             tabs.forEach(tab => tab.classList.remove("selected"));
             span.classList.add("selected");
-            displayFishesAsItems(fishes);
+            displayFishesAsItems(fishes, renderer);
         })
     })
 }
