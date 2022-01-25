@@ -4,7 +4,10 @@ const pat = [ //modif
     [[1], [2 / (SPECIES.length - 1)]], // Specie C
 ];
 
+//Creation of the Neural Network
 const neuralNetwork = new NeuralNetwork(1, 2, 1);
+
+//Training of the Neural Network
 neuralNetwork.train(pat);
 console.log("TEST");
 neuralNetwork.test(pat);
@@ -197,7 +200,7 @@ class Fish {
         this.z = position.z;
     }
 
-    // TO BE REPLACED
+    
     getSpecie() {
         // Normalize
         //console.log("FISH ID : " + this.id);
