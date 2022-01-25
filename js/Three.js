@@ -62,6 +62,8 @@
           poisson = gltf.scene;
           poisson.position.set(0,0,0);
           fishesObjectGroup.add(poisson);
+          console.log("poisson");
+          console.log(poisson);
           
           //fishesGroup.add(poisson);
           
@@ -72,7 +74,8 @@
   
     function createClones(size, color, x, y ,z){
       console.log(fishesObjectGroup);
-      let newFish = fishesObjectGroup.children[color].clone();
+      console.log(fishesObjectGroup.children[0]);
+      let newFish = fishesObjectGroup.children[0].clone();
       newFish.scale.set(size,size,size);
       newFish.position.set(x,y,z);
         
@@ -108,10 +111,10 @@
         fishesArray.push(Fish.fishRandom(i, fishesArray));
       }
 
-      var fichierName = ["poisson2.glb", "poisson.glb", "poisson3.glb"];
-      for(let i=0; i<3; i++){
-        loadObject(fichierName[i]);
-      }
+      var fichierName = ["poisson2.glb"];
+      //for(let i=0; i<3; i++){
+        loadObject(fichierName[0]);
+      //}
 
       console.log(fishesObjectGroup);
     }
