@@ -59,6 +59,17 @@ function makeMatrix (I , J){
 	return tab;
 }
 
+function makeIntMatrix (I , J, a){
+	var tab = new Array();
+	for (var i=0; i<I; i++) {
+		tab.push (new Array);
+		for (var j=0; j<J; j++) {
+			tab[i].push(a);
+		}
+	}
+	return tab;
+}
+
 // Map values from interval1 [A, B] to interval2 [a, b]
 function map(value, interval1, interval2) {
 	return (value - interval1[0]) / (interval1[1] - interval1[0]) * (interval2[1] - interval2[0]) + interval2[0];

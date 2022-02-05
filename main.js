@@ -169,6 +169,11 @@ export function resizeRendererToDisplaySize(renderer) {
 
 // NeuralNetwork.demo();
 
+Ground.init(5,5);
+Ground.init(5,5);
+console.log(Ground.toString());
+console.log(Ground.groundArray);
+
 // Create renderer for display of species
 const canvas2 = document.querySelector('#canvas-2');
 const renderer2 = new THREE.WebGLRenderer({ canvas: canvas2, alpha: true });
