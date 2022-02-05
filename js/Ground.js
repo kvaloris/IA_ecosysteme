@@ -1,3 +1,13 @@
+/* Pour l'utiliser:
+*  pour créer un sol
+*  Ground.init(5,5); avec la taille que tu veux
+*
+*  pour l'utiliser
+*  Ground.getGroundArray());
+*/
+
+
+
 class Ground{
     static groundArray=[];
     static ruleMatrix= [];
@@ -13,6 +23,10 @@ class Ground{
             '\n matrice de règle \n'+this.ruleMatrix.toString();
     }
 
+    static getGroundArray(){
+        var tabTmp = this.groundArray;
+        return tabTmp;
+    }
 }
 
 function generateRuleMatrix(newMatrixPercent){

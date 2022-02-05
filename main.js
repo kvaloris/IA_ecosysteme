@@ -172,7 +172,7 @@ export function resizeRendererToDisplaySize(renderer) {
 Ground.init(5,5);
 Ground.init(5,5);
 console.log(Ground.toString());
-console.log(Ground.groundArray);
+console.log(Ground.getGroundArray());
 
 // Create renderer for display of species
 const canvas2 = document.querySelector('#canvas-2');
