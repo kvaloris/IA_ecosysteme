@@ -13,11 +13,10 @@ var camera = new THREE.PerspectiveCamera(
 );
 camera.position.x = 200;
 camera.position.y = 250;
-camera.position.z = 396;
+camera.position.z = 396
 
 const canvas = document.querySelector('#canvas-1');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-// renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector("#display-1").appendChild(renderer.domElement);
 
 const fishesGroup = new THREE.Group();
@@ -114,7 +113,6 @@ let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value
 
 //BUTTONS
 var btnNextYear = document.querySelector(".button-next-year");
-//console.log(btnNextYear);
 if (btnNextYear != null) {
   btnNextYear.addEventListener('click', () => {
     FishShoal.nextYear();
@@ -167,7 +165,7 @@ export function resizeRendererToDisplaySize(renderer) {
   return needResize;
 }
 
-// NeuralNetwork.demo();
+NeuralNetwork.demo();
 
 // Create renderer for display of species
 const canvas2 = document.querySelector('#canvas-2');

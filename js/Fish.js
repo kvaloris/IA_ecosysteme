@@ -1,7 +1,7 @@
 const pat = [ //modif
-    [[0], [0 / (SPECIES.length - 1)]], // Specie A
-    [[0.5], [1 / (SPECIES.length - 1)]], // Specie B
-    [[1], [2 / (SPECIES.length - 1)]], // Specie C
+    [[0, 1, 1], [0 / (SPECIES.length - 1)]], // Specie A
+    [[0.5, 1, 1], [1 / (SPECIES.length - 1)]], // Specie B
+    [[1, 1, 1], [2 / (SPECIES.length - 1)]], // Specie C
 ];
 
 //Creation of the Neural Network
@@ -208,7 +208,7 @@ class Fish {
         const ageMax = map(this.ageMax, [MINAGEMAX, MAXAGEMAX], [0, 1]);
         const color = map(this.color, [0, TABColor.length - 1], [0, 1]);
         //console.log("color : " + color + " / size : " + size + " / ageMax : " + ageMax);
-        const index = neuralNetwork.output([color]); //modif
+        const index = neuralNetwork.output([color, ageMax, size]); //modif
         //console.log("Species index (0, 1 or 2) : " + index);
         return SPECIES[index];
     }
