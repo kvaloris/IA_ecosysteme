@@ -165,7 +165,7 @@ export function resizeRendererToDisplaySize(renderer) {
   return needResize;
 }
 
-NeuralNetwork.demo();
+// NeuralNetwork.demo();
 
 // Create renderer for display of species
 const canvas2 = document.querySelector('#canvas-2');

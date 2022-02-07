@@ -4,6 +4,12 @@ const pat = [ //modif
     [[1, 1, 1], [2 / (SPECIES.length - 1)]], // Specie C
 ];
 
+// const pat = [ //modif
+//     [[0, 1, 1], [1, 0, 0]], // Specie A
+//     [[0.5, 1, 1], [0, 1, 0]], // Specie B
+//     [[1, 1, 1], [0, 0, 1]], // Specie C
+// ];
+
 //Creation of the Neural Network
 const neuralNetwork = new NeuralNetwork(3, 2, 1);
 
@@ -353,7 +359,7 @@ var importanceLife = {
 };
 
 // Reference for fish most suited for being eaten by humans
-bestFishToHuman = new Fish(0, 0, 0, 0, [50, 60, 80], 10, [2, 1, 2], 2);
+bestFishToHuman = new Fish(0, 0, 0, 0, 1, 10, [2, 1, 2], 2);
 // Importance coefficient
 var importanceToHuman = {
     "xFactor": 0 / XMAX,

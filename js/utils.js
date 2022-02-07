@@ -6,8 +6,13 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
+const rand = mulberry32(1);
+// const randNb = rand();
+// console.log("rand : ", randNb);
+
 function getRandomFloat(min, max) {
-    return Math.random() * (max - min) + min;
+    // return Math.random() * (max - min) + min;
+    return rand() * (max - min) + min;
 }
 
 // Add two vectors v1 and v2
@@ -62,4 +67,13 @@ function makeMatrix (I , J){
 // Map values from interval1 [A, B] to interval2 [a, b]
 function map(value, interval1, interval2) {
 	return (value - interval1[0]) / (interval1[1] - interval1[0]) * (interval2[1] - interval2[0]) + interval2[0];
+}
+
+function mulberry32(a) {
+    return function() {
+      var t = a += 0x6D2B79F5;
+      t = Math.imul(t ^ t >>> 15, t | 1);
+      t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
 }

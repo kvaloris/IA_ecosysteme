@@ -181,13 +181,23 @@ class NeuralNetwork{
         n.train(pat);
         // test it
         n.test(pat);
+
     }
     
     output(pat) {
-        this.test([[pat]]);
-        const output = Math.round(this.update(pat)*2)/2; // return a result between 0 and 1
-        if(output<0 || output>1) throw "output is negative or greater than 1";
+        // this.test([[pat]]);
+        const r = this.update(pat);
+        // console.log(r);
+        const output = Math.round(r[0]*2)/2; // round to 0.5
+        if(output<0 || output>1)  {
+            // throw "output is negative or greater than 1";
+            console.log("output is negative or greater than 1");
+            // console.log("color : "+pat[0]+" output : "+output);
+            return 0;
+        }
         const specieIndex = output * (SPECIES.length-1);
+        // const max = Math.max(...r);
+        // const specieIndex = r.indexOf(max) 
         return specieIndex;
     }
 }
