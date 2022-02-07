@@ -5,12 +5,13 @@ const pat = [ //modif
 ];
 
 //Creation of the Neural Network
-const neuralNetwork = new NeuralNetwork(1, 2, 1);
+const neuralNetwork = new NeuralNetwork(3, 2, 1);
 
 //Training of the Neural Network
 neuralNetwork.train(pat);
 console.log("TEST");
 neuralNetwork.test(pat);
+console.log("FIN TEST");
 
 class Fish {
     id;
