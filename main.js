@@ -6,24 +6,82 @@ import { GUI } from 'dat.gui';
 
 const scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera(
-      /*fov*/ 75,
+      /*fov*/ 55,
       /*aspect ratio*/ window.innerWidth / window.innerHeight,
-      /*near*/ 0.1,
-      /*far*/ 1000
+      /*near*/ 45,
+      /*far*/ 30000
 );
-camera.position.x = 200;
-camera.position.y = 250;
-camera.position.z = 396;
+camera.position.x = -900;
+camera.position.y = -200;
+camera.position.z = -900;
 
 const canvas = document.querySelector('#canvas-1');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-// renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector("#display-1").appendChild(renderer.domElement);
 
+let materialArray = [];
+    let texture_ft = new THREE.TextureLoader().load( 'images/uw_ft.jpg');
+    let texture_bk = new THREE.TextureLoader().load( 'images/uw_bk.jpg');
+    let texture_up = new THREE.TextureLoader().load( 'images/uw_up.jpg');
+    let texture_dn = new THREE.TextureLoader().load( 'images/uw_dn.jpg');
+    let texture_rt = new THREE.TextureLoader().load( 'images/uw_rt.jpg');
+    let texture_lf = new THREE.TextureLoader().load( 'images/uw_lf.jpg');
+      
+    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_ft }));
+    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_bk }));
+    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_up }));
+    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_dn }));
+    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_rt }));
+    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_lf }));
+   
+    for (let i = 0; i < 6; i++)
+      materialArray[i].side = THREE.BackSide;
+      
+    let skyboxGeo = new THREE.BoxGeometry( 2000, 2000, 2000);
+    let skybox = new THREE.Mesh( skyboxGeo, materialArray );
+    scene.add( skybox );
+
 const fishesGroup = new THREE.Group();
+let floorElements = new THREE.Group();
+let displayFloorElmt = new THREE.Group();
+
 
 const loader = new THREE.TextureLoader();
 scene.background = loader.load('./images/sea.jpg');
+
+const manager = new THREE.LoadingManager();
+
+
+export function loadRock(x, z) {
+  var loader = new GLTFLoader();
+  loader.load('./3dobjects/' + 'rock.glb', function (gltf) {
+    let floorElement = gltf.scene;
+    floorElement.scale.set(0.5, 0.25, 0.5);
+    floorElement.position.set(x, -1000, z);
+
+    //floorElements.add(floorElement);
+    displayFloorElmt.add(floorElement);
+  }, undefined, function (error) {
+    console.error(error);
+  });
+}
+
+export function loadFloor(name, x, z) {
+  var loader = new GLTFLoader();
+  loader.load('./3dobjects/' + name+'.glb', function (gltf) {
+    let floorElement = gltf.scene;
+    floorElement.scale.set(700, 700, 700);
+    floorElement.position.set(x, -850, z);
+
+    //floorElements.add(floorElement);
+    displayFloorElmt.add(floorElement);
+  }, undefined, function (error) {
+    console.error(error);
+  });
+}
+
+
 
 // Load 3D object fish at the size asked and at the position asked
 export function loadObject(size, nomPoisson, x, y, z, group) {
@@ -169,10 +227,79 @@ export function resizeRendererToDisplaySize(renderer) {
 
 // NeuralNetwork.demo();
 
-Ground.init(5,5);
-Ground.init(5,5);
-console.log(Ground.toString());
-console.log(Ground.getGroundArray());
+
+
+/*manager.onLoad = function ( ) {
+  
+}*/
+
+createFloor(5);
+
+
+function createFloor(size){
+  Ground.init(5,5);
+  let array = Ground.getGroundArray();
+  console.log(Ground.toString());
+  console.log(Ground.getGroundArray());
+  let arrayCoord = createCoordCase(size);
+  console.log('arrayCoord', arrayCoord);
+  let x;
+  let z;
+  for(let i=0; i<size; i++){
+    for (let j=0; j<size; j++){
+
+      x = i *(2000/size) +((2000/size)/2);
+      z = j* (2000/size)+((2000/size)/2);
+
+      /*if(i<(size/2))
+        x *= -1;
+
+      if(j< (size/2))
+        z *= -1;*/
+
+        if(array[i][j] == 0){
+          loadFloor('green_coral', x, z);
+          console.log('green_coral ',x, ' ', z);
+        }
+
+      if(array[i][j] == 1){
+          loadFloor('blue_coral', x, z);
+          console.log('blue_coral ',x, ' ', z);
+        }
+        
+      if(array[i][j] == 2){
+        loadFloor('yellow_coral', x, z);
+        console.log('yellow_coral ',x, ' ', z);
+        
+      }
+      if(array[i][j] == 3){
+        loadFloor('red_coral', x, z);
+        console.log('red_coral ', x, ' ', z)
+        
+      }
+      if(array[i][j] == 4 ){
+        loadRock(x, z); 
+        console.log('rock ',x, ' ', z)
+      }
+    }
+    
+  }
+}
+
+
+
+function createCoordCase(size){
+  let arrayC = [];
+  let compteur = 0;
+  for(let i=0; i<size; i++){
+    arrayC[i] = compteur;
+    compteur += (2000/size);
+  }
+
+  return arrayC;
+}
+
+scene.add(displayFloorElmt);
 
 // Create renderer for display of species
 const canvas2 = document.querySelector('#canvas-2');
