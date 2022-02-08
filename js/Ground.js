@@ -31,7 +31,7 @@ class Ground{
 
 function generateRuleMatrix(newMatrixPercent){
     let matrixPercentDefault = 
-    [//  0   1  2  3   // 3 color + neutral
+    [//  0   1  2  3   // 3 color + neutre
         [40,20,20,20], //0
         [10,70,10,10], //1
         [10,10,70,10], //2
@@ -50,7 +50,7 @@ function generateRuleMatrix(newMatrixPercent){
     newMatrixPercent.forEach(element => {
         if(element[0]+element[1]+element[2]+element[3] != 100){
             let somme= element[0]+element[1]+element[2]+element[3];
-            console.error("la somme des eléments de la matrice en % doit donner 100; ici "+ element[0]+"+"+element[0]+"+"+element[0]+"+"+element[3]+"="+ somme);
+            console.error("la somme des éléments de la matrice en % doit donner 100; ici "+ element[0]+"+"+element[0]+"+"+element[0]+"+"+element[3]+"="+ somme);
             newMatrixPercent= matrixPercentDefault;
         }
         if(element.length!= matrixPercentDefault[0].length){
@@ -74,11 +74,11 @@ function generateRuleMatrix(newMatrixPercent){
     return newRuleMatrice;
 }
 
-/*renvoie un tableau d'entier en function des parametre
+/*renvoi un tableau d'entier en fonction des paramètres
 *   I,J taille du tableau
-*   ruleMatrix matrice des rèdle
+*   ruleMatrix matrice des règles
 *
-*    les entier serront compris entre 0 et ruleMatrix.lenght-1
+*    les entiers seront compris entre 0 et ruleMatrix.lenght-1
 */
 function getNewTabWFC (I, J, ruleMatrix){
     //assert I J != 0
@@ -98,12 +98,12 @@ function getNewTabWFC (I, J, ruleMatrix){
 *  0|X|1
 *  2|0|2 
 *
-* returne la valeur de X en fct de ces voisin existant
+* retourne la valeur de X en fonction de ses voisins existant
 *
 */
 function getSolutionWithNeibourgh(I, J, ruleMatrix,tab, x, y){
-    var stateElemant = new Array(ruleMatrix.length) // nombre d'élément du même tipe 
-    stateElemant.fill(0);
+    var stateElement = new Array(ruleMatrix.length) // nombre d'éléments du même type 
+    stateElement.fill(0);
     let minI = Math.max(0, x-1);
     let maxI = Math.min(I, x+2); //car boucle <maxI
     let minJ = Math.max(0, y-1);
@@ -112,27 +112,27 @@ function getSolutionWithNeibourgh(I, J, ruleMatrix,tab, x, y){
     for (let i = minI; i < maxI; i++) {
         for (let j = minJ; j < maxJ; j++) {
             if (i!=x && j!=y && tab[i][j]!=-1){
-                stateElemant[tab[i][j]]+=1
+                stateElement[tab[i][j]]+=1
             }
         
         }
         
     }
 
-    return getSolutionWhitTabState(ruleMatrix,stateElemant);
+    return getSolutionWhitTabState(ruleMatrix,stateElement);
 
     
 }
 
-/* a partir d'un tableau du nombre de chaque type d'élément
-*  retourne le choix de l'élément du milieux
+/* à partir d'un tableau du nombre de chaque type d'éléments
+*  retourne le choix de l'élément du milieu
 */
-function getSolutionWhitTabState (ruleMatrix, tabStateElemant){
+function getSolutionWhitTabState (ruleMatrix, tabStateElement){
     var chanceForElement = new Array(ruleMatrix.length); //pour chaque élément sa chance de définir la case actuel
     chanceForElement.fill(0);
-    for (let element = 0; element < tabStateElemant.length; element++) {
+    for (let element = 0; element < tabStateElement.length; element++) {
         for (let index = 0; index < chanceForElement.length; index++) {
-            chanceForElement[index]+= tabStateElemant[element]*ruleMatrix[element][index];
+            chanceForElement[index]+= tabStateElement[element]*ruleMatrix[element][index];
         }
     };
 
