@@ -41,7 +41,7 @@ let materialArray = [];
     let boxSize = 600;
     let skyboxGeo = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
     let skybox = new THREE.Mesh( skyboxGeo, materialArray );
-    skybox.position.x = 0;
+    skybox.position.x = -60;
     skybox.position.y = 0;
     skybox.position.z = 0;
     scene.add( skybox );
