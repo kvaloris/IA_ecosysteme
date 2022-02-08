@@ -109,28 +109,15 @@ function getTypeOfNeibourgh(I, J,tab, x, y){
     let minJ = Math.max(0, y-1);
     let maxJ = Math.min(J, y+2);
 
-    console.warn("Neibourg");
-    var textTps  = x +',' + y+'   : ';
-    var textAjout="garder: "
     for (let i = minI; i < maxI; i++) {
         for (let j = minJ; j < maxJ; j++) {
-            var typeTps= tab[i][j];
-            textTps+= tab[i][j] + ", "
             if (! (i==x && j==y)){ //ne doit pas etre lui meme
                 if( tab[i][j]!=-1){
-                    tabOfType[tab[i][j]]+=1
-                    textAjout+= tab[i][j] + ", "
-                }else{
-                    textAjout+= " , "
+                    tabOfType[tab[i][j]]+=1;
                 }
             }
-        
         }
-        
     }
-    console.warn(textTps);
-    console.warn(textAjout);
-    console.warn(tabOfType);
     return tabOfType;
 }
 
