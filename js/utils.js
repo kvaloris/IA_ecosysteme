@@ -35,3 +35,42 @@ function divideV3(v, c) {
 function moduleV3(v) {
     return Math.sqrt(Math.pow(v.x, 2) + Math.pow(v.y, 2) + Math.pow(v.z, 2));
 }
+
+function makeRandMatrix (I , J){
+   
+	var tab = new Array();
+	for (var i=0; i<I; i++) {
+		tab.push (new Array);
+		for (var j=0; j<J; j++) {
+			tab[i].push(getRandomFloat(-2.0,2.0));
+		}
+	}
+	return tab;
+}
+
+function makeMatrix (I , J){
+	var tab = new Array();
+	for (var i=0; i<I; i++) {
+		tab.push (new Array);
+		for (var j=0; j<J; j++) {
+			tab[i].push(0);
+		}
+	}
+	return tab;
+}
+
+function makeIntMatrix (I , J, a){
+	var tab = new Array();
+	for (var i=0; i<I; i++) {
+		tab.push (new Array);
+		for (var j=0; j<J; j++) {
+			tab[i].push(a);
+		}
+	}
+	return tab;
+}
+
+// Map values from interval1 [A, B] to interval2 [a, b]
+function map(value, interval1, interval2) {
+	return (value - interval1[0]) / (interval1[1] - interval1[0]) * (interval2[1] - interval2[0]) + interval2[0];
+}
