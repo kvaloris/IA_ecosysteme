@@ -38,40 +38,32 @@ function generateRuleMatrix(newMatrixPercent){
         [10,10,10,70]  //3
     ];
     
-    if(newMatrixPercent==null ){
-        //console.error("la matrice en % est null");
-        newMatrixPercent= matrixPercentDefault;
+    if(newMatrixPercent==null ){ // il n't a pas de matrice passer en parametre
+        return matrixPercentDefault;
+    }else if (!isCorrectRuleMatrice(newMatrixPercent)){ // la matrice n'est pas conforme
+        return matrixPercentDefault;
     }
+    return newMatrixPercent;
+}
+
+function isCorrectRuleMatrice(matToVerif){
     if(newMatrixPercent.length!= matrixPercentDefault.length){
         console.error("la matrice en % n'a pas la bonne taille");
-        newMatrixPercent= matrixPercentDefault;
+        return false;
     }
 
     newMatrixPercent.forEach(element => {
         if(element[0]+element[1]+element[2]+element[3] != 100){
             let somme= element[0]+element[1]+element[2]+element[3];
             console.error("la somme des éléments de la matrice en % doit donner 100; ici "+ element[0]+"+"+element[0]+"+"+element[0]+"+"+element[3]+"="+ somme);
-            newMatrixPercent= matrixPercentDefault;
+            return false;
         }
         if(element.length!= matrixPercentDefault[0].length){
             console.error("la matrice en % n'a pas la bonne taille");
-            newMatrixPercent= matrixPercentDefault;
+            return false;
         }
     });
-
-    
-    let newRuleMatrice=newMatrixPercent;
-    /*
-    for (let i = 0; i < newRuleMatrice.length; i++) {
-        let somme =0;
-        for (let j = 0; j < newRuleMatrice.length; j++) {
-            somme+= newRuleMatrice[i][j];
-            newRuleMatrice[i][j] = somme/100;
-        }
-        
-    }
-    */
-    return newRuleMatrice;
+    return true;
 }
 
 /*renvoi un tableau d'entier en fonction des paramètres
