@@ -11,6 +11,7 @@ const neuralNetwork = new NeuralNetwork(1, 2, 1);
 neuralNetwork.train(pat);
 console.log("TEST");
 neuralNetwork.test(pat);
+console.log("FIN TEST");
 
 class Fish {
     id;
@@ -207,6 +208,7 @@ class Fish {
         const size = map(this.size, [MINSIZE, MAXSIZE], [0, 1]);
         const ageMax = map(this.ageMax, [MINAGEMAX, MAXAGEMAX], [0, 1]);
         const color = map(this.color, [0, TABColor.length - 1], [0, 1]);
+        const eyes = map(this.color, [0, MAXeye], [0, 1]);
         //console.log("color : " + color + " / size : " + size + " / ageMax : " + ageMax);
         const index = neuralNetwork.output([color]); //modif
         //console.log("Species index (0, 1 or 2) : " + index);
@@ -352,7 +354,7 @@ var importanceLife = {
 };
 
 // Reference for fish most suited for being eaten by humans
-bestFishToHuman = new Fish(0, 0, 0, 0, [50, 60, 80], 10, [2, 1, 2], 2);
+bestFishToHuman = new Fish(0, 0, 0, 0, 1, 10, [2, 1, 2], 2);
 // Importance coefficient
 var importanceToHuman = {
     "xFactor": 0 / XMAX,

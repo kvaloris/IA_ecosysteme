@@ -176,7 +176,6 @@ let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value
 
 //BUTTONS
 var btnNextYear = document.querySelector(".button-next-year");
-//console.log(btnNextYear);
 if (btnNextYear != null) {
   btnNextYear.addEventListener('click', () => {
     FishShoal.nextYear();
