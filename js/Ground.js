@@ -94,26 +94,44 @@ function getNewTabWFC (I, J, ruleMatrix){
 *
 */
 function getSolutionWithNeibourgh(I, J, ruleMatrix,tab, x, y){
-    var stateElement = new Array(ruleMatrix.length) // nombre d'éléments du même type 
-    stateElement.fill(0);
+    var tabOfType= getTypeOfNeibourgh(I, J,tab, x, y);
+
+    return getSolutionWhitTabState(ruleMatrix,tabOfType);
+
+    
+}
+
+function getTypeOfNeibourgh(I, J,tab, x, y){
+    var tabOfType = new Array(NB_TYPE) // nombre d'éléments du même type 
+    tabOfType.fill(0);
     let minI = Math.max(0, x-1);
     let maxI = Math.min(I, x+2); //car boucle <maxI
     let minJ = Math.max(0, y-1);
     let maxJ = Math.min(J, y+2);
 
+    console.warn("Neibourg");
+    var textTps  = x +',' + y+'   : ';
+    var textAjout="garder: "
     for (let i = minI; i < maxI; i++) {
         for (let j = minJ; j < maxJ; j++) {
-            if (i!=x && j!=y && tab[i][j]!=-1){
-                stateElement[tab[i][j]]+=1
+            var typeTps= tab[i][j];
+            textTps+= tab[i][j] + ", "
+            if (! (i==x && j==y)){ //ne doit pas etre lui meme
+                if( tab[i][j]!=-1){
+                    tabOfType[tab[i][j]]+=1
+                    textAjout+= tab[i][j] + ", "
+                }else{
+                    textAjout+= " , "
+                }
             }
         
         }
         
     }
-
-    return getSolutionWhitTabState(ruleMatrix,stateElement);
-
-    
+    console.warn(textTps);
+    console.warn(textAjout);
+    console.warn(tabOfType);
+    return tabOfType;
 }
 
 /* à partir d'un tableau du nombre de chaque type d'éléments
@@ -139,3 +157,9 @@ function getSolutionWhitTabState (ruleMatrix, tabStateElement){
     
 
 }
+
+/*--------------------------------------------------------------------*/
+/*--------------------        CONSTANTES          --------------------*/
+/*--------------------------------------------------------------------*/
+
+const NB_TYPE = 4; //0 1 2 3
