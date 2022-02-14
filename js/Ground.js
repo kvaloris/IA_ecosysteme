@@ -74,7 +74,7 @@ function isCorrectRuleMatrice(matToVerif){
 */
 function getNewTabWFC (I, J, ruleMatrix){
     //assert I J != 0
-    var newTab= makeIntMatrix (I , J, -1);
+    var newTab= makeIntMatrix (I , J, 0);
     for (let i = 0; i < newTab.length; i++) {
         for (let j = 0; j < newTab.length; j++) {
             newTab[i][j] = getSolutionWithNeibourgh(I, J, ruleMatrix,newTab, i, j);
@@ -127,22 +127,31 @@ function getTypeOfNeibourgh(I, J,tab, x, y){
 function getSolutionWhitTabState (ruleMatrix, tabStateElement){
     var chanceForElement = new Array(ruleMatrix.length); //pour chaque élément sa chance de définir la case actuel
     chanceForElement.fill(0);
-    for (let element = 0; element < tabStateElement.length; element++) {
+    for (let element = 0; element < NB_TYPE; element++) {
         for (let index = 0; index < chanceForElement.length; index++) {
             chanceForElement[index]+= tabStateElement[element]*ruleMatrix[element][index];
         }
     };
 
-    let maxTab = Math.max(...chanceForElement);
-    var maxChanceIndice =[], i;
-    for(i = 0; i < chanceForElement.length; i++){
-        if (chanceForElement[i] === maxTab){
-            maxChanceIndice.push(i);
-        }
+    var total = chanceForElement.reduce((a, b)=> a + b);
+    var chanceForElementMap= chanceForElement;
+    for (let i = 0; i < chanceForElementMap.length-1; i++) {
+        chanceForElementMap[i+1]=chanceForElementMap[i]+chanceForElementMap[i+1];
     }
-    return maxChanceIndice[getRandomInt(maxChanceIndice.length-1)];
-    
+    chanceForElementMap = chanceForElementMap.map(x => x /total);
+    //console.warn(chanceForElement)
+    //console.warn(chanceForElementMap)
 
+    var valAleat = rand();
+    console.warn(valAleat)
+    var indice=0;
+    var tpm1 = chanceForElementMap.length> indice;
+    var tpm2 = chanceForElementMap[indice];
+    while(chanceForElementMap.length > indice && chanceForElementMap[indice]<valAleat){
+        indice++;
+    }
+    //console.warn(indice)
+    return indice;
 }
 
 /*--------------------------------------------------------------------*/
