@@ -4,6 +4,9 @@
 *
 *  pour l'utiliser
 *  Ground.getGroundArray());
+*
+*  pour passer un année:
+*  Ground.nextYear()
 */
 
 
@@ -12,10 +15,9 @@ class Ground{
     static groundArray=[];
     static ruleMatrix= [];
 
-    static init(I, J, ruleMatrix){
-        this.ruleMatrix= generateRuleMatrix(); 
-        this.groundArray= getNewTabWFC (I , J, this.ruleMatrix);
-        
+    static init(I, J, ruleMatrixSize){
+        this.ruleMatrix= generateRuleMatrix(ruleMatrixSize); 
+        this.groundArray= getNewTabWFC (I , J, this.ruleMatrix); 
     }
 
     static toString(){
@@ -27,43 +29,48 @@ class Ground{
         var tabTmp = this.groundArray;
         return tabTmp;
     }
-}
 
-function generateRuleMatrix(newMatrixPercent){
-    let matrixPercentDefault = 
-    [//  0   1  2  3   // 3 color + neutre
-        [40,20,20,20], //0
-        [10,70,10,10], //1
-        [10,10,70,10], //2
-        [10,10,10,70]  //3
-    ];
-    
-    if(newMatrixPercent==null ){ // il n't a pas de matrice passer en parametre
-        return matrixPercentDefault;
-    }else if (!isCorrectRuleMatrice(newMatrixPercent)){ // la matrice n'est pas conforme
-        return matrixPercentDefault;
-    }
-    return newMatrixPercent;
-}
-
-function isCorrectRuleMatrice(matToVerif){
-    if(newMatrixPercent.length!= matrixPercentDefault.length){
-        console.error("la matrice en % n'a pas la bonne taille");
-        return false;
+    static nextYear(){
+        this.groundArray= gatTabWithWFC(this.groundArray.length, this.groundArray[0].length, ruleMatrix, this.groundArray)
     }
 
-    newMatrixPercent.forEach(element => {
-        if(element[0]+element[1]+element[2]+element[3] != 100){
-            let somme= element[0]+element[1]+element[2]+element[3];
-            console.error("la somme des éléments de la matrice en % doit donner 100; ici "+ element[0]+"+"+element[0]+"+"+element[0]+"+"+element[3]+"="+ somme);
-            return false;
-        }
-        if(element.length!= matrixPercentDefault[0].length){
-            console.error("la matrice en % n'a pas la bonne taille");
-            return false;
-        }
-    });
-    return true;
+    static eatCoral(i,j){
+        this.groundArray[i,j]=0;
+    }
+}
+
+function generateRuleMatrix(ruleMatrixSize){
+    var newMatRule;
+    switch (ruleMatrixSize) {
+        case 0:
+            console.error("ruleMatrixSize ==0")
+
+            break;
+        case 1:
+            console.error("ruleMatrixSize ==1")
+
+            break;
+        case 2:
+            newMatRule= MATRIX_RULE_2;
+
+            break;
+        case 3:
+            newMatRule= MATRIX_RULE_3;
+
+            break;
+        case 4:
+            newMatRule= MATRIX_RULE_4;
+
+            break;
+        case 5:
+            newMatRule= MATRIX_RULE_5;
+
+            break;
+        default:
+            console.error("ruleMatrixSize >5")
+            break;
+    }
+    return newMatRule;
 }
 
 /*renvoi un tableau d'entier en fonction des paramètres
@@ -75,15 +82,18 @@ function isCorrectRuleMatrice(matToVerif){
 function getNewTabWFC (I, J, ruleMatrix){
     //assert I J != 0
     var newTab= makeIntMatrix (I , J, 0);
-    for (let i = 0; i < newTab.length; i++) {
-        for (let j = 0; j < newTab.length; j++) {
-            newTab[i][j] = getSolutionWithNeibourgh(I, J, ruleMatrix,newTab, i, j);
-        }
-        
-    }
-    return newTab;
+    return gatTabWithWFC(I, J, ruleMatrix, newTab);
 }
 
+function gatTabWithWFC(I, J, ruleMatrix, tab){
+    for (let i = 0; i < tab.length; i++) {
+        for (let j = 0; j < tab.length; j++) {
+            tab[i][j] = getSolutionWithNeibourgh(I, J, ruleMatrix,tab, i, j);
+        }
+    }
+    return tab;
+
+}
 
 /*
 *  1|0|2
@@ -94,15 +104,13 @@ function getNewTabWFC (I, J, ruleMatrix){
 *
 */
 function getSolutionWithNeibourgh(I, J, ruleMatrix,tab, x, y){
-    var tabOfType= getTypeOfNeibourgh(I, J,tab, x, y);
+    var tabOfType= getTypeOfNeibourgh(I, J,tab, ruleMatrix.length, x, y);
 
     return getSolutionWhitTabState(ruleMatrix,tabOfType);
-
-    
 }
 
-function getTypeOfNeibourgh(I, J,tab, x, y){
-    var tabOfType = new Array(NB_TYPE) // nombre d'éléments du même type 
+function getTypeOfNeibourgh(I, J,tab,nbType, x, y){
+    var tabOfType = new Array(nbType) // nombre d'éléments du même type 
     tabOfType.fill(0);
     let minI = Math.max(0, x-1);
     let maxI = Math.min(I, x+2); //car boucle <maxI
@@ -112,9 +120,7 @@ function getTypeOfNeibourgh(I, J,tab, x, y){
     for (let i = minI; i < maxI; i++) {
         for (let j = minJ; j < maxJ; j++) {
             if (! (i==x && j==y)){ //ne doit pas etre lui meme
-                if( tab[i][j]!=-1){
-                    tabOfType[tab[i][j]]+=1;
-                }
+                tabOfType[tab[i][j]]+=1;
             }
         }
     }
@@ -129,28 +135,24 @@ function getSolutionWhitTabState (ruleMatrix, tabStateElement){
     chanceForElement.fill(0);
     for (let element = 0; element < NB_TYPE; element++) {
         for (let index = 0; index < chanceForElement.length; index++) {
-            chanceForElement[index]+= tabStateElement[element]*ruleMatrix[element][index];
+            chanceForElement[index]+= tabStateElement[element]*ruleMatrix[element][index]; //on ajoute les poucentages
         }
     };
 
-    var total = chanceForElement.reduce((a, b)=> a + b);
+    var total = chanceForElement.reduce((a, b)=> a + b); 
     var chanceForElementMap= chanceForElement;
     for (let i = 0; i < chanceForElementMap.length-1; i++) {
         chanceForElementMap[i+1]=chanceForElementMap[i]+chanceForElementMap[i+1];
     }
+
+    //on map les élément: 0 a total ->  0 a 1
     chanceForElementMap = chanceForElementMap.map(x => x /total);
-    //console.warn(chanceForElement)
-    //console.warn(chanceForElementMap)
 
     var valAleat = rand();
-    console.warn(valAleat)
     var indice=0;
-    var tpm1 = chanceForElementMap.length> indice;
-    var tpm2 = chanceForElementMap[indice];
     while(chanceForElementMap.length > indice && chanceForElementMap[indice]<valAleat){
         indice++;
     }
-    //console.warn(indice)
     return indice;
 }
 
@@ -158,4 +160,32 @@ function getSolutionWhitTabState (ruleMatrix, tabStateElement){
 /*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
 
-const NB_TYPE = 4; //0 1 2 3
+
+const MATRIX_RULE_2 = 
+    [//  0   1 
+        [55,45], //0
+        [45,55] //1
+    ];
+
+const MATRIX_RULE_3 = 
+    [//  0   1  2
+        [55,25,25], //0
+        [15,70,15], //1
+        [15,15,70], //2
+    ];
+const MATRIX_RULE_4 = 
+    [//  0   1  2  3   // 3 color + neutre
+        [40,20,20,20], //0
+        [10,70,10,10], //1
+        [10,10,70,10], //2
+        [10,10,10,70]  //3
+    ];
+
+const MATRIX_RULE_5 = 
+    [//  0   1  2  3  4  // 3 color + neutre
+        [40,15,15,15,15], //0
+        [10,60,10,10,10], //1
+        [10,10,60,10,10], //2
+        [10,10,10,60,10], //3
+        [10,10,10,10,60]  //4
+    ];

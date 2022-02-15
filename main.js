@@ -182,6 +182,7 @@ if (btnNextYear != null) {
     deleteGroup();
     displayFishes(fishesGroup);
     document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
+    Ground.nextYear(); //TODO réafficher
   });
 }
 
@@ -230,7 +231,7 @@ export function resizeRendererToDisplaySize(renderer) {
 
 // NeuralNetwork.demo();
 
-createFloor(5);
+createFloor(10);
 
 
 function createFloor(size){
