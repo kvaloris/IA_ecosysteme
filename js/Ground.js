@@ -1,6 +1,6 @@
 /* Pour l'utiliser:
 *  pour créer un sol
-*  Ground.init(5,5); avec la taille que tu veux
+*  Ground.init(5,5, nombreDeType); avec la taille que tu veux
 *
 *  pour l'utiliser
 *  Ground.getGroundArray());
@@ -67,7 +67,7 @@ function generateRuleMatrix(ruleMatrixSize){
 
             break;
         default:
-            console.error("ruleMatrixSize >5")
+            console.error("ruleMatrixSize >5 ou non defini")
             break;
     }
     return newMatRule;
@@ -133,7 +133,7 @@ function getTypeOfNeibourgh(I, J,tab,nbType, x, y){
 function getSolutionWhitTabState (ruleMatrix, tabStateElement){
     var chanceForElement = new Array(ruleMatrix.length); //pour chaque élément sa chance de définir la case actuel
     chanceForElement.fill(0);
-    for (let element = 0; element < NB_TYPE; element++) {
+    for (let element = 0; element < ruleMatrix.length; element++) {
         for (let index = 0; index < chanceForElement.length; index++) {
             chanceForElement[index]+= tabStateElement[element]*ruleMatrix[element][index]; //on ajoute les poucentages
         }

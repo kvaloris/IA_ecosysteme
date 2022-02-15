@@ -235,7 +235,7 @@ createFloor(10);
 
 
 function createFloor(size){
-  Ground.init(size,size);
+  Ground.init(size,size,4);
   let array = Ground.getGroundArray();
   console.log(Ground.toString());
   console.log(Ground.getGroundArray());
