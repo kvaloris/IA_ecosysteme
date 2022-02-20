@@ -234,36 +234,36 @@ export function resizeRendererToDisplaySize(renderer) {
 createFloor(10);
 
 
-function createFloor(size){
-  Ground.init(size,size,4);
-  let array = Ground.getGroundArray();
+function createFloor(nbCoralsPerLine){
+  Ground.init(boxSize,nbCoralsPerLine,4);
   console.log(Ground.toString());
   console.log(Ground.getGroundArray());
   let x;
   let z;
-  for(let i=0; i<size; i++){
-    for (let j=0; j<size; j++){
+  let typeElement;
+  for(let i=0; i<nbCoralsPerLine; i++){
+    for (let j=0; j<nbCoralsPerLine; j++){
 
-      x = i *(boxSize/size) -((boxSize)/2)+(boxSize/size)/2;
-      z = j* (boxSize/size)-((boxSize)/2)+(boxSize/size)/2;
-
-      if(array[i][j] == 1){
+      x = Ground.getCoralX(i);
+      z = Ground.getCoralY(j);
+      typeElement = Ground.getTypeElement(i,j)
+      if(typeElement == 1){
           loadFloor('blue_coral', x, z);
           console.log('blue_coral ',x, ' ', z);
         }
         
-      if(array[i][j] == 2){
+      if(typeElement == 2){
         loadFloor('yellow_coral', x, z);
         console.log('yellow_coral ',x, ' ', z);
         
       }
-      if(array[i][j] == 3){
+      if(typeElement == 3){
         loadFloor('red_coral', x, z);
         console.log('red_coral ', x, ' ', z)
         
       }
 
-      if(array[i][j] == 4 ){
+      if(typeElement == 4 ){
         loadRock(x, z); 
         console.log('rock ',x, ' ', z)
       }

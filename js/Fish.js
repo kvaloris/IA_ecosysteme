@@ -23,8 +23,10 @@ class Fish {
     yearsOld = 0;
     velocity = { x: 0, y: 0, z: 0 }
     specie = SPECIES[0];
+    hunger;
+    eatObjectifCoordinate;
 
-    constructor(id, x, y, z, color, size, appearance, ageMax, yearsOld = 0) {
+    constructor(id, x, y, z, color, size, appearance, ageMax, yearsOld = 0, hunger=true) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -35,6 +37,8 @@ class Fish {
         this.ageMax = ageMax;
         this.yearsOld = yearsOld;
         this.specie = this.getSpecie();
+        this.hunger = hunger;
+
     }
 
     toString() {
@@ -213,6 +217,12 @@ class Fish {
         const index = neuralNetwork.output([color]); //modif
         //console.log("Species index (0, 1 or 2) : " + index);
         return SPECIES[index];
+    }
+
+    findEatObjectifCoordinate(ground,){//TODO
+        ground
+
+        eatObjectifCoordinate
     }
 }
 

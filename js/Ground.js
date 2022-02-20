@@ -14,10 +14,14 @@
 class Ground{
     static groundArray=[];
     static ruleMatrix= [];
+    static nbCoralsPerLine;
+    static sizeGround;
 
-    static init(I, J, ruleMatrixSize){
+    static init(sizeGround,nbCoralsPerLine , ruleMatrixSize){
+        this.sizeGround=sizeGround;
+        this.nbCoralsPerLine=nbCoralsPerLine;
         this.ruleMatrix= generateRuleMatrix(ruleMatrixSize); 
-        this.groundArray= getNewTabWFC (I , J, this.ruleMatrix); 
+        this.groundArray= getNewTabWFC (this.nbCoralsPerLine, this.ruleMatrix); 
     }
 
     static toString(){
@@ -31,11 +35,33 @@ class Ground{
     }
 
     static nextYear(){
-        this.groundArray= gatTabWithWFC(this.groundArray.length, this.groundArray[0].length, ruleMatrix, this.groundArray)
+        this.groundArray= getTabWithWFC(this.groundArray.length, this.groundArray[0].length, ruleMatrix, this.groundArray)
     }
 
     static eatCoral(i,j){
-        this.groundArray[i,j]=0;
+        this.groundArray[i][j]=0;
+    }
+
+    //TODO trouver les coordonee d'un type
+    static findCoordinatesType(type){
+        for (let i = 0; i < this.groundArray.length; i++) {
+            if(this.groundArray[i].indexOf(type) !=-1){
+                return [getCoralX(i),getCoralY(j)];
+            }
+        }
+        return false;
+    }
+
+    static getCoralX(i){
+        return i *(this.sizeGround/this.nbCoralsPerLine) -((this.sizeGround)/2)+(this.sizeGround/this.nbCoralsPerLine)/2;
+    }
+
+    static getCoralY(j){
+        return j* (this.sizeGround/this.nbCoralsPerLine)-((this.sizeGround)/2)+(this.sizeGround/this.nbCoralsPerLine)/2;
+    }
+
+    static getTypeElement(i,j){
+        return this.groundArray[i][j];
     }
 }
 
@@ -79,16 +105,16 @@ function generateRuleMatrix(ruleMatrixSize){
 *
 *    les entiers seront compris entre 0 et ruleMatrix.lenght-1
 */
-function getNewTabWFC (I, J, ruleMatrix){
-    //assert I J != 0
-    var newTab= makeIntMatrix (I , J, 0);
-    return gatTabWithWFC(I, J, ruleMatrix, newTab);
+function getNewTabWFC (sizeTabElement, ruleMatrix){
+    //assert sizeTabElement  != 0
+    var newTab= makeIntMatrix (sizeTabElement,sizeTabElement , 0);
+    return getTabWithWFC( ruleMatrix, newTab);
 }
 
-function gatTabWithWFC(I, J, ruleMatrix, tab){
+function getTabWithWFC(ruleMatrix, tab){
     for (let i = 0; i < tab.length; i++) {
         for (let j = 0; j < tab.length; j++) {
-            tab[i][j] = getSolutionWithNeibourgh(I, J, ruleMatrix,tab, i, j);
+            tab[i][j] = getSolutionWithNeibourgh(ruleMatrix,tab, i, j);
         }
     }
     return tab;
@@ -103,19 +129,19 @@ function gatTabWithWFC(I, J, ruleMatrix, tab){
 * retourne la valeur de X en fonction de ses voisins existant
 *
 */
-function getSolutionWithNeibourgh(I, J, ruleMatrix,tab, x, y){
-    var tabOfType= getTypeOfNeibourgh(I, J,tab, ruleMatrix.length, x, y);
+function getSolutionWithNeibourgh(ruleMatrix,tab, x, y){
+    var tabOfType= getTypeOfNeibourgh(tab, ruleMatrix.length, x, y);
 
     return getSolutionWhitTabState(ruleMatrix,tabOfType);
 }
 
-function getTypeOfNeibourgh(I, J,tab,nbType, x, y){
+function getTypeOfNeibourgh(tab,nbType, x, y){
     var tabOfType = new Array(nbType) // nombre d'éléments du même type 
     tabOfType.fill(0);
     let minI = Math.max(0, x-1);
-    let maxI = Math.min(I, x+2); //car boucle <maxI
+    let maxI = Math.min(tab.length , x+2); //car boucle <maxI
     let minJ = Math.max(0, y-1);
-    let maxJ = Math.min(J, y+2);
+    let maxJ = Math.min(tab.length , y+2);
 
     for (let i = minI; i < maxI; i++) {
         for (let j = minJ; j < maxJ; j++) {
