@@ -45,7 +45,7 @@ class FishShoal{
 
     // Update the positions of the fishes and rotate them correctly
     static updatePosition(c_ag, c_s,c_al,fishesGroup){
-        this.fishesArray.forEach(fish => fish.move(this.fishesArray, c_ag, c_s, c_al));
+        this.fishesArray.forEach(fish => fish.update(this.fishesArray, c_ag, c_s, c_al));
         for (let i = 0; i < fishesGroup.children.length; i++) {
             let x = this.fishesArray[i].x;
             let y = this.fishesArray[i].y;

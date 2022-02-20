@@ -26,7 +26,7 @@ class Fish {
     hunger;
     eatObjectifCoordinate;
 
-    constructor(id, x, y, z, color, size, appearance, ageMax, yearsOld = 0, hunger=true) {
+    constructor(id, x, y, z, color, size, appearance, ageMax, yearsOld = 0, hunger=true, eatObjectifCoordinate) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -38,6 +38,7 @@ class Fish {
         this.yearsOld = yearsOld;
         this.specie = this.getSpecie();
         this.hunger = hunger;
+        this.eatObjectifCoordinate= eatObjectifCoordinate;
 
     }
 
@@ -56,18 +57,23 @@ class Fish {
     static fishRandom(id, fishes) {
 
         let pos = generateCorrectPosition(fishes);
+        let colorRand = colorRandom(); 
         let newMaxAge = ageMaxRandom();
         return new this(
             id,
             pos[0],
             pos[1],
             pos[2],
-            colorRandom(),
+            colorRand,
             sizeRandom(),
             appearanceRamdon(),
             newMaxAge,
-            Math.round(Math.random() * (newMaxAge - 1)));
+            Math.round(Math.random() * (newMaxAge - 1)),
+            true,
+            Ground.findCoordinatesType(colorRand));
     }
+
+    
 
     // Return the child of fish 1 and fish 2
     static generateChild(id, fish1, fish2, fishes, mutChance) {
@@ -205,6 +211,12 @@ class Fish {
         this.z = position.z;
     }
 
+    update(fishes, c_ag, c_s, c_al){
+        if(this.hunger == true && this.eatObjectifCoordinate === false){
+            this.eatObjectifCoordinate= Ground.findCoordinatesType(this.color);
+        }
+        this.move(fishes, c_ag, c_s, c_al);
+    }
     
     getSpecie() {
         // Normalize

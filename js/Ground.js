@@ -44,9 +44,11 @@ class Ground{
 
     //TODO trouver les coordonee d'un type
     static findCoordinatesType(type){
+        var j;
         for (let i = 0; i < this.groundArray.length; i++) {
-            if(this.groundArray[i].indexOf(type) !=-1){
-                return [getCoralX(i),getCoralY(j)];
+            j= this.groundArray[i].indexOf(type);
+            if( j!=-1){
+                return [this.getCoralX(i),this.getCoralY(j)];
             }
         }
         return false;
