@@ -35,7 +35,7 @@ class Ground{
     }
 
     static nextYear(){
-        this.groundArray= getTabWithWFC(this.groundArray.length, this.groundArray[0].length, ruleMatrix, this.groundArray)
+        this.groundArray= getTabWithWFC(this.ruleMatrix, this.groundArray)
     }
 
     static eatCoral(i,j){

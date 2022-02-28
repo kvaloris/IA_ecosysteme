@@ -203,7 +203,7 @@ export function animate() {
   renderer.render(scene, camera);
 }
 
-FishShoal.init(100);
+FishShoal.init(4);
 displayFishes(fishesGroup);
 
 animate();

@@ -63,13 +63,19 @@ class FishShoal{
 
 
     static nextYear(){
-        for(var i=0; i< this.fishesArray.length; i++){
+        var i=0;
+        while (i< this.fishesArray.length) {
             this.fishesArray[i].yearsOld ++;
-            if (this.fishesArray[i].yearsOld > this.fishesArray[i].ageMax){
+            if (this.fishesArray[i].yearsOld > this.fishesArray[i].ageMax || this.fishesArray[i].hunger==true){
                 this.fishesArray.splice(i,1);
+            }else{
+                i++;
             }
         }
         this.fishesArray = generateNewGeneration(this.fishesArray, this.nbFishInit, this.mutChance);
+        this.fishesArray.forEach(fish => {
+            fish.hunger= true;
+        });
     }
 
     static setMutChance(newFloat){
