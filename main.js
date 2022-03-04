@@ -159,12 +159,15 @@ const slider_mutChance = document.querySelector(".slider-mutChance");
 
 slider_ag.addEventListener('change', () => {
   c_ag = slider_ag.value;
+  console.log(c_ag);
 })
 slider_s.addEventListener('change', () => {
   c_s = slider_s.value;
+  console.log(c_s);
 })
 slider_al.addEventListener('change', () => {
   c_al = slider_al.value;
+  console.log(c_al);
 })
 
 slider_mutChance.addEventListener('change', () => {
