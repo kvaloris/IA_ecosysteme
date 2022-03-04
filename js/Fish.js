@@ -352,7 +352,7 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, importanceFactor) {
 /*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
 
-const XMIN = 0, XMAX = 200, YMIN = 0, YMAX = 200, ZMIN = 0, ZMAX = 200;
+const XMIN = -100-60, XMAX = 100-60, YMIN = -100, YMAX = 100, ZMIN = -100, ZMAX = 100;
 const TABColor = [0, 1, 2];
 const MINSIZE = 3, MAXSIZE = 10;
 const MINAGEMAX = 1, MAXAGEMAX = 6;
