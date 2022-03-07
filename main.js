@@ -177,18 +177,106 @@ slider_mutChance.addEventListener('change', () => {
 
 let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value;
 
+let year = 1;
+
 //BUTTONS
-var btnNextYear = document.querySelector(".button-next-year");
+
+const yearDisplay = document.querySelector(".year");
+// const yearWrapper = document.querySelector(".year-wp");
+const backdrop = document.querySelector('.backdrop');
+const btnNextYear = document.querySelector("#next-year-btn");
 if (btnNextYear != null) {
   btnNextYear.addEventListener('click', () => {
     FishShoal.nextYear();
     deleteGroup();
     displayFishes(fishesGroup);
-    document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
-    Ground.nextYear(); //TODO réafficher
+    // document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
+    // Ground.nextYear(); //TODO réafficher
+    year = year + 1;
+    yearDisplay.innerHTML = "Year " + year;
+
+    yearDisplay.classList.add("yearChange");
+
+    backdrop.animate([
+      { opacity: 0 }, { opacity: 1 } 
+    ], {
+      duration: 1000,
+    });
+    yearDisplay.animate([
+      { opacity: 0 }, { opacity: 1 } 
+    ], {
+      duration: 600,
+      delay: 400
+    });
+    backdrop.animate([
+      { opacity: 1 }, { opacity: 0 } 
+    ], {
+      delay: 1000,
+      duration: 1000,
+    });
+    setTimeout(() => {
+      yearDisplay.setAttribute("style", "transition: 1s");
+      yearDisplay.classList.remove("yearChange");
+    }, 1000);
+    setTimeout(() => {
+      yearDisplay.setAttribute("style", "t");
+    }, 2000);
+
+
+    // yearWrapper.classList.add('changeYear');
+      // backdrop.animate([
+      //   { opacity: 1 }, { opacity: 0 } 
+      // ], {
+      //   duration: 500,
+      //   delay: 1500,
+      //   fill: "forwards"
+      // });
+      // yearDisplay.animate([
+      //   { top: "50%", fontSize: "70px", transform:"translate(-50%, -50%)"}, 
+      //   { top: "10px", fontSize: "24px", transform:"translate(-50%, 0)"}
+      // ], {
+      //   duration: 500,
+      //   delay: 1500,
+      //   fill: "forwards"
+      // });
+    // setTimeout(() => {
+    //   yearWrapper.classList.remove('changeYear');
+    // }, 2000);
   });
 }
 
+const closePresentation = document.querySelector('#close-presentation');
+const presentation = document.querySelector('.presentation-wp');
+closePresentation.addEventListener('click', () => {
+  presentation.animate([
+    {opacity: 1}, {opacity: 0}
+  ], {
+    duration: 1000
+  });
+  setTimeout(() => {
+    presentation.style.display = "none";
+  }, 1000);
+})
+
+const infoBtn = document.querySelector('#info-btn');
+infoBtn.addEventListener('click', () => {
+  presentation.style.display = "initial";
+  presentation.animate([
+    {opacity: 0}, {opacity: 1}
+  ], {
+    duration: 1000
+  });
+})
+
+const slidersBtn = document.querySelector('#sliders-btn');
+const slidersBtnImg = document.querySelector('#sliders-btn > img');
+const slidersConsole = document.querySelector('.sliders-console');
+slidersBtn.addEventListener('click', () => {
+  slidersConsole.classList.toggle('goDown');
+  const btnImgPath = slidersConsole.className.includes('goDown') ? "/assets/slider.png" : "/assets/arrow.png";
+  slidersBtnImg.setAttribute('src', btnImgPath);
+  slidersBtnImg.setAttribute('style', 'transform: rotate(180deg)');
+})
 
 // ANIMATION
 
@@ -218,7 +306,7 @@ document.addEventListener('keydown', () => {
 
 FishShoal.setMutChance(slider_mutChance.value);
 //TEXT INFORMATION
-document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
+// document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
 
 
 export function resizeRendererToDisplaySize(renderer) {
@@ -282,7 +370,12 @@ scene.add(displayFloorElmt);
 const canvas2 = document.querySelector('#canvas-2');
 const renderer2 = new THREE.WebGLRenderer({ canvas: canvas2, alpha: true });
 
-const speciesButton = document.getElementById('display-species');
+const speciesButton = document.getElementById('species-display-btn');
 speciesButton.addEventListener('click', () => displaySpecies(idAnim, renderer2));
 
-document.querySelector('#close-display-2').addEventListener('click', closeSpeciesDisplay);
+document.querySelector('#species-close-btn').addEventListener('click', closeSpeciesDisplay);
+
+const display2 = document.querySelector('#display-2');
+display2.addEventListener('scroll', () => {
+  console.log(display2.scrollTop);
+})

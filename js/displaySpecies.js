@@ -13,15 +13,25 @@ export function displaySpecies(idAnim, renderer) {
 
     // Make the display visible
     const display = document.querySelector('#display-2');
-    display.style.display = "inherit";
+    display.style.display = "initial";
+    display.animate([
+        { transform: "translateX(-100%)" }, { transform: "translateX(0)"}
+    ], {
+        duration: 1000
+    })
+
 
     // Create tabs for the different species
     createSpeciesTab(renderer);
 
-    // When the display is opened, fishes of the first specie are displayed
-    const firstSpecie = Object.keys(FishShoal.getFishesBySpecies())[0];
-    const fishesOfFirstSpecie = FishShoal.getFishesBySpecies()[firstSpecie];
-    displayFishesAsItems(fishesOfFirstSpecie, renderer);
+    setTimeout(() => {
+
+        // When the display is opened, fishes of the first specie are displayed
+        const firstSpecie = Object.keys(FishShoal.getFishesBySpecies())[0];
+        const fishesOfFirstSpecie = FishShoal.getFishesBySpecies()[firstSpecie];
+        displayFishesAsItems(fishesOfFirstSpecie, renderer);
+        
+    }, 1000);
 }
 
 // Display fishes passed in paramaters as items
@@ -103,7 +113,9 @@ function displayFishesAsItems(fishes, renderer) {
         renderer.setScissorTest(true);
 
         // The canvas's transform is set to move it so the top of the canvas is at the top of whatever part the page is currently scrolled to.
-        const transform = `translateY(${window.scrollY}px)`;
+        // const transform = `translateY(${window.scrollY}px)`;
+        const display = document.querySelector('#display-2');
+        const transform = `translateY(${display.scrollTop}px)`;
         renderer.domElement.style.transform = transform;
         
         // Render only the fishes that are on screen
@@ -176,6 +188,13 @@ function createSpeciesTab(renderer) {
 export function closeSpeciesDisplay() {
     cancelAnimationFrame(idAnim2);
     const display = document.querySelector('#display-2');
-    display.style.display = "none";
+    display.animate([
+        { transform: "translateX(0)"}, { transform: "translateX(-100%)" }
+    ], {    
+        duration: 1000
+    })
+    setTimeout(() => {
+        display.style.display = "none";
+    }, 1000);
     animate();
 }

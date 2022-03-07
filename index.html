@@ -18,49 +18,116 @@
 <body>
 
   <div id="display-1">
+
     <div class="nbPoisson"></div>
-    <div class="inputs">
 
-      <div class="slider">
-        <label for="slider-cohesion">Cohesion</label>
-        <input name="slider-cohesion" class="slider-cohesion" type="range" min="0" max="0.001" value="0.0005" step="0.0001">
-  
+    <div class="presentation-wp visible">
+      <div class="presentation">
+        <h2>Underwater ecosystem</h2>
+        <p>Watch a submarine ecosystem composed of fishes and corals evolve from year to year.</p>
+        <p>We have implemented AI in different elements of our ecosystem:</p>
+        <ul>
+          <li><span>Our fishes are boids.</span></li>
+          <li><span>A neural network divides them into species.</span></li>
+          <li><span>A genetic algorithm defines how they reproduce and if they will live.</span></li>
+          <li><span>A WFC places our corals on the floor.</span></li>
+        </ul>
+
+        <div id="close-presentation" class="close"></div>
+      </div>
+    </div>
+
+    <div class="backdrop"></div>
+    <h2 class="year">Year 1</h2>
+
+    <div class="buttons-bottom">
+
+      <div class="sliders-console goDown">
+
+        <div class="button" id="sliders-btn">
+          <img class="btn-img" src="/assets/slider.png" alt="Show the parameters">
+        </div>
+
+        <div class="sliders">
+
+          <label for="slider-cohesion">Cohesion</label>
+          <input name="slider-cohesion" class="slider-cohesion" type="range" min="0" max="0.001" value="0.0005"
+            step="0.0001">
+
+          <label for="slider-separation">Separation</label>
+          <input name="slider-separation" class="slider-separation" type="range" min="0" max="0.001" value="0.0005"
+            step="0.0001">
+
+          <label for="slider-alignment">Alignment</label>
+          <input name="slider-alignment" class="slider-alignment" type="range" min="0" max="0.05" value="0.025"
+            step="0.005">
+
+          <label for="slider-mutChance">Mutation rate</label>
+          <input name="slider-mutChance" class="slider-mutChance" type="range" min="0" max="1" value="0.01"
+            step="0.005">
+
+        </div>
+
       </div>
 
-      <div class="slider">
-        <label for="slider-separation">Separation</label>
-        <input name="slider-separation" class="slider-separation" type="range" min="0" max="0.001" value="0.0005"
-          step="0.0001">
+      <div class="button" id="next-year-btn">
+        <img class="btn-img" src="/assets/play.png" alt="Next Year">
       </div>
-
-      <div class="slider">
-        <label for="slider-alignment">Alignment</label>
-        <input name="slider-alignment" class="slider-alignment" type="range" min="0" max="0.05" value="0.025"
-          step="0.005">
-  
+      <div class="button" id="info-btn">
+        <img class="btn-img" src="/assets/info.png" alt="About the project">
       </div>
-
-      <div class="slider">
-        <label for="slider-mutChance">Mutation rate</label>
-        <input name="slider-mutChance" class="slider-mutChance" type="range" min="0" max="1" value="0.01" step="0.005">  
-      </div>
-  
-      <input type="button" value="Next Year" id="button-next-year" class="button-next-year">
-      
-      <input type="button" value="Display Species" id="display-species">
 
     </div>
+
+    <div class="button" id="species-display-btn">
+      <img class="btn-img" src="/assets/arrow.png" alt="Show species display">
+    </div>
+
+    <!-- <div>
+    <svg viewBox="-250 -250 500 500" style="width: 500px">
+      <path id="curve" d="M-250,0a250,250 0 1,0 500,0a250,250 0 1,0 -500,0"/>
+      <path id="curve" d="M73.2,148.6c4-6.1,65.5-96.8,178.6-95.6c111.3,1.2,170.8,90.3,175.1,97" />
+      <text width="500">
+        <textPath xlink:href="#curve">
+          Dangerous Curves Ahead
+        </textPath>
+      </text>
+    </svg>
+
+    </div> -->
+
+
+    <!-- <input type="button" value="Next Year" id="button-next-year" class="button-next-year">
+
+    <input type="button" value="Display Species" id="display-species"> -->
 
     <canvas id="canvas-1"></canvas>
 
   </div>
 
   <div id="display-2">
+
+    <div class="button" id="species-close-btn">
+      <img class="btn-img" src="/assets/arrow-blue.png" alt="Close species display">
+    </div>
+
     <div id="container-2">
-      <h1>Espèces de poissons</h1>
-      <div class="species-tabs"></div>
-      <div id="close-display-2" class="close"></div>
+
+      <div class="header-2">
+
+        <div class="specie-icon-wp">
+          <img class="specie-icon" src="/assets/fish.png" alt="Species">
+        </div>
+
+        <div class="species-tabs-wp">
+          <div class="line-h"></div>
+          <div class="species-tabs"></div>
+          <div class="line-h"></div>
+        </div>
+      </div>
+
       <div class="grid-fishes"></div>
+
       <canvas id="canvas-2"></canvas>
     </div>
   </div>
