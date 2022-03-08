@@ -21,30 +21,30 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector("#display-1").appendChild(renderer.domElement);
 
 let materialArray = [];
-    let texture_ft = new THREE.TextureLoader().load( 'images/uw_ft.jpg');
-    let texture_bk = new THREE.TextureLoader().load( 'images/uw_bk.jpg');
-    let texture_up = new THREE.TextureLoader().load( 'images/uw_up.jpg');
-    let texture_dn = new THREE.TextureLoader().load( 'images/uw_dn.jpg');
-    let texture_rt = new THREE.TextureLoader().load( 'images/uw_rt.jpg');
-    let texture_lf = new THREE.TextureLoader().load( 'images/uw_lf.jpg');
-      
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_ft }));
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_bk }));
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_up }));
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_dn }));
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_rt }));
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_lf }));
-   
-    for (let i = 0; i < 6; i++)
-      materialArray[i].side = THREE.BackSide;
-    
-    let boxSize = 600;
-    let skyboxGeo = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
-    let skybox = new THREE.Mesh( skyboxGeo, materialArray );
-    skybox.position.x = -60;
-    skybox.position.y = 0;
-    skybox.position.z = 0;
-    scene.add( skybox );
+let texture_ft = new THREE.TextureLoader().load('images/uw_ft.jpg');
+let texture_bk = new THREE.TextureLoader().load('images/uw_bk.jpg');
+let texture_up = new THREE.TextureLoader().load('images/uw_up.jpg');
+let texture_dn = new THREE.TextureLoader().load('images/uw_dn.jpg');
+let texture_rt = new THREE.TextureLoader().load('images/uw_rt.jpg');
+let texture_lf = new THREE.TextureLoader().load('images/uw_lf.jpg');
+
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_ft }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_bk }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_up }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_dn }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_rt }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_lf }));
+
+for (let i = 0; i < 6; i++)
+  materialArray[i].side = THREE.BackSide;
+
+let boxSize = 600;
+let skyboxGeo = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+let skybox = new THREE.Mesh(skyboxGeo, materialArray);
+skybox.position.x = -60;
+skybox.position.y = 0;
+skybox.position.z = 0;
+scene.add(skybox);
 
 const fishesGroup = new THREE.Group();
 let floorElements = new THREE.Group();
@@ -73,7 +73,7 @@ export function loadRock(x, z) {
 
 export function loadFloor(name, x, z) {
   var loader = new GLTFLoader();
-  loader.load('./3dobjects/' + name+'.glb', function (gltf) {
+  loader.load('./3dobjects/' + name + '.glb', function (gltf) {
     let floorElement = gltf.scene;
     floorElement.scale.set(300, 300, 300);
     floorElement.position.set(x, -240, z);
@@ -159,97 +159,84 @@ const slider_mutChance = document.querySelector(".slider-mutChance");
 
 slider_ag.addEventListener('change', () => {
   c_ag = slider_ag.value;
-  console.log(c_ag);
 })
 slider_s.addEventListener('change', () => {
   c_s = slider_s.value;
-  console.log(c_s);
 })
 slider_al.addEventListener('change', () => {
   c_al = slider_al.value;
-  console.log(c_al);
 })
-
 slider_mutChance.addEventListener('change', () => {
   FishShoal.setMutChance(slider_mutChance.value);
-  console.log("val slider" + slider_mutChance.value);
 })
 
 let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value;
 
-let year = 1;
 
-//BUTTONS
+// BUTTONS
 
 const yearDisplay = document.querySelector(".year");
-// const yearWrapper = document.querySelector(".year-wp");
 const backdrop = document.querySelector('.backdrop');
 const btnNextYear = document.querySelector("#next-year-btn");
-if (btnNextYear != null) {
-  btnNextYear.addEventListener('click', () => {
-    FishShoal.nextYear();
-    deleteGroup();
-    displayFishes(fishesGroup);
-    // document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
-    // Ground.nextYear(); //TODO réafficher
-    year = year + 1;
-    yearDisplay.innerHTML = "Year " + year;
+let year = 1;
+btnNextYear.addEventListener('click', () => {
 
-    yearDisplay.classList.add("yearChange");
+  FishShoal.nextYear();
+  deleteGroup();
+  displayFishes(fishesGroup);
+  // document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
+  // Ground.nextYear(); //TODO réafficher
 
-    backdrop.animate([
-      { opacity: 0 }, { opacity: 1 } 
-    ], {
-      duration: 1000,
-    });
-    yearDisplay.animate([
-      { opacity: 0 }, { opacity: 1 } 
-    ], {
-      duration: 600,
-      delay: 400
-    });
-    backdrop.animate([
-      { opacity: 1 }, { opacity: 0 } 
-    ], {
-      delay: 1000,
-      duration: 1000,
-    });
-    setTimeout(() => {
-      yearDisplay.setAttribute("style", "transition: 1s");
-      yearDisplay.classList.remove("yearChange");
-    }, 1000);
-    setTimeout(() => {
-      yearDisplay.setAttribute("style", "t");
-    }, 2000);
+  // Increment the year
 
+  year = year + 1;
+  yearDisplay.innerHTML = "Year " + year;
 
-    // yearWrapper.classList.add('changeYear');
-      // backdrop.animate([
-      //   { opacity: 1 }, { opacity: 0 } 
-      // ], {
-      //   duration: 500,
-      //   delay: 1500,
-      //   fill: "forwards"
-      // });
-      // yearDisplay.animate([
-      //   { top: "50%", fontSize: "70px", transform:"translate(-50%, -50%)"}, 
-      //   { top: "10px", fontSize: "24px", transform:"translate(-50%, 0)"}
-      // ], {
-      //   duration: 500,
-      //   delay: 1500,
-      //   fill: "forwards"
-      // });
-    // setTimeout(() => {
-    //   yearWrapper.classList.remove('changeYear');
-    // }, 2000);
+  const duration1 = 1000;
+  const duration2 = 600;
+
+  // Animation part 1
+
+  yearDisplay.classList.add("yearChange");
+  backdrop.style.display = "initial";
+  backdrop.animate([
+    { opacity: 0 }, { opacity: 1 }
+  ], {
+    duration: duration1,
   });
-}
+  yearDisplay.animate([
+    { opacity: 0 }, { opacity: 1 }
+  ], {
+    duration: duration2,
+    delay: duration1 - duration2
+  });
+
+  // Animation part 2
+
+  backdrop.animate([
+    { opacity: 1 }, { opacity: 0 }
+  ], {
+    delay: duration1,
+    duration: duration1,
+  });
+  setTimeout(() => {
+    yearDisplay.setAttribute("style", "transition: 1s");
+    yearDisplay.classList.remove("yearChange");
+  }, duration1);
+
+  // When the animation ends
+
+  setTimeout(() => {
+    backdrop.style.display = "none";
+    yearDisplay.setAttribute("style", "");
+  }, duration1 * 2);
+});
 
 const closePresentation = document.querySelector('#close-presentation');
 const presentation = document.querySelector('.presentation-wp');
 closePresentation.addEventListener('click', () => {
   presentation.animate([
-    {opacity: 1}, {opacity: 0}
+    { opacity: 1 }, { opacity: 0 }
   ], {
     duration: 1000
   });
@@ -262,7 +249,7 @@ const infoBtn = document.querySelector('#info-btn');
 infoBtn.addEventListener('click', () => {
   presentation.style.display = "initial";
   presentation.animate([
-    {opacity: 0}, {opacity: 1}
+    { opacity: 0 }, { opacity: 1 }
   ], {
     duration: 1000
   });
@@ -315,7 +302,7 @@ export function resizeRendererToDisplaySize(renderer) {
   const height = canvas.clientHeight;
   const needResize = canvas.width !== width || canvas.height !== height;
   if (needResize) {
-      renderer.setSize(width, height, false);
+    renderer.setSize(width, height, false);
   }
   return needResize;
 }
@@ -325,41 +312,41 @@ export function resizeRendererToDisplaySize(renderer) {
 createFloor(10);
 
 
-function createFloor(nbCoralsPerLine){
-  Ground.init(boxSize,nbCoralsPerLine,4);
+function createFloor(nbCoralsPerLine) {
+  Ground.init(boxSize, nbCoralsPerLine, 4);
   console.log(Ground.toString());
   console.log(Ground.getGroundArray());
   let x;
   let z;
   let typeElement;
-  for(let i=0; i<nbCoralsPerLine; i++){
-    for (let j=0; j<nbCoralsPerLine; j++){
+  for (let i = 0; i < nbCoralsPerLine; i++) {
+    for (let j = 0; j < nbCoralsPerLine; j++) {
 
       x = Ground.getCoralX(i);
       z = Ground.getCoralY(j);
-      typeElement = Ground.getTypeElement(i,j)
-      if(typeElement == 1){
-          loadFloor('blue_coral', x, z);
-          console.log('blue_coral ',x, ' ', z);
-        }
-        
-      if(typeElement == 2){
-        loadFloor('yellow_coral', x, z);
-        console.log('yellow_coral ',x, ' ', z);
-        
-      }
-      if(typeElement == 3){
-        loadFloor('red_coral', x, z);
-        console.log('red_coral ', x, ' ', z)
-        
+      typeElement = Ground.getTypeElement(i, j)
+      if (typeElement == 1) {
+        loadFloor('blue_coral', x, z);
+        console.log('blue_coral ', x, ' ', z);
       }
 
-      if(typeElement == 4 ){
-        loadRock(x, z); 
-        console.log('rock ',x, ' ', z)
+      if (typeElement == 2) {
+        loadFloor('yellow_coral', x, z);
+        console.log('yellow_coral ', x, ' ', z);
+
+      }
+      if (typeElement == 3) {
+        loadFloor('red_coral', x, z);
+        console.log('red_coral ', x, ' ', z)
+
+      }
+
+      if (typeElement == 4) {
+        loadRock(x, z);
+        console.log('rock ', x, ' ', z)
       }
     }
-    
+
   }
 }
 
@@ -374,8 +361,3 @@ const speciesButton = document.getElementById('species-display-btn');
 speciesButton.addEventListener('click', () => displaySpecies(idAnim, renderer2));
 
 document.querySelector('#species-close-btn').addEventListener('click', closeSpeciesDisplay);
-
-const display2 = document.querySelector('#display-2');
-display2.addEventListener('scroll', () => {
-  console.log(display2.scrollTop);
-})
