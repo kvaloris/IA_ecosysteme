@@ -2,6 +2,7 @@ import * as THREE from 'three/build/three.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
+import { animateChangeYear, closePresentation, showPresentation, handleSlidersConsoleDisplay } from './js/buttonActions.js';
 import { GUI } from 'dat.gui';
 
 const scene = new THREE.Scene();
@@ -21,30 +22,30 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector("#display-1").appendChild(renderer.domElement);
 
 let materialArray = [];
-    let texture_ft = new THREE.TextureLoader().load( 'images/uw_ft.jpg');
-    let texture_bk = new THREE.TextureLoader().load( 'images/uw_bk.jpg');
-    let texture_up = new THREE.TextureLoader().load( 'images/uw_up.jpg');
-    let texture_dn = new THREE.TextureLoader().load( 'images/uw_dn.jpg');
-    let texture_rt = new THREE.TextureLoader().load( 'images/uw_rt.jpg');
-    let texture_lf = new THREE.TextureLoader().load( 'images/uw_lf.jpg');
-      
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_ft }));
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_bk }));
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_up }));
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_dn }));
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_rt }));
-    materialArray.push(new THREE.MeshBasicMaterial( { map: texture_lf }));
-   
-    for (let i = 0; i < 6; i++)
-      materialArray[i].side = THREE.BackSide;
-    
-    let boxSize = 600;
-    let skyboxGeo = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
-    let skybox = new THREE.Mesh( skyboxGeo, materialArray );
-    skybox.position.x = -60;
-    skybox.position.y = 0;
-    skybox.position.z = 0;
-    scene.add( skybox );
+let texture_ft = new THREE.TextureLoader().load('images/uw_ft.jpg');
+let texture_bk = new THREE.TextureLoader().load('images/uw_bk.jpg');
+let texture_up = new THREE.TextureLoader().load('images/uw_up.jpg');
+let texture_dn = new THREE.TextureLoader().load('images/uw_dn.jpg');
+let texture_rt = new THREE.TextureLoader().load('images/uw_rt.jpg');
+let texture_lf = new THREE.TextureLoader().load('images/uw_lf.jpg');
+
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_ft }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_bk }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_up }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_dn }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_rt }));
+materialArray.push(new THREE.MeshBasicMaterial({ map: texture_lf }));
+
+for (let i = 0; i < 6; i++)
+  materialArray[i].side = THREE.BackSide;
+
+let boxSize = 600;
+let skyboxGeo = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+let skybox = new THREE.Mesh(skyboxGeo, materialArray);
+skybox.position.x = -60;
+skybox.position.y = 0;
+skybox.position.z = 0;
+scene.add(skybox);
 
 const fishesGroup = new THREE.Group();
 let floorElements = new THREE.Group();
@@ -73,7 +74,7 @@ export function loadRock(x, z) {
 
 export function loadFloor(name, x, z) {
   var loader = new GLTFLoader();
-  loader.load('./3dobjects/' + name+'.glb', function (gltf) {
+  loader.load('./3dobjects/' + name + '.glb', function (gltf) {
     let floorElement = gltf.scene;
     floorElement.scale.set(300, 300, 300);
     floorElement.position.set(x, -240, z);
@@ -166,26 +167,35 @@ slider_s.addEventListener('change', () => {
 slider_al.addEventListener('change', () => {
   c_al = slider_al.value;
 })
-
 slider_mutChance.addEventListener('change', () => {
   FishShoal.setMutChance(slider_mutChance.value);
-  console.log("val slider" + slider_mutChance.value);
 })
 
 let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value;
 
-//BUTTONS
-var btnNextYear = document.querySelector(".button-next-year");
-if (btnNextYear != null) {
-  btnNextYear.addEventListener('click', () => {
-    FishShoal.nextYear();
-    deleteGroup();
-    displayFishes(fishesGroup);
-    document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
-    Ground.nextYear(); //TODO réafficher
-  });
-}
 
+// BUTTONS
+
+const btnNextYear = document.querySelector("#next-year-btn");
+btnNextYear.addEventListener('click', () => {
+
+  FishShoal.nextYear();
+  deleteGroup();
+  displayFishes(fishesGroup);
+  // document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
+  // Ground.nextYear(); //TODO réafficher
+
+  animateChangeYear();
+});
+
+const closePresentationBtn = document.querySelector('#close-presentation');
+closePresentationBtn.addEventListener('click', closePresentation);
+
+const infoBtn = document.querySelector('#info-btn');
+infoBtn.addEventListener('click', showPresentation);
+
+const slidersBtn = document.querySelector('#sliders-btn');
+slidersBtn.addEventListener('click', handleSlidersConsoleDisplay);
 
 // ANIMATION
 
@@ -215,7 +225,7 @@ document.addEventListener('keydown', () => {
 
 FishShoal.setMutChance(slider_mutChance.value);
 //TEXT INFORMATION
-document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
+// document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
 
 
 export function resizeRendererToDisplaySize(renderer) {
@@ -224,7 +234,7 @@ export function resizeRendererToDisplaySize(renderer) {
   const height = canvas.clientHeight;
   const needResize = canvas.width !== width || canvas.height !== height;
   if (needResize) {
-      renderer.setSize(width, height, false);
+    renderer.setSize(width, height, false);
   }
   return needResize;
 }
@@ -234,52 +244,54 @@ export function resizeRendererToDisplaySize(renderer) {
 createFloor(10);
 
 
-function createFloor(nbCoralsPerLine){
-  Ground.init(boxSize,nbCoralsPerLine,4);
+function createFloor(nbCoralsPerLine) {
+  Ground.init(boxSize, nbCoralsPerLine, 4);
   console.log(Ground.toString());
   console.log(Ground.getGroundArray());
   let x;
   let z;
   let typeElement;
-  for(let i=0; i<nbCoralsPerLine; i++){
-    for (let j=0; j<nbCoralsPerLine; j++){
+  for (let i = 0; i < nbCoralsPerLine; i++) {
+    for (let j = 0; j < nbCoralsPerLine; j++) {
 
       x = Ground.getCoralX(i);
       z = Ground.getCoralY(j);
-      typeElement = Ground.getTypeElement(i,j)
-      if(typeElement == 1){
-          loadFloor('blue_coral', x, z);
-          console.log('blue_coral ',x, ' ', z);
-        }
-        
-      if(typeElement == 2){
-        loadFloor('yellow_coral', x, z);
-        console.log('yellow_coral ',x, ' ', z);
-        
-      }
-      if(typeElement == 3){
-        loadFloor('red_coral', x, z);
-        console.log('red_coral ', x, ' ', z)
-        
+      typeElement = Ground.getTypeElement(i, j)
+      if (typeElement == 1) {
+        loadFloor('blue_coral', x, z);
+        console.log('blue_coral ', x, ' ', z);
       }
 
-      if(typeElement == 4 ){
-        loadRock(x, z); 
-        console.log('rock ',x, ' ', z)
+      if (typeElement == 2) {
+        loadFloor('yellow_coral', x, z);
+        console.log('yellow_coral ', x, ' ', z);
+
+      }
+      if (typeElement == 3) {
+        loadFloor('red_coral', x, z);
+        console.log('red_coral ', x, ' ', z)
+
+      }
+
+      if (typeElement == 4) {
+        loadRock(x, z);
+        console.log('rock ', x, ' ', z)
       }
     }
-    
+
   }
 }
 
 
 scene.add(displayFloorElmt);
 
+// SPECIES DISPLAY
+
 // Create renderer for display of species
 const canvas2 = document.querySelector('#canvas-2');
 const renderer2 = new THREE.WebGLRenderer({ canvas: canvas2, alpha: true });
 
-const speciesButton = document.getElementById('display-species');
-speciesButton.addEventListener('click', () => displaySpecies(idAnim, renderer2));
 
-document.querySelector('#close-display-2').addEventListener('click', closeSpeciesDisplay);
+document.getElementById('species-display-btn').addEventListener('click', () => displaySpecies(idAnim, renderer2));
+
+document.querySelector('#species-close-btn').addEventListener('click', closeSpeciesDisplay);

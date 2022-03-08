@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Smooch+Sans:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+
+:root {
+  --blue: #97add9;
+  --white: white;
+  --blue-transparent: #97add93f;
+  --dark-blue: #4d6698;
+  --very-dark-blue: #384f7e;
+}
+
+body {
+  margin: 0;
+  font-family: "Smooch Sans", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--white);
+  overflow: hidden;
+  letter-spacing: 5px;
+}
+
+
+
+
+
+/* DISPLAY 1 */
+
+#display-1, #canvas-1 {
+  width: 100%;
+  height: 100vh;
+}
+
+#display-1>* {
+  position: absolute;
+}
+
+#display-1 > *:not(#canvas-1) {
+  z-index: 1;
+}
+
+/* .nbPoisson{
+    position: absolute;
+    width: 35vw;
+    top: 20px;
+    left: 20px;
+    font-size: 15px;
+    color: #ffffff;
+} */
+
+
+/* DISPLAY YEAR AND ANIMATION */
+
+.year {
+  margin: 0;
+  top: 40px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.yearChange {
+  opacity: 0;
+  margin: 0;
+  top: 50%;
+  font-size: 70px;
+  transform:translate(-50%, -50%);
+}
+
+.backdrop {
+  display: none;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  opacity: 0;
+}
+
+
+
+
+
+/* CLOSE BUTTON */
+
+.close {
+  /* Appearance */
+  font-size: 50px;
+  color: #ffffff;
+  
+  /* Position */
+  position: absolute;
+  top: 23px; right: 23px;
+  
+  /* Cliquable */
+  cursor: pointer;
+
+  /* Transition */
+  transition: 1s;
+}
+
+.close:after {
+  display: inline-block;
+  content: "\00d7"; /* This will render the 'X' */
+  position: absolute;
+  line-height: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.close:hover {
+  color: var(--blue);
+}
+
+
+
+
+
+/* SCROLLBAR */
+
+/* Width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--white); 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--dark-blue); 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--very-dark-blue); 
+}
