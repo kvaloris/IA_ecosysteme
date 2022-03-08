@@ -14,7 +14,7 @@
     camera.position.z = 150;
     camera.position.x = 100;
     camera.position.y = 100;*/
-    var camera = new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,45,30000);
+    var camera = new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,45,10000);
     camera.position.set(-900,-200,-900);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -25,10 +25,10 @@
     //TEST
     const fishesObjectGroup = new THREE.Group();
     const fishBodyGroup = new THREE.Group();
+    const bodyFish = new THREE.Group();
+    const tailFish = new THREE.Group();
+    const colorList =["yellow", "blue", "red"];
     //fin test
-
-    /*const loader = new THREE.TextureLoader();
-    scene.background = loader.load('./images/sea.jpg');*/
 
     let materialArray = [];
     let texture_ft = new THREE.TextureLoader().load( 'images/aqua9_ft.jpg');
@@ -51,35 +51,43 @@
     let skyboxGeo = new THREE.BoxGeometry( 10000, 10000, 10000);
     let skybox = new THREE.Mesh( skyboxGeo, materialArray );
     scene.add( skybox );
-
-
-    let poisson; 
-
-    function loadObject(nomPoisson){
-      var loader = new GLTFLoader();
-          loader.load('./3dobjects/'+ nomPoisson, function (gltf)
-      {
-          poisson = gltf.scene;
-          poisson.position.set(0,0,0);
-          fishesObjectGroup.add(poisson);
-          console.log("poisson");
-          console.log(poisson);
-          
-          //fishesGroup.add(poisson);
-          
-      }, undefined, function (error) {
-        console.error(error);
-      });
-    }
   
-    function createClones(size, color, x, y ,z){
-      console.log(fishesObjectGroup);
-      console.log(fishesObjectGroup.children[0]);
-      let newFish = fishesObjectGroup.children[0].clone();
+    function createClones(size, color, x, y ,z, appearance){
+      let newFish = assembleFish(color, appearance);
       newFish.scale.set(size,size,size);
       newFish.position.set(x,y,z);
         
       fishesGroup.add(newFish);
+    }
+
+    function assembleFish(color, appearance){
+      const assembleFish = new THREE.Group();
+      let body = bodyFish.children[color].clone(); //add body
+      //Add tails
+      let tail = tailFish.children[color].clone();
+      let tail1 = tailFish.children[0].clone();
+      let tail2 = tailFish.children[0].clone();
+      tail1.rotation.set(0,0.5,0);
+      tail1.position.set(6,-1.8,2)
+      tail2.rotation.set(0,-0.5,0);
+      tail2.position.set(8,-1.8,4.5);
+      switch(appearance[1]){
+        case 1:
+          assembleFish.add(tail);
+          break;
+        case 2:
+          assembleFish.add(tail1);
+          assembleFish.add(tail2);
+          break;
+
+        case 3:
+          assembleFish.add(tail1);
+          assembleFish.add(tail2);
+          assembleFish.add(tail);
+          break;
+      }
+      assembleFish.add(body);
+      return assembleFish;
     }
       
 
@@ -94,7 +102,7 @@
     function displayFish(fish){
       console.log(fish.color);
       
-      createClones(fish.size, fish.color, fish.x, fish.y, fish.z);
+      createClones(fish.size, fish.color, fish.x, fish.y, fish.z, fish.appearance);
     }
 
     let fishesArray = [];
@@ -110,48 +118,56 @@
       for(let i=0; i< number; i++){
         fishesArray.push(Fish.fishRandom(i, fishesArray));
       }
-
-      var fichierName = ["poisson2.glb"];
-      //for(let i=0; i<3; i++){
-        loadObject(fichierName[0]);
-      //}
-
-      console.log(fishesObjectGroup);
     }
 
+  const manager = new THREE.LoadingManager();
+  manager.onLoad = function ( ) {
+
+    console.log( 'Loading complete!');
+    createClones(20, 1, 40, 40 ,40, [2,1,1]);
+    //init(100);
+    //displayFishes();
+
+  };
+
+  manager.onError = function ( url ) {
+
+    console.log( 'There was an error loading ' + url );
+
+  };
+
     function loadObjectSeparate(){
-      var loader = new GLTFLoader();
-         loader.load('./3dobjects/fish_main_red.glb', function (gltf)
-      {
-          let body = gltf.scene;
-          body.scale.set(20,20,20);
-          body.position.set(0,0,0);
-          fishBodyGroup.add(body);
-          
-          //fishesGroup.add(poisson);
-          
-      }, undefined, function (error) {
-        console.error(error);
-      });
-      loader.load('./3dobjects/queue_fish_blue.glb', function (gltf)
-      {
-          let queue = gltf.scene;
-          queue.scale.set(10,10,10);
-          queue.position.set(6,-0.5,2.5);
-          fishBodyGroup.add(queue);
-          
-          //fishesGroup.add(poisson);
-          
-      }, undefined, function (error) {
-        console.error(error);
-      });
+      var loader = new GLTFLoader(manager);
+      for(let i=0; i<colorList.length; i++){
+        loader.load('./3dobjects/fish_main_'+ colorList[i]+'.glb', function (gltf)
+        {
+            let body = gltf.scene;
+            body.scale.set(20,20,20);
+            body.position.set(0,0,0);
+            bodyFish.add(body);
+            
+        }, undefined, function (error) {
+          console.error(error);
+        });
+        loader.load('./3dobjects/queue_fish_'+colorList[i]+'.glb', function (gltf)
+        {
+            let queue = gltf.scene;
+            queue.scale.set(10,10,10);
+            queue.position.set(6,-1.8,2.9);
+            tailFish.add(queue);
+            
+        }, undefined, function (error) {
+          console.error(error);
+        });
+      }
+
 
         
     }
 
     loadObjectSeparate();
 
-    scene.add(fishBodyGroup);
+    //scene.add(fishBodyGroup);
     //fin du test
 
     scene.add(fishesGroup);
@@ -179,8 +195,7 @@
       renderer.render(scene, camera);
     }
 
-    //init(100);
-    //displayFishes();
+    
 
     animate();
 
