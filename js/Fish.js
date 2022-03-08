@@ -212,8 +212,14 @@ class Fish {
     }
 
     update(fishes, c_ag, c_s, c_al){
-        if(this.hunger == true && this.eatObjectifCoordinate === false){
-            this.eatObjectifCoordinate= Ground.findCoordinatesType(this.color);
+        if(this.hunger == true){ //si il a faim
+            if ( this.eatObjectifCoordinate === false){ // si il n'a pas de cible en trouve une
+                this.eatObjectifCoordinate= Ground.findCoordinatesType(this.color);
+            }else if(this.eatObjectifCoordinate != false && this.eatObjectifCoordinate[0]*this.eatObjectifCoordinate[0]+this.eatObjectifCoordinate[1]*this.eatObjectifCoordinate[1]<= this.size){ //si il est proche de ca cible la mange
+                this.hunger=false;
+                this.eatObjectifCoordinate = false;
+                Ground.eatCoral(this.eatObjectifCoordinate[0],this.eatObjectifCoordinate[1]);
+            }
         }
         this.move(fishes, c_ag, c_s, c_al);
     }
