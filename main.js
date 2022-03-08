@@ -3,18 +3,20 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
 import { animateChangeYear, closePresentation, showPresentation, handleSlidersConsoleDisplay } from './js/buttonActions.js';
-import { GUI } from 'dat.gui';
 
 const scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera(
-      /*fov*/ 55,
-      /*aspect ratio*/ window.innerWidth / window.innerHeight,
-      /*near*/ 45,
-      /*far*/ 30000
-);
-camera.position.x = -100;
-camera.position.y = -200;
-camera.position.z = -300;
+// var camera = new THREE.PerspectiveCamera(
+//       /*fov*/ 55,
+//       /*aspect ratio*/ window.innerWidth / window.innerHeight,
+//       /*near*/ 45,
+//       /*far*/ 30000
+// );
+// camera.position.x = -100;
+// camera.position.y = -200;
+// camera.position.z = -300;
+
+var camera = new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,45,10000);
+camera.position.set(-900,-200,-900);
 
 const canvas = document.querySelector('#canvas-1');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -22,19 +24,19 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector("#display-1").appendChild(renderer.domElement);
 
 let materialArray = [];
-let texture_ft = new THREE.TextureLoader().load('images/uw_ft.jpg');
-let texture_bk = new THREE.TextureLoader().load('images/uw_bk.jpg');
-let texture_up = new THREE.TextureLoader().load('images/uw_up.jpg');
-let texture_dn = new THREE.TextureLoader().load('images/uw_dn.jpg');
-let texture_rt = new THREE.TextureLoader().load('images/uw_rt.jpg');
-let texture_lf = new THREE.TextureLoader().load('images/uw_lf.jpg');
-
-materialArray.push(new THREE.MeshBasicMaterial({ map: texture_ft }));
-materialArray.push(new THREE.MeshBasicMaterial({ map: texture_bk }));
-materialArray.push(new THREE.MeshBasicMaterial({ map: texture_up }));
-materialArray.push(new THREE.MeshBasicMaterial({ map: texture_dn }));
-materialArray.push(new THREE.MeshBasicMaterial({ map: texture_rt }));
-materialArray.push(new THREE.MeshBasicMaterial({ map: texture_lf }));
+let texture_ft = new THREE.TextureLoader().load( 'images/aqua9_ft.jpg');
+let texture_bk = new THREE.TextureLoader().load( 'images/aqua9_bk.jpg');
+let texture_up = new THREE.TextureLoader().load( 'images/aqua9_up.jpg');
+let texture_dn = new THREE.TextureLoader().load( 'images/aqua9_dn.jpg');
+let texture_rt = new THREE.TextureLoader().load( 'images/aqua9_rt.jpg');
+let texture_lf = new THREE.TextureLoader().load( 'images/aqua9_lf.jpg');
+  
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_ft }));
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_bk }));
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_up }));
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_dn }));
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_rt }));
+materialArray.push(new THREE.MeshBasicMaterial( { map: texture_lf }));
 
 for (let i = 0; i < 6; i++)
   materialArray[i].side = THREE.BackSide;
@@ -50,15 +52,64 @@ scene.add(skybox);
 const fishesGroup = new THREE.Group();
 let floorElements = new THREE.Group();
 let displayFloorElmt = new THREE.Group();
+//TEST
+const fishesObjectGroup = new THREE.Group();
+const fishBodyGroup = new THREE.Group();
+const bodyFish = new THREE.Group();
+const tailFish = new THREE.Group();
+const finsFish = new THREE.Group();
+const colorList =["yellow", "blue", "red"];
+//fin test
 
-
-const loader = new THREE.TextureLoader();
-scene.background = loader.load('./images/sea.jpg');
 
 const manager = new THREE.LoadingManager();
+manager.onLoad = function ( ) {
 
+  console.log( 'Loading complete!');
+  //createClones(20, 0, 5, 5 ,5, [2,2,1]);
+  //init(100);
+  //displayFishes();
+  FishShoal.init(100);
+  displayFishes(fishesGroup);
+  
+  FishShoal.setMutChance(slider_mutChance.value);
+  createFloor(10);
 
-export function loadRock(x, z) {
+};
+
+manager.onError = function ( url ) {
+
+  console.log( 'There was an error loading ' + url );
+
+};
+
+function loadObjectSeparate(){
+  var loader = new GLTFLoader(manager);
+  for(let i=0; i<colorList.length; i++){
+    loader.load('./3dobjects/fish_main_'+ colorList[i]+'.glb', function (gltf)
+    {
+        let body = gltf.scene;
+        body.scale.set(20,20,20);
+        body.position.set(0,0,0);
+        bodyFish.add(body);
+        
+    }, undefined, function (error) {
+      console.error(error);
+    });
+    loader.load('./3dobjects/queue_fish_'+colorList[i]+'.glb', function (gltf)
+    {
+        let queue = gltf.scene;
+        queue.scale.set(10,10,10);
+        queue.position.set(6,-1.8,2.9);
+        tailFish.add(queue);
+        
+    }, undefined, function (error) {
+      console.error(error);
+    });
+  }
+}
+
+ function loadRock(x, z) {
   var loader = new GLTFLoader();
   loader.load('./3dobjects/' + 'rock.glb', function (gltf) {
     let floorElement = gltf.scene;
@@ -72,7 +123,7 @@ export function loadRock(x, z) {
   });
 }
 
-export function loadFloor(name, x, z) {
+ function loadFloor(name, x, z) {
   var loader = new GLTFLoader();
   loader.load('./3dobjects/' + name + '.glb', function (gltf) {
     let floorElement = gltf.scene;
@@ -89,18 +140,56 @@ export function loadFloor(name, x, z) {
 
 
 // Load 3D object fish at the size asked and at the position asked
-export function loadObject(size, nomPoisson, x, y, z, group) {
-  var loader = new GLTFLoader();
-  loader.load('./3dobjects/' + nomPoisson, function (gltf) {
-    let poisson = gltf.scene;
-    poisson.scale.set(size, size, size);
-    poisson.position.set(x, y, z);
+// export function loadObject(size, nomPoisson, x, y, z, group) {
+//   var loader = new GLTFLoader();
+//   loader.load('./3dobjects/' + nomPoisson, function (gltf) {
+//     let poisson = gltf.scene;
+//     poisson.scale.set(size, size, size);
+//     poisson.position.set(x, y, z);
 
-    group.add(poisson);
-  }, undefined, function (error) {
-    console.error(error);
-  });
-}
+//     group.add(poisson);
+//   }, undefined, function (error) {
+//     console.error(error);
+//   });
+// }
+
+  function createClones(size, color, x, y ,z, appearance){
+    let newFish = assembleFish(color, appearance);
+    newFish.scale.set(size,size,size);
+    newFish.position.set(x,y,z);
+      
+    fishesGroup.add(newFish);
+  }
+
+  function assembleFish(color, appearance){
+    const assembleFish = new THREE.Group();
+    let body = bodyFish.children[color].clone(); //add body
+    //Add tails
+    let tail = tailFish.children[color].clone();
+    let tail1 = tailFish.children[0].clone();
+    let tail2 = tailFish.children[0].clone();
+    tail1.rotation.set(0,0.5,0);
+    tail1.position.set(6,-1.8,2)
+    tail2.rotation.set(0,-0.5,0);
+    tail2.position.set(8,-1.8,4.5);
+    switch(appearance[1]){
+      case 1:
+        assembleFish.add(tail);
+        break;
+      case 2:
+        assembleFish.add(tail1);
+        assembleFish.add(tail2);
+        break;
+
+      case 3:
+        assembleFish.add(tail1);
+        assembleFish.add(tail2);
+        assembleFish.add(tail);
+        break;
+    }
+    assembleFish.add(body);
+    return assembleFish;
+  }
 
 // Allow to empty a group of fishes
 function deleteGroup() {
@@ -110,23 +199,9 @@ function deleteGroup() {
 }
 
 // Display the fish passed in parameter 
-function displayFish(fish, group) {
-  var fichierName;
-
-  switch (fish.color) {
-    case 0:
-      fichierName = "poisson2.glb"; // red
-      break;
-    case 1:
-      fichierName = "poisson.glb"; // blue
-      break;
-    default:
-      fichierName = "poisson3.glb"; // yellow
-      break;
+function displayFish(fish,group) {
+  createClones(fish.size, fish.color, fish.x, fish.y, fish.z, fish.appearance);
   }
-
-  loadObject(fish.size, fichierName, fish.x, fish.y, fish.z, group);
-}
 
 // Display a certain number of fishes
 function displayFishes(group) {
@@ -197,6 +272,9 @@ infoBtn.addEventListener('click', showPresentation);
 const slidersBtn = document.querySelector('#sliders-btn');
 slidersBtn.addEventListener('click', handleSlidersConsoleDisplay);
 
+loadObjectSeparate();
+
+
 // ANIMATION
 
 let idAnim;
@@ -213,8 +291,7 @@ export function animate() {
   renderer.render(scene, camera);
 }
 
-FishShoal.init(100);
-displayFishes(fishesGroup);
+
 
 animate();
 document.addEventListener('keydown', () => {
@@ -223,7 +300,6 @@ document.addEventListener('keydown', () => {
   displayFishes(fishesGroup);
 });
 
-FishShoal.setMutChance(slider_mutChance.value);
 //TEXT INFORMATION
 // document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
 
@@ -241,7 +317,7 @@ export function resizeRendererToDisplaySize(renderer) {
 
 // NeuralNetwork.demo();
 
-createFloor(10);
+
 
 
 function createFloor(nbCoralsPerLine) {
@@ -292,6 +368,6 @@ const canvas2 = document.querySelector('#canvas-2');
 const renderer2 = new THREE.WebGLRenderer({ canvas: canvas2, alpha: true });
 
 
-document.getElementById('species-display-btn').addEventListener('click', () => displaySpecies(idAnim, renderer2));
+//document.getElementById('species-display-btn').addEventListener('click', () => displaySpecies(idAnim, renderer2));
 
-document.querySelector('#species-close-btn').addEventListener('click', closeSpeciesDisplay);
+//document.querySelector('#species-close-btn').addEventListener('click', closeSpeciesDisplay);
