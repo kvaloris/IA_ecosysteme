@@ -27,6 +27,7 @@
     const fishBodyGroup = new THREE.Group();
     const bodyFish = new THREE.Group();
     const tailFish = new THREE.Group();
+    const finsFish = new THREE.Group();
     const colorList =["yellow", "blue", "red"];
     //fin test
 
@@ -48,7 +49,7 @@
     for (let i = 0; i < 6; i++)
       materialArray[i].side = THREE.BackSide;
       
-    let skyboxGeo = new THREE.BoxGeometry( 10000, 10000, 10000);
+    let skyboxGeo = new THREE.BoxGeometry( 5000, 5000, 5000);
     let skybox = new THREE.Mesh( skyboxGeo, materialArray );
     scene.add( skybox );
   
@@ -124,7 +125,7 @@
   manager.onLoad = function ( ) {
 
     console.log( 'Loading complete!');
-    createClones(20, 1, 40, 40 ,40, [2,1,1]);
+    //createClones(20, 0, 5, 5 ,5, [2,2,1]);
     //init(100);
     //displayFishes();
 
