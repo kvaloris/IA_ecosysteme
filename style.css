@@ -512,10 +512,20 @@ h1 {
   margin: 0 auto;
 }
 
-text {
-  fill: #FF9800;
+.next-year-hover text {
+  fill: var(--white);
 }
 
+.next-year-hover {
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+  transition: 1s;
+}
+
+#next-year-btn:hover .next-year-hover {
+  opacity: 1;
+}
 
 
 /* Scrollbar */
