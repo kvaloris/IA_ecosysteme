@@ -31,12 +31,12 @@
     scene.background = loader.load('./images/sea.jpg');*/
 
     let materialArray = [];
-    let texture_ft = new THREE.TextureLoader().load( 'images/uw_ft.jpg');
-    let texture_bk = new THREE.TextureLoader().load( 'images/uw_bk.jpg');
-    let texture_up = new THREE.TextureLoader().load( 'images/uw_up.jpg');
-    let texture_dn = new THREE.TextureLoader().load( 'images/uw_dn.jpg');
-    let texture_rt = new THREE.TextureLoader().load( 'images/uw_rt.jpg');
-    let texture_lf = new THREE.TextureLoader().load( 'images/uw_lf.jpg');
+    let texture_ft = new THREE.TextureLoader().load( 'images/aqua9_ft.jpg');
+    let texture_bk = new THREE.TextureLoader().load( 'images/aqua9_bk.jpg');
+    let texture_up = new THREE.TextureLoader().load( 'images/aqua9_up.jpg');
+    let texture_dn = new THREE.TextureLoader().load( 'images/aqua9_dn.jpg');
+    let texture_rt = new THREE.TextureLoader().load( 'images/aqua9_rt.jpg');
+    let texture_lf = new THREE.TextureLoader().load( 'images/aqua9_lf.jpg');
       
     materialArray.push(new THREE.MeshBasicMaterial( { map: texture_ft }));
     materialArray.push(new THREE.MeshBasicMaterial( { map: texture_bk }));
@@ -119,9 +119,7 @@
       console.log(fishesObjectGroup);
     }
 
-    //TEST
-
-   /* function loadObjectSeparate(){
+    function loadObjectSeparate(){
       var loader = new GLTFLoader();
          loader.load('./3dobjects/fish_main_red.glb', function (gltf)
       {
@@ -149,11 +147,11 @@
       });
 
         
-    }*/
+    }
 
-    //loadObjectSeparate();
+    loadObjectSeparate();
 
-    //scene.add(fishBodyGroup);
+    scene.add(fishBodyGroup);
     //fin du test
 
     scene.add(fishesGroup);
@@ -181,8 +179,8 @@
       renderer.render(scene, camera);
     }
 
-    init(100);
-    displayFishes();
+    //init(100);
+    //displayFishes();
 
     animate();
 
