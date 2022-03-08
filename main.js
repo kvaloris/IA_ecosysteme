@@ -2,6 +2,7 @@ import * as THREE from 'three/build/three.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
+import { animateChangeYear, closePresentation, showPresentation, handleSlidersConsoleDisplay } from './js/buttonActions.js';
 import { GUI } from 'dat.gui';
 
 const scene = new THREE.Scene();
@@ -175,10 +176,7 @@ let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value
 
 // BUTTONS
 
-const yearDisplay = document.querySelector(".year");
-const backdrop = document.querySelector('.backdrop');
 const btnNextYear = document.querySelector("#next-year-btn");
-let year = 1;
 btnNextYear.addEventListener('click', () => {
 
   FishShoal.nextYear();
@@ -187,83 +185,17 @@ btnNextYear.addEventListener('click', () => {
   // document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
   // Ground.nextYear(); //TODO réafficher
 
-  // Increment the year
-
-  year = year + 1;
-  yearDisplay.innerHTML = "Year " + year;
-
-  const duration1 = 1000;
-  const duration2 = 600;
-
-  // Animation part 1
-
-  yearDisplay.classList.add("yearChange");
-  backdrop.style.display = "initial";
-  backdrop.animate([
-    { opacity: 0 }, { opacity: 1 }
-  ], {
-    duration: duration1,
-  });
-  yearDisplay.animate([
-    { opacity: 0 }, { opacity: 1 }
-  ], {
-    duration: duration2,
-    delay: duration1 - duration2
-  });
-
-  // Animation part 2
-
-  backdrop.animate([
-    { opacity: 1 }, { opacity: 0 }
-  ], {
-    delay: duration1,
-    duration: duration1,
-  });
-  setTimeout(() => {
-    yearDisplay.setAttribute("style", "transition: 1s");
-    yearDisplay.classList.remove("yearChange");
-  }, duration1);
-
-  // When the animation ends
-
-  setTimeout(() => {
-    backdrop.style.display = "none";
-    yearDisplay.setAttribute("style", "");
-  }, duration1 * 2);
+  animateChangeYear();
 });
 
-const closePresentation = document.querySelector('#close-presentation');
-const presentation = document.querySelector('.presentation-wp');
-closePresentation.addEventListener('click', () => {
-  presentation.animate([
-    { opacity: 1 }, { opacity: 0 }
-  ], {
-    duration: 1000
-  });
-  setTimeout(() => {
-    presentation.style.display = "none";
-  }, 1000);
-})
+const closePresentationBtn = document.querySelector('#close-presentation');
+closePresentationBtn.addEventListener('click', closePresentation);
 
 const infoBtn = document.querySelector('#info-btn');
-infoBtn.addEventListener('click', () => {
-  presentation.style.display = "initial";
-  presentation.animate([
-    { opacity: 0 }, { opacity: 1 }
-  ], {
-    duration: 1000
-  });
-})
+infoBtn.addEventListener('click', showPresentation);
 
 const slidersBtn = document.querySelector('#sliders-btn');
-const slidersBtnImg = document.querySelector('#sliders-btn > img');
-const slidersConsole = document.querySelector('.sliders-console');
-slidersBtn.addEventListener('click', () => {
-  slidersConsole.classList.toggle('goDown');
-  const btnImgPath = slidersConsole.className.includes('goDown') ? "/assets/slider.png" : "/assets/arrow.png";
-  slidersBtnImg.setAttribute('src', btnImgPath);
-  slidersBtnImg.setAttribute('style', 'transform: rotate(180deg)');
-})
+slidersBtn.addEventListener('click', handleSlidersConsoleDisplay);
 
 // ANIMATION
 
@@ -359,7 +291,7 @@ scene.add(displayFloorElmt);
 const canvas2 = document.querySelector('#canvas-2');
 const renderer2 = new THREE.WebGLRenderer({ canvas: canvas2, alpha: true });
 
-const speciesButton = document.getElementById('species-display-btn');
-speciesButton.addEventListener('click', () => displaySpecies(idAnim, renderer2));
+
+document.getElementById('species-display-btn').addEventListener('click', () => displaySpecies(idAnim, renderer2));
 
 document.querySelector('#species-close-btn').addEventListener('click', closeSpeciesDisplay);
