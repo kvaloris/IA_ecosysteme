@@ -252,6 +252,7 @@ let c_ag = slider_ag.value; let c_s = slider_s.value; let c_al = slider_al.value
 // BUTTONS
 
 const btnNextYear = document.querySelector("#next-year-btn");
+let year = 1;
 btnNextYear.addEventListener('click', () => {
 
   FishShoal.nextYear();
@@ -260,7 +261,7 @@ btnNextYear.addEventListener('click', () => {
   // document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
   // Ground.nextYear(); //TODO réafficher
 
-  animateChangeYear();
+  year = animateChangeYear(year);
 });
 
 const closePresentationBtn = document.querySelector('#close-presentation');

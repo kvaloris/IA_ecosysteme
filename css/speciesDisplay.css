@@ -58,6 +58,8 @@
   justify-content: flex-end;
 }
 
+/* STATS */
+
 .fish-stats {
   position: absolute;
   display: flex;
