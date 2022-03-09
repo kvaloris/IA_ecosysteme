@@ -16,7 +16,7 @@ const scene = new THREE.Scene();
 // camera.position.z = -300;
 
 var camera = new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,45,10000);
-camera.position.set(-900,-200,-900);
+camera.position.set(-100,-200,-300);
 
 const canvas = document.querySelector('#canvas-1');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -67,10 +67,11 @@ manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
   //createClones(20, 0, 5, 5 ,5, [2,2,1]);
-  //init(100);
-  //displayFishes();
   FishShoal.init(100);
+  //FishShoal.init(2);
   displayFishes(fishesGroup);
+  //scene.add(bodyFish.children[0]);
+  //scene.add(tailFish.children[0]);
   
   FishShoal.setMutChance(slider_mutChance.value);
   createFloor(10);
@@ -88,8 +89,9 @@ function loadObjectSeparate(){
   for(let i=0; i<colorList.length; i++){
     loader.load('./3dobjects/fish_main_'+ colorList[i]+'.glb', function (gltf)
     {
+      console.log(gltf.scene);
         let body = gltf.scene;
-        body.scale.set(20,20,20);
+        body.scale.set(10,10,10);
         body.position.set(0,0,0);
         bodyFish.add(body);
         
@@ -106,52 +108,20 @@ function loadObjectSeparate(){
     }, undefined, function (error) {
       console.error(error);
     });
+
+    loader.load('./3dobjects/' + colorList[i] + '_coral.glb', function (gltf) {
+      let floorElement = gltf.scene;
+      floorElement.scale.set(300, 300, 300);
+      floorElement.position.set(0, -240, 0);
+  
+      floorElements.add(floorElement);
+    }, undefined, function (error) {
+      console.error(error);
+    });
   }
+
 }
 
- function loadRock(x, z) {
-  var loader = new GLTFLoader();
-  loader.load('./3dobjects/' + 'rock.glb', function (gltf) {
-    let floorElement = gltf.scene;
-    floorElement.scale.set(0.5, 0.25, 0.5);
-    floorElement.position.set(x, -1000, z);
-
-    //floorElements.add(floorElement);
-    displayFloorElmt.add(floorElement);
-  }, undefined, function (error) {
-    console.error(error);
-  });
-}
-
- function loadFloor(name, x, z) {
-  var loader = new GLTFLoader();
-  loader.load('./3dobjects/' + name + '.glb', function (gltf) {
-    let floorElement = gltf.scene;
-    floorElement.scale.set(300, 300, 300);
-    floorElement.position.set(x, -240, z);
-
-    //floorElements.add(floorElement);
-    displayFloorElmt.add(floorElement);
-  }, undefined, function (error) {
-    console.error(error);
-  });
-}
-
-
-
-// Load 3D object fish at the size asked and at the position asked
-// export function loadObject(size, nomPoisson, x, y, z, group) {
-//   var loader = new GLTFLoader();
-//   loader.load('./3dobjects/' + nomPoisson, function (gltf) {
-//     let poisson = gltf.scene;
-//     poisson.scale.set(size, size, size);
-//     poisson.position.set(x, y, z);
-
-//     group.add(poisson);
-//   }, undefined, function (error) {
-//     console.error(error);
-//   });
-// }
 
   function createClones(size, color, x, y ,z, appearance){
     let newFish = assembleFish(color, appearance);
@@ -334,24 +304,25 @@ function createFloor(nbCoralsPerLine) {
       z = Ground.getCoralY(j);
       typeElement = Ground.getTypeElement(i, j)
       if (typeElement == 1) {
-        loadFloor('blue_coral', x, z);
+        let blue_coral = floorElements.children[1].clone();
+        blue_coral.position.set(x, -240, z);
+        displayFloorElmt.add(blue_coral);
         console.log('blue_coral ', x, ' ', z);
       }
 
       if (typeElement == 2) {
-        loadFloor('yellow_coral', x, z);
+        let yellow_coral = floorElements.children[0].clone();
+        yellow_coral.position.set(x, -240, z);
+        displayFloorElmt.add(yellow_coral);
         console.log('yellow_coral ', x, ' ', z);
 
       }
       if (typeElement == 3) {
-        loadFloor('red_coral', x, z);
-        console.log('red_coral ', x, ' ', z)
+        let red_coral = floorElements.children[2].clone();
+        red_coral.position.set(x, -240, z);
+        displayFloorElmt.add(red_coral);
+        console.log('red_coral ', x, ' ', z);
 
-      }
-
-      if (typeElement == 4) {
-        loadRock(x, z);
-        console.log('rock ', x, ' ', z)
       }
     }
 
