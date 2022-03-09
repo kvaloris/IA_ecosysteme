@@ -76,6 +76,22 @@ function displayFishesAsItems(fishes, renderer) {
         return { scene, camera, controls };
     }
 
+    function createStatElement(id, text, path) {
+        const statValue = document.createElement('span');
+        statValue.innerText = text;
+        const statIcon = document.createElement('img');
+        statIcon.setAttribute('src', path);
+        const statIconWp = document.createElement('div');
+        statIconWp.classList.add('stat-icon');
+        statIconWp.appendChild(statIcon);
+        const stat = document.createElement('div');
+        stat.classList.add('fish-stat');
+        stat.id = id;
+        stat.appendChild(statValue);
+        stat.appendChild(statIconWp);
+        return stat;
+    }
+
     // For each fish
     for (let i = 0; i < fishes.length; i++) {
         let fish = fishes[i];
@@ -84,7 +100,25 @@ function displayFishesAsItems(fishes, renderer) {
         const elem = document.createElement('span');
         elem.classList.add('diagram');
         elem.id = 'list-fish-' + i;
-        grid.appendChild(elem);
+        // grid.appendChild(elem);
+
+        // Create html elements for display of fish stats
+
+        const statElements = [
+            createStatElement("stat-age", fish.yearsOld + " years", "/assets/birthday.png"),
+            createStatElement("stat-life", fish.ageMax + " years", "/assets/timer.png"),
+            createStatElement("stat-size", fish.size + " cm", "/assets/ruler.png")
+        ];
+
+        const stats = document.createElement('div');
+        stats.classList.add('fish-stats');
+        statElements.forEach(stat => stats.appendChild(stat));
+
+        const elemWp = document.createElement('span');
+        elemWp.classList.add('diagram-wp');
+        elemWp.appendChild(elem);
+        elemWp.appendChild(stats);
+        grid.appendChild(elemWp);
 
         // Create scene, camera and controls
         const { scene, camera, controls } = makeScene(elem);
