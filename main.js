@@ -153,12 +153,12 @@ function loadObjectSeparate(){
 //   });
 // }
 
-  function createClones(size, color, x, y ,z, appearance){
+  export function createClones(size, color, x, y ,z, appearance, group){
     let newFish = assembleFish(color, appearance);
     newFish.scale.set(size,size,size);
     newFish.position.set(x,y,z);
       
-    fishesGroup.add(newFish);
+    group.add(newFish);
   }
 
   function assembleFish(color, appearance){
@@ -199,8 +199,8 @@ function deleteGroup() {
 }
 
 // Display the fish passed in parameter 
-function displayFish(fish,group) {
-  createClones(fish.size, fish.color, fish.x, fish.y, fish.z, fish.appearance);
+function displayFish(fish, group) {
+  createClones(fish.size, fish.color, fish.x, fish.y, fish.z, fish.appearance, group);
   }
 
 // Display a certain number of fishes
@@ -368,6 +368,6 @@ const canvas2 = document.querySelector('#canvas-2');
 const renderer2 = new THREE.WebGLRenderer({ canvas: canvas2, alpha: true });
 
 
-//document.getElementById('species-display-btn').addEventListener('click', () => displaySpecies(idAnim, renderer2));
+document.getElementById('species-display-btn').addEventListener('click', () => displaySpecies(idAnim, renderer2));
 
-//document.querySelector('#species-close-btn').addEventListener('click', closeSpeciesDisplay);
+document.querySelector('#species-close-btn').addEventListener('click', closeSpeciesDisplay);

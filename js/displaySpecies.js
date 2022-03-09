@@ -1,6 +1,5 @@
 import * as THREE from 'three/build/three.module.js';
-//import { loadObject, animate, resizeRendererToDisplaySize } from './../main.js';
-import {animate, resizeRendererToDisplaySize } from './../main.js';
+import { createClones, animate, resizeRendererToDisplaySize } from './../main.js';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
 
 let idAnim2;
@@ -91,7 +90,9 @@ function displayFishesAsItems(fishes, renderer) {
         const { scene, camera, controls } = makeScene(elem);
         // Add the fish to the scene
         // map is a function in "utils.js" that map values from interval1 [A, B] to interval2 [a, b]
-        displayFishAt(fish, scene, map(fish.size, [MINSIZE, MAXSIZE], [1, 3]), 0, 0, 0);
+        // displayFishAt(fish, scene, map(fish.size, [MINSIZE, MAXSIZE], [1, 3]), 0, 0, 0);
+        createClones(.05, fish.color, 0, 0, 0, fish.appearance, scene);
+        console.log(scene);
 
         // Add the html element and a render function to array sceneElement
         addScene(elem, (renderer, rect) => {
@@ -102,7 +103,6 @@ function displayFishesAsItems(fishes, renderer) {
             renderer.render(scene, camera);
         });
     }
-
     const clearColor = new THREE.Color('#000');
     function render(renderer) {
 
