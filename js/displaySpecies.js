@@ -1,6 +1,7 @@
 import * as THREE from 'three/build/three.module.js';
 import { createClones, animate, resizeRendererToDisplaySize } from './../main.js';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
+import { FishShoal } from './FishShoal.js';
 
 let idAnim2;
 
@@ -150,7 +151,7 @@ function displayFishesAsItems(fishes, renderer) {
         // The canvas's transform is set to move it so the top of the canvas is at the top of whatever part the page is currently scrolled to.
         // const transform = `translateY(${window.scrollY}px)`;
         const display = document.querySelector('#display-2');
-        const transform = `translateY(${display.scrollTop}px)`;
+        const transform = `translate(${display.scrollLeft}px, ${display.scrollTop}px)`;
         renderer.domElement.style.transform = transform;
         
         // Render only the fishes that are on screen

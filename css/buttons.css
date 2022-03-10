@@ -17,11 +17,14 @@
   transition: background-color 1s;
 }
 
-.button:hover {
+.button:not(.btn-disabled):hover {
   background-color: var(--blue);
 }
 
-
+.btn-disabled {
+  background-color: rgb(189, 189, 189);
+  cursor: initial;
+}
 
 
 

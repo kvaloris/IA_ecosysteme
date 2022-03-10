@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
 import { animateChangeYear, closePresentation, showPresentation, handleSlidersConsoleDisplay } from './js/buttonActions.js';
+import { FishShoal } from "./js/FishShoal.js";
 
 const scene = new THREE.Scene();
 // var camera = new THREE.PerspectiveCamera(
@@ -30,7 +31,7 @@ let texture_up = new THREE.TextureLoader().load( 'images/aqua9_up.jpg');
 let texture_dn = new THREE.TextureLoader().load( 'images/aqua9_dn.jpg');
 let texture_rt = new THREE.TextureLoader().load( 'images/aqua9_rt.jpg');
 let texture_lf = new THREE.TextureLoader().load( 'images/aqua9_lf.jpg');
-  
+
 materialArray.push(new THREE.MeshBasicMaterial( { map: texture_ft }));
 materialArray.push(new THREE.MeshBasicMaterial( { map: texture_bk }));
 materialArray.push(new THREE.MeshBasicMaterial( { map: texture_up }));
@@ -69,9 +70,9 @@ manager.onLoad = function ( ) {
   //createClones(20, 0, 5, 5 ,5, [2,2,1]);
   //init(100);
   //displayFishes();
-  FishShoal.init(100);
+  FishShoal.init(2);
   displayFishes(fishesGroup);
-  
+
   FishShoal.setMutChance(slider_mutChance.value);
   createFloor(10);
 
@@ -92,7 +93,7 @@ function loadObjectSeparate(){
         body.scale.set(20,20,20);
         body.position.set(0,0,0);
         bodyFish.add(body);
-        
+
     }, undefined, function (error) {
       console.error(error);
     });
@@ -102,7 +103,7 @@ function loadObjectSeparate(){
         queue.scale.set(10,10,10);
         queue.position.set(6,-1.8,2.9);
         tailFish.add(queue);
-        
+
     }, undefined, function (error) {
       console.error(error);
     });
@@ -157,7 +158,7 @@ function loadObjectSeparate(){
     let newFish = assembleFish(color, appearance);
     newFish.scale.set(size,size,size);
     newFish.position.set(x,y,z);
-      
+
     group.add(newFish);
   }
 
@@ -192,19 +193,19 @@ function loadObjectSeparate(){
   }
 
 // Allow to empty a group of fishes
-function deleteGroup() {
-  for (var i = fishesGroup.children.length - 1; i >= 0; i--) {
-    fishesGroup.remove(fishesGroup.children[i]);
+export function deleteGroup(group) {
+  for (var i = group.children.length - 1; i >= 0; i--) {
+    group.remove(group.children[i]);
   }
 }
 
-// Display the fish passed in parameter 
+// Display the fish passed in parameter
 function displayFish(fish, group) {
   createClones(fish.size, fish.color, fish.x, fish.y, fish.z, fish.appearance, group);
   }
 
 // Display a certain number of fishes
-function displayFishes(group) {
+export function displayFishes(group) {
   for (let i = 0; i < FishShoal.fishesArray.length; i++) {
     displayFish(FishShoal.fishesArray[i], group);
   }
@@ -255,13 +256,19 @@ const btnNextYear = document.querySelector("#next-year-btn");
 let year = 1;
 btnNextYear.addEventListener('click', () => {
 
-  FishShoal.nextYear();
-  deleteGroup();
-  displayFishes(fishesGroup);
-  // document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
-  // Ground.nextYear(); //TODO réafficher
+  console.log(Ground.getGroundArray());
 
-  year = animateChangeYear(year);
+  if(FishShoal.eatingPeriod === "no") {
+    btnNextYear.classList.add('btn-disabled');
+    FishShoal.eatingPeriod = "ongoing";
+    // FishShoal.nextYear();
+    // deleteGroup(fishesGroup);
+    // displayFishes(fishesGroup);
+    // document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
+    // Ground.nextYear(); //TODO réafficher
+    year = animateChangeYear(year);
+
+  }
 });
 
 const closePresentationBtn = document.querySelector('#close-presentation');
@@ -285,7 +292,7 @@ export function animate() {
   resizeRendererToDisplaySize(renderer);
 
   idAnim = requestAnimationFrame(animate);
-  FishShoal.updatePosition(c_ag, c_s, c_al, fishesGroup);
+  FishShoal.update(c_ag, c_s, c_al, fishesGroup);
 
   // Here, the code for animation
 
@@ -295,11 +302,11 @@ export function animate() {
 
 
 animate();
-document.addEventListener('keydown', () => {
-  FishShoal.nextYear();
-  deleteGroup();
-  displayFishes(fishesGroup);
-});
+// document.addEventListener('keydown', () => {
+//   FishShoal.nextYear();
+//   deleteGroup(fishesGroup);
+//   displayFishes(fishesGroup);
+// });
 
 //TEXT INFORMATION
 // document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
@@ -336,23 +343,23 @@ function createFloor(nbCoralsPerLine) {
       typeElement = Ground.getTypeElement(i, j)
       if (typeElement == 1) {
         loadFloor('blue_coral', x, z);
-        console.log('blue_coral ', x, ' ', z);
+        // console.log('blue_coral ', x, ' ', z);
       }
 
       if (typeElement == 2) {
         loadFloor('yellow_coral', x, z);
-        console.log('yellow_coral ', x, ' ', z);
+        // console.log('yellow_coral ', x, ' ', z);
 
       }
       if (typeElement == 3) {
         loadFloor('red_coral', x, z);
-        console.log('red_coral ', x, ' ', z)
+        // console.log('red_coral ', x, ' ', z)
 
       }
 
       if (typeElement == 4) {
         loadRock(x, z);
-        console.log('rock ', x, ' ', z)
+        // console.log('rock ', x, ' ', z)
       }
     }
 
