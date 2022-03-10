@@ -31,7 +31,10 @@
   z-index: -1;
 }
 
-
+.empty-grid {
+  font-size: 24px;
+  margin-top: 130px;
+}
 
 
 

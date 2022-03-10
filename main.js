@@ -318,6 +318,7 @@ export function resizeRendererToDisplaySize(renderer) {
   const height = canvas.clientHeight;
   const needResize = canvas.width !== width || canvas.height !== height;
   if (needResize) {
+    console.log("resize");
     renderer.setSize(width, height, false);
   }
   return needResize;

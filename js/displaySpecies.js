@@ -43,6 +43,14 @@ function displayFishesAsItems(fishes, renderer) {
     const grid = document.querySelector('.grid-fishes');
     grid.innerHTML = "";
 
+    if(fishes.length === 0) {
+        const text = document.createElement("div");
+        text.classList.add("empty-grid");
+        text.innerText = "None";
+        grid.appendChild(text);
+        return;
+    }
+
     // For each fish, the render function and element will be added to an array sceneElements
     const sceneElements = [];
     function addScene(elem, fn) {
