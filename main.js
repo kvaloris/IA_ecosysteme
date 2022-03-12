@@ -300,8 +300,8 @@ function createFloor(nbCoralsPerLine) {
   for (let i = 0; i < nbCoralsPerLine; i++) {
     for (let j = 0; j < nbCoralsPerLine; j++) {
 
-      x = Ground.getCoralX(i);
-      z = Ground.getCoralY(j);
+      x = Ground.getCoralX(i,j);
+      z = Ground.getCoralY(i,j);
       typeElement = Ground.getTypeElement(i, j)
       if (typeElement == 1) {
         let blue_coral = floorElements.children[1].clone();
