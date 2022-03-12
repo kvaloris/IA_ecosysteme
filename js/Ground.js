@@ -35,7 +35,13 @@ class Ground{
     }
 
     static nextYear(){
-        this.groundArray= getTabWithWFC(this.ruleMatrix, this.groundArray)
+        for (let i = 0; i < this.groundArray.length; i++) {
+            for (let j = 0; j < this.groundArray.length; j++) {
+                if(this.groundArray[i][j]===0){
+                    this.groundArray[i][j] = getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j);
+                }
+            }
+        }
     }
 
     static eatCoral(i,j){
@@ -110,6 +116,8 @@ function generateRuleMatrix(ruleMatrixSize){
 function getNewTabWFC (sizeTabElement, ruleMatrix){
     //assert sizeTabElement  != 0
     var newTab= makeIntMatrix (sizeTabElement,sizeTabElement , 0);
+    newTab = getTabWithWFC( ruleMatrix, newTab);
+    newTab = getTabWithWFC( ruleMatrix, newTab);
     return getTabWithWFC( ruleMatrix, newTab);
 }
 
@@ -203,10 +211,10 @@ const MATRIX_RULE_3 =
     ];
 const MATRIX_RULE_4 = 
     [//  0   1  2  3   // 3 color + neutre
-        [40,20,20,20], //0
-        [10,70,10,10], //1
-        [10,10,70,10], //2
-        [10,10,10,70]  //3
+        [94,2,2,2], //0
+        [20,78,1,1], //1
+        [20,1,78,1], //2
+        [20,1,1,78]  //3
     ];
 
 const MATRIX_RULE_5 = 

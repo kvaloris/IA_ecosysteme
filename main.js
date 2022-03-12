@@ -74,7 +74,7 @@ manager.onLoad = function ( ) {
   //scene.add(tailFish.children[0]);
   
   FishShoal.setMutChance(slider_mutChance.value);
-  createFloor(10);
+  createFloor(40);
 
 };
 
