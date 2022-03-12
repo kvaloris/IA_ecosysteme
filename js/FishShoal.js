@@ -17,6 +17,7 @@ class FishShoal{
         var nbColor= [0];
         var meanAgeMax=0;
         var meanSize=0;
+        var scoreLife=0;
         this.fishesArray.forEach(fish => {
             while ((nbColor.length-1) < fish.color){
                 nbColor.push(0);
@@ -24,12 +25,14 @@ class FishShoal{
             nbColor[fish.color]++;
             meanAgeMax+=fish.ageMax;
             meanSize+=fish.size;
+            scoreLife+=fish.getScoreLife();
         });
 
         meanSize= meanSize/this.fishesArray.length;
         text+= "Average life expectancy: "+meanAgeMax+"</br>"
         meanAgeMax= meanAgeMax/this.fishesArray.length;
         text+= "Average size: "+meanSize+"</br>"
+        text+= "Average score Life: "+scoreLife/this.fishesArray.length+"</br>"
 
         for(var i=0; i< nbColor.length; i++){
             let color;
@@ -98,6 +101,10 @@ class FishShoal{
         })
 
         return species;
+    }
+
+    static remouveFish(i){
+        this.fishesArray.splice(i,1);
     }
 }
 

@@ -70,6 +70,9 @@ manager.onLoad = function ( ) {
   //init(100);
   //displayFishes();
   FishShoal.init(100);
+  //console.log(FishShoal.getNbFishToString());
+  console.log('moyenne score poisson peche: ' +Fisherman.getMeanScoreFish());
+  console.log( 'nb poisson qui vont etre peche: '+ Fisherman.getNbGoodFish());
   displayFishes(fishesGroup);
   
   FishShoal.setMutChance(slider_mutChance.value);
@@ -295,7 +298,9 @@ export function animate() {
 
 animate();
 document.addEventListener('keydown', () => {
-  FishShoal.nextYear();
+  Fisherman.goFishing();
+  //FishShoal.nextYear();
+  console.log(FishShoal.getNbFishToString());
   deleteGroup();
   displayFishes(fishesGroup);
 });

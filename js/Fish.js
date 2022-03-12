@@ -112,6 +112,35 @@ class Fish {
         return getScoreComparedToTheBestFish(this, bestFishToHuman, importanceToHuman)
     }
 
+    getScoreToFishObjectif(color, colorFactor, size,sizeFactor, eye, tail, fin, appearanceFactor, yearsOld, yearsOldFactor) {
+        var score = 0; //  best score = 0
+
+        if(color!=null){
+            score = score + (this.color === color ? 0 : 1 * colorFactor); // color
+        }
+        
+        if(size!=null){
+            score = score + Math.abs(this.size - size) * sizeFactor;
+        }
+        if(eye!=null){
+            score = score + Math.abs(this.appearance[0] - eye) * appearanceFactor; //yeux
+        }
+
+        if(tail!=null){
+            score = score + Math.abs(this.appearance[1] - tail) * appearanceFactor; //yeux
+        }
+
+        if(fin!=null){
+            score = score + Math.abs(this.appearance[2] - fin) * appearanceFactor; //yeux
+        }
+
+        if(yearsOld!=null){
+            score = score + Math.abs(this.yearsOld - yearsOld) * yearsOldFactor;
+        }
+        return score;
+    }
+
+
     // BOIDS
 
     // Separation
@@ -242,6 +271,7 @@ class Fish {
 
         eatObjectifCoordinate
     }
+
 }
 
 // Return an array of correct coordinates 
@@ -382,16 +412,16 @@ var importanceLife = {
 };
 
 // Reference for fish most suited for being eaten by humans
-bestFishToHuman = new Fish(0, 0, 0, 0, 1, 10, [2, 1, 2], 2);
+bestFishToHuman = new Fish(0, 0, 0, 0, 1, 7, [2, 1, 2], 2);
 // Importance coefficient
 var importanceToHuman = {
     "xFactor": 0 / XMAX,
     "yFactor": 0 / YMAX,
     "zFactor": 0 / ZMAX,
-    "colorFactor": 0.05,
-    "sizeFactor": 2 / MAXSIZE,
+    "colorFactor": 3,
+    "sizeFactor": 1 / MAXSIZE,
     "appearanceFactor": 3,
-    "yearsOldFactor": 10 / MAXAGEMAX
+    "yearsOldFactor": 0 / MAXAGEMAX
 };
 
 
