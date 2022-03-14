@@ -1,8 +1,7 @@
-export function animateChangeYear() {
+export function animateChangeYear(year) {
 
   const yearDisplay = document.querySelector(".year");
   const backdrop = document.querySelector('.backdrop');
-  let year = 1;
 
   // Increment the year
 
@@ -47,6 +46,8 @@ export function animateChangeYear() {
     backdrop.style.display = "none";
     yearDisplay.setAttribute("style", "");
   }, duration1 * 2);
+
+  return year;
 }
 
 export function closePresentation() {

@@ -1,3 +1,14 @@
+/*--------------------------------------------------------------------*/
+/*--------------------        CONSTANTES          --------------------*/
+/*--------------------------------------------------------------------*/
+
+const XMIN = -200-60, XMAX = 200-60, YMIN = -200, YMAX = 200, ZMIN = -200, ZMAX = 200;
+const TABColor = [0, 1, 2];
+const MINSIZE = 3, MAXSIZE = 10;
+const MINAGEMAX = 1, MAXAGEMAX = 6;
+const MAXeye = 4, MAXtail = 2, MAXfin = 4; //yeux, queue, nageoir
+SPECIES = ["Specie A", "Specie B",  "Specie C"];
+
 function getDistance(x1, y1, z1, x2, y2, z2) {
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
 }

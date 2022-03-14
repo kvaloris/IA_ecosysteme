@@ -1,6 +1,5 @@
 
-
-class NeuralNetwork{
+export class NeuralNetwork{
 
 	//nb node for each layer
 	nInput;

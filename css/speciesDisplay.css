@@ -31,7 +31,10 @@
   z-index: -1;
 }
 
-
+.empty-grid {
+  font-size: 24px;
+  margin-top: 130px;
+}
 
 
 
@@ -52,6 +55,65 @@
   border-radius: 10px;
   z-index: -2;
 }
+
+.diagram-wp {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* STATS */
+
+.fish-stats {
+  position: absolute;
+  display: flex;
+  color: black;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 10px;
+  font-family: "Roboto";
+  font-size: 12px;
+  gap: 5px;
+  font-weight: bold;
+}
+
+.fish-stat {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.fish-stat img {
+  height: 12px;
+}
+
+.stat-icon {
+  position: relative;
+}
+
+.fish-stat:hover .stat-icon::before {
+  width: max-content;
+  position: absolute;
+  top: 50%;
+  transform: translate(27px, calc(-50% - 2px));
+  background: var(--dark-blue);
+  padding: 5px 4px 5px 8px;
+  border-radius: 4px;
+  color: var( --white);
+  z-index: 99;
+}
+
+#stat-life:hover .stat-icon::before {
+  content: "Life Expectancy";
+}
+
+#stat-size:hover .stat-icon::before {
+  content: "Size";
+}
+
+#stat-age:hover .stat-icon::before {
+  content: "  Current Age";
+}
+
 
 
 

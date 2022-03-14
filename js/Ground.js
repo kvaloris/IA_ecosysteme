@@ -48,7 +48,8 @@ class Ground{
         for (let i = 0; i < this.groundArray.length; i++) {
             j= this.groundArray[i].indexOf(type);
             if( j!=-1){
-                return [this.getCoralX(i),this.getCoralY(j)];
+                // return [this.getCoralX(i),this.getCoralY(j)];
+                return {i: i, j: j, x: this.getCoralX(i), z: this.getCoralY(j)}
             }
         }
         return false;
