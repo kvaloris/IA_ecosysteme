@@ -1,4 +1,6 @@
-class Fisherman{
+import { FishShoal } from "./FishShoal.js";
+
+export class Fisherman{
     static delta = 2;
     static colorTarget = 1;
     static colorFactor = 5;

@@ -2,6 +2,7 @@ import * as THREE from 'three/build/three.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FishShoal } from "./js/FishShoal.js";
+import { Fisherman } from './js/Fisherman.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
 import { animateChangeYear, closePresentation, showPresentation, handleSlidersConsoleDisplay } from './js/buttonActions.js';
 
