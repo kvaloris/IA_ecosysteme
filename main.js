@@ -1,9 +1,9 @@
 import * as THREE from 'three/build/three.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { FishShoal } from "./js/FishShoal.js";
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
 import { animateChangeYear, closePresentation, showPresentation, handleSlidersConsoleDisplay } from './js/buttonActions.js';
-import { FishShoal } from "./js/FishShoal.js";
 
 const scene = new THREE.Scene();
 // var camera = new THREE.PerspectiveCamera(
@@ -70,7 +70,7 @@ manager.onLoad = function ( ) {
   //createClones(20, 0, 5, 5 ,5, [2,2,1]);
   //init(100);
   //displayFishes();
-  FishShoal.init(2);
+  FishShoal.init(50);
   displayFishes(fishesGroup);
 
   FishShoal.setMutChance(slider_mutChance.value);
