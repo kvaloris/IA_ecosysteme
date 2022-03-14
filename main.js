@@ -7,15 +7,6 @@ import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
 import { animateChangeYear, closePresentation, showPresentation, handleSlidersConsoleDisplay } from './js/buttonActions.js';
 
 const scene = new THREE.Scene();
-// var camera = new THREE.PerspectiveCamera(
-//       /*fov*/ 55,
-//       /*aspect ratio*/ window.innerWidth / window.innerHeight,
-//       /*near*/ 45,
-//       /*far*/ 30000
-// );
-// camera.position.x = -100;
-// camera.position.y = -200;
-// camera.position.z = -300;
 
 var camera = new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,45,10000);
 camera.position.set(-100,-200,-300);
@@ -60,6 +51,7 @@ const fishBodyGroup = new THREE.Group();
 const bodyFish = new THREE.Group();
 const tailFish = new THREE.Group();
 const finsFish = new THREE.Group();
+const eyesFish = new THREE.Group();
 const colorList =["yellow", "blue", "red"];
 //fin test
 
@@ -68,7 +60,6 @@ const manager = new THREE.LoadingManager();
 manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
-  //createClones(20, 0, 5, 5 ,5, [2,2,1]);
   FishShoal.init(100);
   //console.log(FishShoal.getNbFishToString());
   console.log('moyenne score poisson peche: ' +Fisherman.getMeanScoreFish());
@@ -93,8 +84,9 @@ function loadObjectSeparate(){
     {
       console.log(gltf.scene);
         let body = gltf.scene;
-        body.scale.set(10,10,10);
+        body.scale.set(5,5,5);
         body.position.set(0,0,0);
+        body.name = colorList[i];
         bodyFish.add(body);
 
     }, undefined, function (error) {
@@ -103,10 +95,35 @@ function loadObjectSeparate(){
     loader.load('./3dobjects/queue_fish_'+colorList[i]+'.glb', function (gltf)
     {
         let queue = gltf.scene;
-        queue.scale.set(10,10,10);
-        queue.position.set(6,-1.8,2.9);
+        queue.scale.set(5,5,5);
+        queue.position.set(0,0,0);
+        queue.name =colorList[i];
         tailFish.add(queue);
 
+    }, undefined, function (error) {
+      console.error(error);
+    });
+
+    loader.load('./3dobjects/fins_fish_'+colorList[i]+'.glb', function (gltf)
+    {
+        let fin = gltf.scene;
+        fin.scale.set(5,5,5);
+        fin.position.set(0,0,0);
+        fin.name =colorList[i];
+        finsFish.add(fin);
+        
+    }, undefined, function (error) {
+      console.error(error);
+    });
+
+    loader.load('./3dobjects/eyes_fish_'+colorList[i]+'.glb', function (gltf)
+    {
+        let eye = gltf.scene;
+        eye.scale.set(5,5,5);
+        eye.position.set(0,0,0);
+        eye.name =colorList[i];
+        eyesFish.add(eye);
+        
     }, undefined, function (error) {
       console.error(error);
     });
@@ -115,6 +132,7 @@ function loadObjectSeparate(){
       let floorElement = gltf.scene;
       floorElement.scale.set(300, 300, 300);
       floorElement.position.set(0, -240, 0);
+      floorElement.name=colorList[i];
   
       floorElements.add(floorElement);
     }, undefined, function (error) {
@@ -134,32 +152,99 @@ function loadObjectSeparate(){
   }
 
   function assembleFish(color, appearance){
-    const assembleFish = new THREE.Group();
+    let assembleFish = new THREE.Group();
     let body = bodyFish.children[color].clone(); //add body
+    let fins = new THREE.Group();
+    let coupleFins = new THREE.Group();
+    let fin = finsFish.children[color].clone();
+    let fin2 = finsFish.children[color].clone();
+    fin2.rotation.set(0,-179,0);
+    fin2.position.set(-0.6,0,2.6);
+    coupleFins.add(fin);
+    coupleFins.add(fin2);
     //Add tails
+    let tails = new THREE.Group();
     let tail = tailFish.children[color].clone();
-    let tail1 = tailFish.children[0].clone();
-    let tail2 = tailFish.children[0].clone();
+    console.log(tail);
+    //Add eyes
+    let eyes = new THREE.Group();
+    let eye = eyesFish.children[color].clone();
+    let eye2 = eyesFish.children[color].clone();
+    let coupleEyes = new THREE.Group();
+    eye2.position.set(0,0,-0.7);
+    coupleEyes.add(eye);
+    coupleEyes.add(eye2);
+
+    let tail1 = tailFish.children[color].clone();
+    let tail2 = tailFish.children[color].clone();
     tail1.rotation.set(0,0.5,0);
-    tail1.position.set(6,-1.8,2)
+    tail1.position.set(2, 0, 1);
     tail2.rotation.set(0,-0.5,0);
-    tail2.position.set(8,-1.8,4.5);
-    switch(appearance[1]){
+    tail2.position.set(2, 0, 1.4);
+    switch(appearance[1]){ //add tails
       case 1:
-        assembleFish.add(tail);
+        tails.add(tail);
+        tails.position.set(1.5, -0.3, 1.2);
         break;
       case 2:
-        assembleFish.add(tail1);
-        assembleFish.add(tail2);
+        tails.add(tail1);
+        tails.add(tail2);
+        tails.position.set(-0.4,-0.2,0.1);
         break;
 
       case 3:
-        assembleFish.add(tail1);
-        assembleFish.add(tail2);
-        assembleFish.add(tail);
+        tails.add(tail1);
+        tails.add(tail2);
+        tails.add(tail);
+        tails.position.set(-0.4,-0.2,0.1);
+        break;
+    }
+    switch(appearance[2]){//add fins
+      case 1:
+        fins.add(fin);
+        break;
+      case 2:
+        fins.add(coupleFins);
+        break;
+
+      case 3:
+        fin.position.set(0, 0.5, 0);
+        fins.add(coupleFins);
+        fins.add(fin);
+        break;
+
+      case 4:
+        let couple2 = coupleFins.clone();
+        couple2.position.set(0,0.5,0);
+        fins.add(coupleFins);
+        fins.add(couple2);
+        break;
+    }
+    switch(appearance[0]){//add eyes
+      case 1:
+        eyes.add(eye);
+        break;
+      case 2:
+        eyes.add(coupleEyes);
+        break;
+
+      case 3:
+        eye.position.set(0, 0, 0.2);
+        eyes.add(coupleEyes);
+        eyes.add(eye);
+        break;
+
+      case 4:
+        let couple2 = coupleEyes.clone();
+        couple2.position.set(0.1,0.1,0);
+        eyes.add(coupleEyes);
+        eyes.add(couple2);
         break;
     }
     assembleFish.add(body);
+    assembleFish.add(tails);
+    assembleFish.add(fins);
+    assembleFish.add(eyes);
     return assembleFish;
   }
 
@@ -170,8 +255,14 @@ export function deleteGroup(group) {
   }
 }
 
-// Display the fish passed in parameter
-function displayFish(fish, group) {
+function removeGround(){
+  for (var i = displayFloorElmt.children.length - 1; i >= 0; i--) {
+    displayFloorElmt.remove(displayFloorElmt.children[i]);
+  }
+}
+
+// Display the fish passed in parameter 
+function displayFish(fish,group) {
   createClones(group, fish.size, fish.color, fish.x, fish.y, fish.z, fish.appearance, group);
   }
 
