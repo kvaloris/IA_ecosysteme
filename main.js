@@ -60,13 +60,14 @@ const manager = new THREE.LoadingManager();
 manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
-  FishShoal.init(100);
+  FishShoal.init(10);
   //console.log(FishShoal.getNbFishToString());
   console.log('moyenne score poisson peche: ' +Fisherman.getMeanScoreFish());
   console.log( 'nb poisson qui vont etre peche: '+ Fisherman.getNbGoodFish());
   displayFishes(fishesGroup);
 
   FishShoal.setMutChance(slider_mutChance.value);
+  Ground.init(boxSize, 40, 4);
   createFloor(40);
 
 };
@@ -82,7 +83,7 @@ function loadObjectSeparate(){
   for(let i=0; i<colorList.length; i++){
     loader.load('./3dobjects/fish_main_'+ colorList[i]+'.glb', function (gltf)
     {
-      console.log(gltf.scene);
+
         let body = gltf.scene;
         body.scale.set(5,5,5);
         body.position.set(0,0,0);
@@ -165,7 +166,7 @@ function loadObjectSeparate(){
     //Add tails
     let tails = new THREE.Group();
     let tail = tailFish.children[color].clone();
-    console.log(tail);
+    
     //Add eyes
     let eyes = new THREE.Group();
     let eye = eyesFish.children[color].clone();
@@ -255,7 +256,7 @@ export function deleteGroup(group) {
   }
 }
 
-function removeGround(){
+export function removeGround(){
   for (var i = displayFloorElmt.children.length - 1; i >= 0; i--) {
     displayFloorElmt.remove(displayFloorElmt.children[i]);
   }
@@ -393,10 +394,10 @@ export function resizeRendererToDisplaySize(renderer) {
 
 
 
-function createFloor(nbCoralsPerLine) {
-  Ground.init(boxSize, nbCoralsPerLine, 4);
-  console.log(Ground.toString());
-  console.log(Ground.getGroundArray());
+export function createFloor(nbCoralsPerLine) {
+  
+  //console.log(Ground.toString());
+  //console.log(Ground.getGroundArray());
   let x;
   let z;
   let typeElement;
@@ -410,21 +411,21 @@ function createFloor(nbCoralsPerLine) {
         let blue_coral = floorElements.children[1].clone();
         blue_coral.position.set(x, -240, z);
         displayFloorElmt.add(blue_coral);
-        console.log('blue_coral ', x, ' ', z);
+        //console.log('blue_coral ', x, ' ', z);
       }
 
       if (typeElement == 2) {
         let yellow_coral = floorElements.children[0].clone();
         yellow_coral.position.set(x, -240, z);
         displayFloorElmt.add(yellow_coral);
-        console.log('yellow_coral ', x, ' ', z);
+        //console.log('yellow_coral ', x, ' ', z);
 
       }
       if (typeElement == 3) {
         let red_coral = floorElements.children[2].clone();
         red_coral.position.set(x, -240, z);
         displayFloorElmt.add(red_coral);
-        console.log('red_coral ', x, ' ', z);
+        //console.log('red_coral ', x, ' ', z);
 
       }
     }

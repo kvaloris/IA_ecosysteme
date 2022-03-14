@@ -1,4 +1,4 @@
-import { deleteGroup, displayFishes } from "/main.js";
+import { deleteGroup, displayFishes, removeGround, createFloor } from "/main.js";
 import { Fish } from "./Fish";
 
 export class FishShoal{
@@ -122,6 +122,8 @@ export class FishShoal{
         });
         deleteGroup(fishesGroup);
         displayFishes(fishesGroup);
+        removeGround();
+        createFloor(40);
     }
 
     static setMutChance(newFloat){
