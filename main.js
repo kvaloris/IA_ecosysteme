@@ -59,50 +59,7 @@ manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
   FishShoal.init(100);
-  //FishShoal.init(2);
   displayFishes(fishesGroup);
-  let body = bodyFish.children[2].clone();
-  let tails = new THREE.Group();
-  let fins = new THREE.Group();
-  let eyes = new THREE.Group();
-  let coupleFins = new THREE.Group();
-  let tail= tailFish.children[2].clone();
-  let fin = finsFish.children[2].clone();
-  let fin2 = finsFish.children[2].clone();
-  let eye = eyesFish.children[2].clone();
-  let eye2 = eyesFish.children[2].clone();
-  tail.position.set(2, 0, 1.2);
-  fin.position.set(0,0,0);
-  fin2.position.set(-0.6,0,2.6);
-  fin2.rotation.set(0,-179,0);
-  coupleFins.add(fin);
-  coupleFins.add(fin2);
-  let couples = coupleFins.clone();
-  couples.position.set(0,0.3,0);
-  let coupleEyes = new THREE.Group();
-  
-
-  eye2.position.set(0,0,-0.7);
-  coupleEyes.add(eye);
-  coupleEyes.add(eye2);
-  let couple2 = coupleEyes.clone();
-  couple2.position.set(0.1,0.1,0);
-  
-  fins.add(coupleFins);
-  fins.add(couples);
-  tails.add(tail);
-  eyes.add(coupleEyes);
-  eyes.add(couple2);
-  tails.position.set(-0.4,-0.2,0.1);
-  let newFish = new THREE.Group();
-  newFish.add(body);
-  newFish.add(tails);
-  newFish.add(fins);
-  newFish.add(eyes);
-  newFish.position.set(10, 5, 20);
-  newFish.scale.set(10, 10, 10);
-  scene.add(newFish);
-  
   FishShoal.setMutChance(slider_mutChance.value);
   createFloor(10);
 
