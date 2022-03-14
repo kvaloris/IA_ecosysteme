@@ -3,3 +3,7 @@ node_modules\*
 dist
 dist-ssr
 *.local
+*.json
+*.json
+node_modules/*
+node_modules/.vite/*

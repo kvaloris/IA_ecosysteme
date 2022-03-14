@@ -134,7 +134,7 @@ function displayFishesAsItems(fishes, renderer) {
         // Add the fish to the scene
         // map is a function in "utils.js" that map values from interval1 [A, B] to interval2 [a, b]
         // displayFishAt(fish, scene, map(fish.size, [MINSIZE, MAXSIZE], [1, 3]), 0, 0, 0);
-        createClones(map(fish.size, [MINSIZE, MAXSIZE], [.05, .08]), fish.color, 0, 0, 0, fish.appearance, scene);
+        createClones(scene, map(fish.size, [MINSIZE, MAXSIZE], [.05, .08]), fish.color, 0, 0, 0, fish.appearance);
         console.log(scene);
 
         // Add the html element and a render function to array sceneElement

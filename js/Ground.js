@@ -9,7 +9,17 @@
 *  Ground.nextYear()
 */
 
+class Emement{
+    e_type;
+    e_deltaX;
+    e_deltaY;
 
+    constructor(type=0,x=0,y=0){
+       this.e_type=type;
+       this.e_deltaX=x;
+       this.e_deltaY=y; 
+    }
+}
 
 class Ground{
     static groundArray=[];
@@ -22,6 +32,17 @@ class Ground{
         this.nbCoralsPerLine=nbCoralsPerLine;
         this.ruleMatrix= generateRuleMatrix(ruleMatrixSize); 
         this.groundArray= getNewTabWFC (this.nbCoralsPerLine, this.ruleMatrix); 
+
+        for (let i = 0; i < this.groundArray.length; i++) { //permet de ramd un peu la position
+            for (let j = 0; j < this.groundArray.length; j++) {
+                if(this.groundArray[i][j].type!=0){
+                    this.groundArray[i][j].e_deltaX=getXYDelta(this.sizeGround,this.nbCoralsPerLine);
+                    this.groundArray[i][j].e_deltaY=getXYDelta(this.sizeGround,this.nbCoralsPerLine);
+                }
+            }
+        }
+
+        
     }
 
     static toString(){
@@ -35,7 +56,13 @@ class Ground{
     }
 
     static nextYear(){
-        this.groundArray= getTabWithWFC(this.ruleMatrix, this.groundArray)
+        for (let i = 0; i < this.groundArray.length; i++) {
+            for (let j = 0; j < this.groundArray.length; j++) {
+                if(this.groundArray[i][j].type==0){
+                    this.groundArray[i][j] = new Emement( getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j),getXYDelta(this.sizeGround,this.nbCoralsPerLine),getXYDelta(this.sizeGround,this.nbCoralsPerLine));
+                }
+            }
+        }
     }
 
     static eatCoral(i,j){
@@ -44,27 +71,30 @@ class Ground{
 
     //TODO trouver les coordonee d'un type
     static findCoordinatesType(type){
-        var j;
         for (let i = 0; i < this.groundArray.length; i++) {
-            j= this.groundArray[i].indexOf(type);
-            if( j!=-1){
-                // return [this.getCoralX(i),this.getCoralY(j)];
-                return {i: i, j: j, x: this.getCoralX(i), z: this.getCoralY(j)}
+            for (let j = 0; j < this.groundArray.length; j++) {
+                if(this.groundArray[i][j].e_type==type){
+                    return {i: i, j: j, x: this.getCoralX(i, j), z: this.getCoralY(i, j)}
+                }            
             }
         }
         return false;
     }
 
-    static getCoralX(i){
-        return i *(this.sizeGround/this.nbCoralsPerLine) -((this.sizeGround)/2)+(this.sizeGround/this.nbCoralsPerLine)/2;
+    static getCoralX(i,j){
+        this.groundArray;
+        var tmp = this.getGroundArray()[i][j]; 
+        return i *(this.sizeGround/this.nbCoralsPerLine) -((this.sizeGround)/2)+(this.sizeGround/this.nbCoralsPerLine)/2
+                +this.getGroundArray()[i][j].e_deltaX;
     }
 
-    static getCoralY(j){
-        return j* (this.sizeGround/this.nbCoralsPerLine)-((this.sizeGround)/2)+(this.sizeGround/this.nbCoralsPerLine)/2;
+    static getCoralY(i,j){
+        return j* (this.sizeGround/this.nbCoralsPerLine)-((this.sizeGround)/2)+(this.sizeGround/this.nbCoralsPerLine)/2
+                +this.getGroundArray()[i][j].e_deltaY;
     }
 
     static getTypeElement(i,j){
-        return this.groundArray[i][j];
+        return this.groundArray[i][j].e_type;
     }
 }
 
@@ -110,14 +140,16 @@ function generateRuleMatrix(ruleMatrixSize){
 */
 function getNewTabWFC (sizeTabElement, ruleMatrix){
     //assert sizeTabElement  != 0
-    var newTab= makeIntMatrix (sizeTabElement,sizeTabElement , 0);
+    var newTab= makeIntMatrix (sizeTabElement,sizeTabElement , new Emement());
+    newTab = getTabWithWFC( ruleMatrix, newTab);
+    newTab = getTabWithWFC( ruleMatrix, newTab);
     return getTabWithWFC( ruleMatrix, newTab);
 }
 
 function getTabWithWFC(ruleMatrix, tab){
     for (let i = 0; i < tab.length; i++) {
         for (let j = 0; j < tab.length; j++) {
-            tab[i][j] = getSolutionWithNeibourgh(ruleMatrix,tab, i, j);
+            tab[i][j] = new Emement( getSolutionWithNeibourgh(ruleMatrix,tab, i, j),0,0) ;
         }
     }
     return tab;
@@ -149,7 +181,7 @@ function getTypeOfNeibourgh(tab,nbType, x, y){
     for (let i = minI; i < maxI; i++) {
         for (let j = minJ; j < maxJ; j++) {
             if (! (i==x && j==y)){ //ne doit pas etre lui meme
-                tabOfType[tab[i][j]]+=1;
+                tabOfType[tab[i][j].e_type]+=1;
             }
         }
     }
@@ -185,6 +217,11 @@ function getSolutionWhitTabState (ruleMatrix, tabStateElement){
     return indice;
 }
 
+
+function getXYDelta(sizeGround,nbCoralsPerLine){
+    var maxDelta= (sizeGround/nbCoralsPerLine)/4;
+    return getRandomFloat(-maxDelta,maxDelta) ;
+}
 /*--------------------------------------------------------------------*/
 /*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
@@ -204,10 +241,10 @@ const MATRIX_RULE_3 =
     ];
 const MATRIX_RULE_4 = 
     [//  0   1  2  3   // 3 color + neutre
-        [40,20,20,20], //0
-        [10,70,10,10], //1
-        [10,10,70,10], //2
-        [10,10,10,70]  //3
+        [94,2,2,2], //0
+        [20,80,0,0], //1
+        [20,0,80,0], //2
+        [20,0,0,80]  //3
     ];
 
 const MATRIX_RULE_5 = 
