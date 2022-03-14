@@ -46,7 +46,7 @@ class Ground{
     }
 
     static toString(){
-        return 'Sole: \n'+ this.groundArray.toString() +
+        return 'Sol: \n'+ this.groundArray.toString() +
             '\n matrice de règle \n'+this.ruleMatrix.toString();
     }
 
