@@ -66,25 +66,29 @@ export class FishShoal{
     static updatePosition(c_ag, c_s,c_al,fishesGroup){
 
         // Fishes either move aimlessly or move to eat according to if it's eating period or not
+
         if(this.eatingPeriod === "no") {
-            // console.log("moving again");
-            this.fishesArray.forEach(fish => fish.update(this.fishesArray, c_ag, c_s, c_al));
+            this.fishesArray.forEach(fish => fish.move(this.fishesArray, c_ag, c_s, c_al));
         }
-        else if(this.eatingPeriod === "ongoing") {
+
+        if(this.eatingPeriod === "ongoing") {
             let endEatingPeriod = true;
+            const hungry_fishes = this.fishesArray.filter(fish => fish.hunger);
+            const unhungry_fishes = this.fishesArray.filter(fish => !fish.hunger);
+
             this.fishesArray.forEach(fish => {
                 const endEating = fish.moveToEat();
+                if(fish.hunger) fish.separate(hungry_fishes, c_s);
+                else fish.move(unhungry_fishes, c_ag, c_s, c_al);
+
                 if(!endEating) endEatingPeriod = false;
-                // else {
-                //     fish.x = 0;
-                //     fish.y = 0;
-                //     fish.z = 0;
-                // }
             })
             if(endEatingPeriod) {
                 this.eatingPeriod = "ending";
             };
         }
+
+        this.fishesArray.forEach(fish => fish.update());
 
         for (let i = 0; i < fishesGroup.children.length; i++) {
             let x = this.fishesArray[i].x;

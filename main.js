@@ -60,7 +60,7 @@ const manager = new THREE.LoadingManager();
 manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
-  FishShoal.init(100);
+  FishShoal.init(10);
   //console.log(FishShoal.getNbFishToString());
   console.log('moyenne score poisson peche: ' +Fisherman.getMeanScoreFish());
   console.log( 'nb poisson qui vont etre peche: '+ Fisherman.getNbGoodFish());
@@ -354,7 +354,7 @@ export function animate() {
   resizeRendererToDisplaySize(renderer);
 
   idAnim = requestAnimationFrame(animate);
-  FishShoal.update(c_ag, c_s, c_al, fishesGroup);
+  if(FishShoal.fishesArray) FishShoal.update(c_ag, c_s, c_al, fishesGroup);
 
   // Here, the code for animation
 

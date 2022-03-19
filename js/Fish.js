@@ -240,29 +240,16 @@ export class Fish {
 
     // Update the position of fish
     move(fishes, c_ag, c_s, c_al) {
-        this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));
-        this.limitSpeed();
-        let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
-        this.x = position.x;
-        this.y = position.y;
-        this.z = position.z;
+        this.velocity = addV3(this.velocity, this.separate(fishes, c_s));
+        this.velocity = addV3(this.velocity, this.aggregate(fishes, c_ag));
+        this.velocity = addV3(this.velocity, this.align(fishes, c_al));
+        this.velocity = addV3(this.velocity, this.bound());
     }
 
-    moveTowardsCoral(coralPositionVector, c) {
-        let v = substractV3(coralPositionVector, {x: this.x, y: this.y, z: this.z});
-        v = multiplyV3(v, c);
-
-        this.velocity = addV3(this.velocity, v);
-        this.limitSpeed();
-        let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
-        // let position = coralPositionVector;
-        this.x = position.x;
-        this.y = position.y;
-        this.z = position.z;
-    }
-
+    // Return true if fish is no longer searching for food
     moveToEat() {
-        if(this.hunger === true){ // If hungry
+        if(!this.hunger) return true;
+
             // Searches a target
             const target = Ground.findCoordinatesType(getTypeOfCoral(this.color));
             // If no target, end
@@ -270,10 +257,13 @@ export class Fish {
 
             // Target's coordinates
             const x = target.x;
-            const y = -270;
+            const y = -290;
             const z = target.z;
-
-            this.moveTowardsCoral({x: x, y: y, z: z}, 0.01);
+            const coralPositionVector = {x: x, y: y, z: z};
+            
+            let v = substractV3(coralPositionVector, {x: this.x, y: this.y, z: this.z});
+            v = multiplyV3(v, 0.01);
+            this.velocity = addV3(this.velocity, v);
             
             if(getDistance(this.x, this.y, this.z, x, y, z) <= 10) { // If very close, eats
                 this.hunger=false;
@@ -284,12 +274,15 @@ export class Fish {
             }
 
             return false;
-        }
-        else return true;
+        
     }
 
-    update(fishes, c_ag, c_s, c_al){
-        this.move(fishes, c_ag, c_s, c_al);
+    update(){
+        this.limitSpeed();
+        let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
+        this.x = position.x;
+        this.y = position.y;
+        this.z = position.z;
     }
     
     getSpecie() {
