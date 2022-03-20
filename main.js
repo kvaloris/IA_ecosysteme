@@ -60,7 +60,7 @@ const manager = new THREE.LoadingManager();
 manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
-  FishShoal.init(20);
+  FishShoal.init(1);
   //console.log(FishShoal.getNbFishToString());
   console.log('moyenne score poisson peche: ' +Fisherman.getMeanScoreFish());
   console.log( 'nb poisson qui vont etre peche: '+ Fisherman.getNbGoodFish());
@@ -155,6 +155,9 @@ function loadObjectSeparate(){
 
   }
 
+  const axesHelper = new THREE.AxesHelper( 5 );
+  scene.add( axesHelper );
+
   function assembleFish(color, appearance){
     let assembleFish = new THREE.Group();
     let body;
@@ -217,10 +220,14 @@ function loadObjectSeparate(){
     tail1.position.set(2, 0, 1);
     tail2.rotation.set(0,-0.5,0);
     tail2.position.set(2, 0, 1.4);
-    switch(appearance[1]){ //add tails
+    tail.position.set(2, 0, 1.2);
+
+    const testTail = 3;
+    switch(testTail){ //add tails
       case 1:
         tails.add(tail);
-        tails.position.set(1.5, -0.3, 1.2);
+        // tails.position.set(1.5, -0.3, 1.2);
+        tails.position.set(1.74, -0.17, 1.3);
         break;
       case 2:
         tails.add(tail1);
