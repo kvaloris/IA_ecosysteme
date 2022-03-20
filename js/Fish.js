@@ -150,7 +150,7 @@ export class Fish {
     // Separation
     separate(fishes, c) {
 
-        const dmin = 80;
+        const dmin = 50;
 
         let v = { x: 0, y: 0, z: 0 };
 
