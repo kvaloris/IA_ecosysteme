@@ -1,7 +1,8 @@
 import * as THREE from 'three/build/three.module.js';
 import { createClones, animate, resizeRendererToDisplaySize } from './../main.js';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
-import { FishShoal } from './FishShoal.js';
+// import { FishShoal } from './FishShoal_old';
+import * as FishShoal from "./FishShoal.js";
 
 let idAnim2;
 
@@ -60,6 +61,7 @@ function displayFishesAsItems(fishes, renderer) {
     // For each fish, will be created a scene, camera and controls
     function makeScene(elem) {
         const scene = new THREE.Scene();
+        scene.background = new THREE.Color( 0xffffff ); // TEST
 
         const fov = 45;
         const aspect = 2;  // the canvas default
@@ -71,8 +73,10 @@ function displayFishesAsItems(fishes, renderer) {
         scene.add(camera);
 
         const controls = new TrackballControls(camera, elem);
-        controls.noZoom = true;
+        controls.noZoom = false;
         controls.noPan = true;
+        controls.minDistance = .25;
+        controls.maxDistance = 1;
 
         {
             const color = 0xFFFFFF;

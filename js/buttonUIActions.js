@@ -50,22 +50,20 @@ export function animateChangeYear(year) {
   return year;
 }
 
-export function closePresentation() {
-  const presentation = document.querySelector('.presentation-wp');
-  presentation.animate([
+export function closePopup(node) {
+  node.animate([
     { opacity: 1 }, { opacity: 0 }
   ], {
     duration: 1000
   });
   setTimeout(() => {
-    presentation.style.display = "none";
+    node.style.display = "none";
   }, 1000);
 }
 
-export function showPresentation() {
-  const presentation = document.querySelector('.presentation-wp');
-  presentation.style.display = "initial";
-  presentation.animate([
+export function showPopup(node) {
+  node.style.display = "initial";
+  node.animate([
     { opacity: 0 }, { opacity: 1 }
   ], {
     duration: 1000
@@ -79,4 +77,45 @@ export function handleSlidersConsoleDisplay() {
   const btnImgPath = slidersConsole.className.includes('goDown') ? "/assets/slider.png" : "/assets/arrow.png";
   slidersBtnImg.setAttribute('src', btnImgPath);
   slidersBtnImg.setAttribute('style', 'transform: rotate(180deg)');
+}
+
+export function fillFishingOptions() {
+
+  function fillOption(inputNode, minValue, maxValue) {
+    for(let i=minValue; i<=maxValue; i++) {
+      inputNode.setAttribute('min', minValue);
+      inputNode.setAttribute('max', maxValue);
+      inputNode.setAttribute('value', minValue);
+    }
+  }
+
+  const sizeInput = document.querySelector('[name=fishing-opt-size]');
+  const eyesInput = document.querySelector('[name=fishing-opt-eyes]');
+  const finsInput = document.querySelector('[name=fishing-opt-fins]');
+  const tailsInput = document.querySelector('[name=fishing-opt-tails]');
+
+  fillOption(sizeInput, MINSIZE, MAXSIZE);
+  fillOption(eyesInput, 0, MAXeye);
+  fillOption(finsInput, 0, MAXfin);
+  fillOption(tailsInput, 0, MAXtail);
+}
+
+export function updateFishingResult(number) {
+  const placeholder = document.querySelector('#fishing-result-ph');
+
+  if(number === 0) placeholder.innerHTML = "You have caught no fish.";
+  else if(number === 1) placeholder.innerHTML = "You have caught " + number + " fish.";
+  else placeholder.innerHTML = "You have caught " + number + " fishes.";
+}
+
+export function updateFishingErrorMessage(number) {
+  const placeholder = document.querySelector('#fishing-error');
+  if(number === 0) {
+    placeholder.innerHTML = "There is no fish with those caracteristics";
+    return false;
+  }
+  else {
+    placeholder.innerHTML = "";
+    return true;
+  }
 }

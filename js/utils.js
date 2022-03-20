@@ -9,6 +9,9 @@ const MINAGEMAX = 1, MAXAGEMAX = 6;
 const MAXeye = 4, MAXtail = 2, MAXfin = 4; //yeux, queue, nageoir
 SPECIES = ["Specie A", "Specie B",  "Specie C"];
 
+let fishesArray = [];
+let eatingPeriod = "no";
+
 function getDistance(x1, y1, z1, x2, y2, z2) {
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
 }
