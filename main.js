@@ -45,7 +45,7 @@ scene.add(skybox);
 
 const fishesGroup = new THREE.Group();
 let floorElements = new THREE.Group();
-let displayFloorElmt = new THREE.Group();
+export let displayFloorElmt = new THREE.Group();
 const fishesObjectGroup = new THREE.Group();
 const fishBodyGroup = new THREE.Group();
 const bodyFish = new THREE.Group();
@@ -90,7 +90,7 @@ function loadObjectSeparate(){
     }, undefined, function (error) {
       console.error(error);
     });
-    loader.load('./3dobjects/queue_fish_'+colorList[i]+'.glb', function (gltf)
+    loader.load('./3dobjects/queue_fish_'+ colorList[i]+'.glb', function (gltf)
     {
         let queue = gltf.scene;
         queue.scale.set(5,5,5);
@@ -119,7 +119,7 @@ function loadObjectSeparate(){
         let eye = gltf.scene;
         eye.scale.set(5,5,5);
         eye.position.set(0,0,0);
-        eye.name =colorList[i];
+        eye.name = colorList[i];
         eyesFish.add(eye);
         
     }, undefined, function (error) {
@@ -141,21 +141,52 @@ function loadObjectSeparate(){
 }
 
 
-  export function createClones(group, size, color, x, y ,z, appearance){
-    let newFish = assembleFish(color, appearance);
-    newFish.scale.set(size,size,size);
-    newFish.position.set(x,y,z);
+  export function createClones(group, fish){
+    let newFish = assembleFish(fish.color, fish.appearance);
+    newFish.scale.set(fish.size,fish.size,fish.size);
+    newFish.position.set(fish.x,fish.y,fish.z);
+    console.log("id 3dobject" + newFish.id);
+    fish.id_3dobject = newFish.id;
 
     group.add(newFish);
   }
 
   function assembleFish(color, appearance){
     let assembleFish = new THREE.Group();
-    let body = bodyFish.children[color].clone(); //add body
+    let body;
+    let fin_object;
+    let tail_object;
+    let eye_object;
+    for(let i=0; i<3; i++){
+      console.log(i);
+      console.log(colorList[i]);
+      if(bodyFish.children[i].name == colorList[color]){
+        body = bodyFish.children[color].clone();
+        console.log(bodyFish.children[color].name);
+      }
+      if(finsFish.children[i].name == colorList[color]){
+        fin_object = finsFish.children[color];
+        console.log(finsFish.children[color].name);
+      }
+      if(tailFish.children[i].name == colorList[color]){
+        tail_object = tailFish.children[color];
+        console.log(tailFish.children[color].name);      
+      }
+
+      if(eyesFish.children[i].name == colorList[color]){
+        eye_object = eyesFish.children[color];
+        console.log(eyesFish.children[color].name);       
+      }
+    }
+
+    //let body = bodyFish.children[color].clone(); //add body
     let fins = new THREE.Group();
     let coupleFins = new THREE.Group();
-    let fin = finsFish.children[color].clone();
-    let fin2 = finsFish.children[color].clone();
+    let fin = fin_object.clone();
+    let fin2 = fin_object.clone();
+    //let fin = finsFish.children[color].clone();
+    //let fin2 = finsFish.children[color].clone();
+    //let fin2 = fin.clone();
     fin2.rotation.set(0,-179,0);
     fin2.position.set(-0.6,0,2.6);
     coupleFins.add(fin);
@@ -163,18 +194,21 @@ function loadObjectSeparate(){
     
     //Add tails
     let tails = new THREE.Group();
-    let tail = tailFish.children[color].clone();
+    let tail = tail_object.clone();
+    //let tail = tailFish.children[color].clone();
     //Add eyes
     let eyes = new THREE.Group();
-    let eye = eyesFish.children[color].clone();
-    let eye2 = eyesFish.children[color].clone();
+    let eye = eye_object.clone();
+    let eye2 = eye_object.clone();
     let coupleEyes = new THREE.Group();
     eye2.position.set(0,0,-0.7);
     coupleEyes.add(eye);
     coupleEyes.add(eye2);
 
-    let tail1 = tailFish.children[color].clone();
-    let tail2 = tailFish.children[color].clone();
+    //let tail1 = tailFish.children[color].clone();
+    //let tail2 = tailFish.children[color].clone();
+    let tail1 = tail.clone();
+    let tail2 = tail.clone();
     tail1.rotation.set(0,0.5,0);
     tail1.position.set(2, 0, 1);
     tail2.rotation.set(0,-0.5,0);
@@ -255,7 +289,7 @@ export function deleteGroup(group) {
 
 // Display the fish passed in parameter 
 function displayFish(fish,group) {
-  createClones(group, fish.size, fish.color, fish.x, fish.y, fish.z, fish.appearance, group);
+  createClones(group, fish);
   }
 
 // Display a certain number of fishes
@@ -392,20 +426,20 @@ function createFloor(nbCoralsPerLine) {
   for (let i = 0; i < nbCoralsPerLine; i++) {
     for (let j = 0; j < nbCoralsPerLine; j++) {
 
-        displayFloor(Ground, i,j);
+        displayFloor(i,j);
     }
 
   }
 }
 
-export function displayFloor(group, i,j) {
+export function displayFloor( i,j) {
 
   let x;
   let z;
   let typeElement;
-  x = group.getCoralX(i,j);
-  z = group.getCoralY(i,j);
-  typeElement = group.getTypeElement(i, j);
+  x = Ground.getCoralX(i,j);
+  z = Ground.getCoralY(i,j);
+  typeElement = Ground.getTypeElement(i, j);
   if (typeElement == 1) {
     let blue_coral = floorElements.children[1].clone();
     blue_coral.position.set(x, -240, z);
@@ -431,6 +465,8 @@ export function displayFloor(group, i,j) {
 
 
 scene.add(displayFloorElmt);
+
+console.log(scene.getObjectByName("fish9"));
 
 // SPECIES DISPLAY
 

@@ -107,10 +107,15 @@ export class FishShoal{
         var i=0;
         // Fishes grow one year older and dies from aging or hunger
         while (i < this.fishesArray.length) {
+            console.log("test nextyear");
             this.fishesArray[i].yearsOld ++;
             if (this.fishesArray[i].yearsOld > this.fishesArray[i].ageMax || this.fishesArray[i].hunger==true){
                 if(this.fishesArray[i].hunger==true) console.log('fish of color ' + this.fishesArray[i].color + ' died from hunger');
                 this.fishesArray.splice(i,1);
+                fishesGroup.remove(fishesGroup.getObjectById(this.fishesArray[i].id_3dobject));
+                console.log("test remove");
+                console.log(this.fishesArray[i]);
+                console.log(fishesGroup.getObjectById(this.fishesArray[i].id_3dobject));
             }else{
                 i++;
             }
@@ -121,6 +126,8 @@ export class FishShoal{
         this.fishesArray.forEach(fish => {
             fish.hunger= true;
         });
+
+        //fishesGroup.clear();
         //deleteGroup(fishesGroup);
         //displayFishes(fishesGroup);
         console.log("test Ground");
@@ -166,6 +173,7 @@ function generateNewGeneration(fishesTab, nbFInit, mutChance) {
         if(Math.random() < getChanceReproduction(fishesTab,nbFInit)){
             let child1 = Fish.generateChild(fishesTab.length, couple[0], couple[1], fishesTab, mutChance);
             fishesTab.push(child1);
+
         }
     });
     return fishesTab;

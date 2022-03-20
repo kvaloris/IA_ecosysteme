@@ -17,6 +17,7 @@ neuralNetwork.test(pat);
 console.log("FIN TEST");
 
 export class Fish {
+    id_3dobject;
     id;
     x; y; z;
     color = [0, 0, 0];
