@@ -1,5 +1,6 @@
-import { deleteGroup, displayFishes, removeGround, createFloor } from "/main.js";
+import { deleteGroup, displayFishes, displayFloor } from "/main.js";
 import { Fish } from "./Fish";
+import { Ground } from "./Ground";
 
 export class FishShoal{
 
@@ -120,10 +121,11 @@ export class FishShoal{
         this.fishesArray.forEach(fish => {
             fish.hunger= true;
         });
-        deleteGroup(fishesGroup);
-        displayFishes(fishesGroup);
-        removeGround();
-        createFloor(40);
+        //deleteGroup(fishesGroup);
+        //displayFishes(fishesGroup);
+        console.log("test Ground");
+        Ground.nextYear();
+       
     }
 
     static setMutChance(newFloat){

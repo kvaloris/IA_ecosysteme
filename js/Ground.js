@@ -1,3 +1,6 @@
+//import * as THREE from 'three/build/three.module.js';
+import { deleteGroup, displayFloor } from "/main.js";
+
 /* Pour l'utiliser:
 *  pour créer un sol
 *  Ground.init(5,5, nombreDeType); avec la taille que tu veux
@@ -21,7 +24,7 @@ class Emement{
     }
 }
 
-class Ground{
+export class Ground{
     static groundArray=[];
     static ruleMatrix= [];
     static nbCoralsPerLine;
@@ -56,13 +59,22 @@ class Ground{
     }
 
     static nextYear(){
+        console.log("entrée Ground");
         for (let i = 0; i < this.groundArray.length; i++) {
+            console.log("entrée boucle 1");
             for (let j = 0; j < this.groundArray.length; j++) {
                 if(this.groundArray[i][j].type==0){
+                    console.log("deleteGround");
                     this.groundArray[i][j] = new Emement( getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j),getXYDelta(this.sizeGround,this.nbCoralsPerLine),getXYDelta(this.sizeGround,this.nbCoralsPerLine));
+                    deleteGroup(displayFloorElmt);
+                    displayFloor(this.groundArray, i,j);
+                    //scene.add(displayFloorElmt);
                 }
             }
         }
+
+        
+        //console.log(displayFloorElmt);   
     }
 
     static eatCoral(i,j){

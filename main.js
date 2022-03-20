@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FishShoal } from "./js/FishShoal.js";
 import { Fisherman } from './js/Fisherman.js';
+import { Ground } from './js/Ground.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
 import { animateChangeYear, closePresentation, showPresentation, handleSlidersConsoleDisplay } from './js/buttonActions.js';
 
@@ -45,7 +46,6 @@ scene.add(skybox);
 const fishesGroup = new THREE.Group();
 let floorElements = new THREE.Group();
 let displayFloorElmt = new THREE.Group();
-//TEST
 const fishesObjectGroup = new THREE.Group();
 const fishBodyGroup = new THREE.Group();
 const bodyFish = new THREE.Group();
@@ -53,7 +53,6 @@ const tailFish = new THREE.Group();
 const finsFish = new THREE.Group();
 const eyesFish = new THREE.Group();
 const colorList =["yellow", "blue", "red"];
-//fin test
 
 
 const manager = new THREE.LoadingManager();
@@ -67,7 +66,6 @@ manager.onLoad = function ( ) {
   displayFishes(fishesGroup);
 
   FishShoal.setMutChance(slider_mutChance.value);
-  Ground.init(boxSize, 40, 4);
   createFloor(40);
 
 };
@@ -83,7 +81,6 @@ function loadObjectSeparate(){
   for(let i=0; i<colorList.length; i++){
     loader.load('./3dobjects/fish_main_'+ colorList[i]+'.glb', function (gltf)
     {
-
         let body = gltf.scene;
         body.scale.set(5,5,5);
         body.position.set(0,0,0);
@@ -163,10 +160,10 @@ function loadObjectSeparate(){
     fin2.position.set(-0.6,0,2.6);
     coupleFins.add(fin);
     coupleFins.add(fin2);
+    
     //Add tails
     let tails = new THREE.Group();
     let tail = tailFish.children[color].clone();
-    
     //Add eyes
     let eyes = new THREE.Group();
     let eye = eyesFish.children[color].clone();
@@ -256,12 +253,6 @@ export function deleteGroup(group) {
   }
 }
 
-export function removeGround(){
-  for (var i = displayFloorElmt.children.length - 1; i >= 0; i--) {
-    displayFloorElmt.remove(displayFloorElmt.children[i]);
-  }
-}
-
 // Display the fish passed in parameter 
 function displayFish(fish,group) {
   createClones(group, fish.size, fish.color, fish.x, fish.y, fish.z, fish.appearance, group);
@@ -328,7 +319,7 @@ btnNextYear.addEventListener('click', () => {
     // deleteGroup(fishesGroup);
     // displayFishes(fishesGroup);
     // document.querySelector('.nbPoisson').innerHTML = FishShoal.getNbFishToString();
-    // Ground.nextYear(); //TODO réafficher
+    //Ground.nextYear(); //TODO réafficher
     year = animateChangeYear(year);
 
   }
@@ -394,41 +385,46 @@ export function resizeRendererToDisplaySize(renderer) {
 
 
 
-export function createFloor(nbCoralsPerLine) {
-  
-  //console.log(Ground.toString());
-  //console.log(Ground.getGroundArray());
-  let x;
-  let z;
-  let typeElement;
+function createFloor(nbCoralsPerLine) {
+  Ground.init(boxSize, nbCoralsPerLine, 4);
+  console.log(Ground.toString());
+  console.log(Ground.getGroundArray());
   for (let i = 0; i < nbCoralsPerLine; i++) {
     for (let j = 0; j < nbCoralsPerLine; j++) {
 
-      x = Ground.getCoralX(i,j);
-      z = Ground.getCoralY(i,j);
-      typeElement = Ground.getTypeElement(i, j)
-      if (typeElement == 1) {
-        let blue_coral = floorElements.children[1].clone();
-        blue_coral.position.set(x, -240, z);
-        displayFloorElmt.add(blue_coral);
-        //console.log('blue_coral ', x, ' ', z);
-      }
-
-      if (typeElement == 2) {
-        let yellow_coral = floorElements.children[0].clone();
-        yellow_coral.position.set(x, -240, z);
-        displayFloorElmt.add(yellow_coral);
-        //console.log('yellow_coral ', x, ' ', z);
-
-      }
-      if (typeElement == 3) {
-        let red_coral = floorElements.children[2].clone();
-        red_coral.position.set(x, -240, z);
-        displayFloorElmt.add(red_coral);
-        //console.log('red_coral ', x, ' ', z);
-
-      }
+        displayFloor(Ground, i,j);
     }
+
+  }
+}
+
+export function displayFloor(group, i,j) {
+
+  let x;
+  let z;
+  let typeElement;
+  x = group.getCoralX(i,j);
+  z = group.getCoralY(i,j);
+  typeElement = group.getTypeElement(i, j);
+  if (typeElement == 1) {
+    let blue_coral = floorElements.children[1].clone();
+    blue_coral.position.set(x, -240, z);
+    displayFloorElmt.add(blue_coral);
+    //console.log('blue_coral ', x, ' ', z);
+  }
+
+  if (typeElement == 2) {
+    let yellow_coral = floorElements.children[0].clone();
+    yellow_coral.position.set(x, -240, z);
+    displayFloorElmt.add(yellow_coral);
+    //console.log('yellow_coral ', x, ' ', z);
+
+  }
+  if (typeElement == 3) {
+    let red_coral = floorElements.children[2].clone();
+    red_coral.position.set(x, -240, z);
+    displayFloorElmt.add(red_coral);
+    //console.log('red_coral ', x, ' ', z);
 
   }
 }

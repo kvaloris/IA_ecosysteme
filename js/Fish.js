@@ -1,4 +1,5 @@
 import { NeuralNetwork } from "./NeuralNetwork";
+import { Ground } from "./Ground"
 
 const pat = [ //modif
     [[0], [0 / (SPECIES.length - 1)]], // Specie A
