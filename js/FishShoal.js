@@ -1,5 +1,6 @@
-import { deleteGroup, displayFishes } from "/main.js";
 import { Fish } from "./Fish";
+import { Ground } from "./Ground";
+import { createClones} from "../main";
 
 export class FishShoal{
 
@@ -13,7 +14,7 @@ export class FishShoal{
             const fish = Fish.fishRandom(i, this.fishesArray);
             this.fishesArray.push(fish);
         }
-        this.nbFishInit =number;
+        this.nbFishInit = number;
     }
 
     static getNbFishToString(){
@@ -106,22 +107,25 @@ export class FishShoal{
         var i=0;
         // Fishes grow one year older and dies from aging or hunger
         while (i < this.fishesArray.length) {
+            console.log("test nextyear");
             this.fishesArray[i].yearsOld ++;
             if (this.fishesArray[i].yearsOld > this.fishesArray[i].ageMax || this.fishesArray[i].hunger==true){
                 if(this.fishesArray[i].hunger==true) console.log('fish of color ' + this.fishesArray[i].color + ' died from hunger');
                 this.fishesArray.splice(i,1);
+                fishesGroup.remove(fishesGroup.getObjectById(this.fishesArray[i].id_3dobject));
             }else{
                 i++;
             }
         }
         // New fishes are born
-        this.fishesArray = generateNewGeneration(this.fishesArray, this.nbFishInit, this.mutChance);
+        this.fishesArray = generateNewGeneration(this.fishesArray, this.nbFishInit, this.mutChance, fishesGroup);
         // They are hungry
         this.fishesArray.forEach(fish => {
             fish.hunger= true;
         });
-        deleteGroup(fishesGroup);
-        displayFishes(fishesGroup);
+
+        Ground.nextYear();
+       
     }
 
     static setMutChance(newFloat){
@@ -148,11 +152,12 @@ export class FishShoal{
 
     static remouveFish(i){
         this.fishesArray.splice(i,1);
+        fishesGroup.remove(fishesGroup.getObjectById(this.fishesArray[i].id_3dobject));
     }
 }
 
 // Generate a new generation of fishes
-function generateNewGeneration(fishesTab, nbFInit, mutChance) {
+function generateNewGeneration(fishesTab, nbFInit, mutChance, fishesGroup) {
 
     if(fishesTab.length < 2) return fishesTab;
 
@@ -162,6 +167,8 @@ function generateNewGeneration(fishesTab, nbFInit, mutChance) {
         if(Math.random() < getChanceReproduction(fishesTab,nbFInit)){
             let child1 = Fish.generateChild(fishesTab.length, couple[0], couple[1], fishesTab, mutChance);
             fishesTab.push(child1);
+            createClones(fishesGroup, child1);
+
         }
     });
     return fishesTab;
