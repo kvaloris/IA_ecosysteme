@@ -36,10 +36,9 @@ materialArray.push(new THREE.MeshBasicMaterial( { map: texture_lf }));
 for (let i = 0; i < 6; i++)
   materialArray[i].side = THREE.BackSide;
 
-let boxSize = 600;
-let skyboxGeo = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+let skyboxGeo = new THREE.BoxGeometry(BOXSIZE, BOXSIZE, BOXSIZE);
 let skybox = new THREE.Mesh(skyboxGeo, materialArray);
-skybox.position.x = -60;
+// skybox.position.x = -60;
 skybox.position.y = 0;
 skybox.position.z = 0;
 scene.add(skybox);
@@ -67,7 +66,7 @@ manager.onLoad = function ( ) {
   displayFishes(fishesGroup);
 
   FishShoal.setMutChance(slider_mutChance.value);
-  createFloor(40);
+  createFloor(10);
 
 };
 
@@ -148,11 +147,7 @@ function loadObjectSeparate(){
     newFish.position.set(fish.x,fish.y,fish.z);
     fish.id_3dobject = newFish.id;
 
-    console.log("CREATE CLONES");
-    console.log(fish.id_3dobject);
-
     group.add(newFish);
-
   }
 
   function assembleFish(color, appearance){
@@ -500,9 +495,9 @@ export function resizeRendererToDisplaySize(renderer) {
 
 
 function createFloor(nbCoralsPerLine) {
-  Ground.init(boxSize, nbCoralsPerLine, 4);
-  // console.log(Ground.toString());
-  // console.log(Ground.getGroundArray());
+  Ground.init(BOXSIZE, nbCoralsPerLine, 4);
+  console.log(Ground.toString2());
+
   for (let i = 0; i < nbCoralsPerLine; i++) {
     for (let j = 0; j < nbCoralsPerLine; j++) {
 
@@ -512,7 +507,7 @@ function createFloor(nbCoralsPerLine) {
   }
 }
 
-export function displayFloor( i,j) {
+export function displayFloor(i, j) {
 
   let x;
   let z;
@@ -520,31 +515,39 @@ export function displayFloor( i,j) {
   x = Ground.getCoralX(i,j);
   z = Ground.getCoralY(i,j);
   typeElement = Ground.getTypeElement(i, j);
+
+  let element;
   
+  // Blue coral
   if (typeElement == 1) {
-    let blue_coral = floorElements.children[1].clone();
-    blue_coral.position.set(x, -240, z);
-    displayFloorElmt.add(blue_coral);
-    Ground.getGroundArray(i, j, blue_coral.id);
+    element = floorElements.children[1].clone();
+    element.position.set(x, -BOXSIZE/2, z);
+    displayFloorElmt.add(element);
+    // Ground.getGroundArray(i, j, blue_coral.id);
     //console.log('blue_coral ', x, ' ', z);
   }
 
+  // Yellow coral
   if (typeElement == 2) {
-    let yellow_coral = floorElements.children[0].clone();
-    yellow_coral.position.set(x, -240, z);
-    displayFloorElmt.add(yellow_coral);
-    Ground.getGroundArray(i, j, yellow_coral.id);
+    element = floorElements.children[0].clone();
+    element.position.set(x, -BOXSIZE/2, z);
+    displayFloorElmt.add(element);
+    // Ground.getGroundArray(i, j, yellow_coral.id);
     //console.log('yellow_coral ', x, ' ', z);
 
   }
+
+  // Red coral
   if (typeElement == 3) {
-    let red_coral = floorElements.children[2].clone();
-    red_coral.position.set(x, -240, z);
-    displayFloorElmt.add(red_coral);
-    Ground.getGroundArray(i, j, red_coral.id);
+    element = floorElements.children[2].clone();
+    element.position.set(x, -BOXSIZE/2, z);
+    displayFloorElmt.add(element);
+    // Ground.getGroundArray(i, j, red_coral.id);
     //console.log('red_coral ', x, ' ', z);
 
   }
+
+  if(element) Ground.groundArray[i][j].e_id_3d_object = element.id;
 }
 
 

@@ -7,7 +7,9 @@ const TABColor = [0, 1, 2];
 const MINSIZE = 3, MAXSIZE = 10;
 const MINAGEMAX = 1, MAXAGEMAX = 6;
 const MAXeye = 4, MAXtail = 2, MAXfin = 4; //yeux, queue, nageoir
-SPECIES = ["Specie A", "Specie B",  "Specie C"];
+const BOXSIZE = 600;
+
+const SPECIES = ["Specie A", "Specie B",  "Specie C"];
 
 let fishesArray = [];
 let eatingPeriod = "no";

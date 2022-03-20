@@ -39,7 +39,7 @@ export class Ground{
 
         for (let i = 0; i < this.groundArray.length; i++) { //permet de ramd un peu la position
             for (let j = 0; j < this.groundArray.length; j++) {
-                if(this.groundArray[i][j].type!=0){
+                if(this.groundArray[i][j].e_type!=0){
                     this.groundArray[i][j].e_deltaX=getXYDelta(this.sizeGround,this.nbCoralsPerLine);
                     this.groundArray[i][j].e_deltaY=getXYDelta(this.sizeGround,this.nbCoralsPerLine);
                 }
@@ -59,20 +59,30 @@ export class Ground{
         return tabTmp;
     }
 
+    static toString2() {
+        let array = [];
+        this.groundArray.forEach(row => {
+            row = row.map(element => element.e_type);
+            array.push(row);
+        })
+        return array;
+    }
+
     static nextYear(){
         // console.log("entrée Ground");
         for (let i = 0; i < this.groundArray.length; i++) {
             // console.log("entrée boucle 1");
             for (let j = 0; j < this.groundArray.length; j++) {
-                if(this.groundArray[i][j].type==0){
+                if(this.groundArray[i][j].e_type==0){
                     // console.log("deleteGround");
-                    displayFloorElmt.remove(displayFloorElmt.getObjectById(this.groundArray[i][j].id_3dobject));
-                    this.groundArray[i][j] = new Emement( getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j),getXYDelta(this.sizeGround,this.nbCoralsPerLine),getXYDelta(this.sizeGround,this.nbCoralsPerLine));
+                    displayFloorElmt.remove(displayFloorElmt.getObjectById(this.groundArray[i][j].e_id_3d_object));
+                    // this.groundArray[i][j] = new Emement( getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j),getXYDelta(this.sizeGround,this.nbCoralsPerLine),getXYDelta(this.sizeGround,this.nbCoralsPerLine));
                     displayFloor(i,j);
                     
                 }
             }
         }
+
         //displayFloorElmt.clear();
 
         // for (let i = 0; i < this.groundArray.length; i++) {
@@ -83,7 +93,7 @@ export class Ground{
     }
 
     static eatCoral(i,j){
-        this.groundArray[i][j]=0;
+        this.groundArray[i][j].e_type=0;
     }
 
     //TODO trouver les coordonee d'un type

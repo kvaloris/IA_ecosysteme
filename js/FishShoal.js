@@ -1,6 +1,6 @@
 import { Fish } from "./Fish";
 import { Ground } from "./Ground";
-import { createClones} from "../main";
+import { createClones, displayFloorElmt } from "../main";
 
     let nbFishInit;
     let mutChance= 0.1;
@@ -54,6 +54,9 @@ import { createClones} from "../main";
 
             nextYear(fishesGroup);
             eatingPeriod = "no";
+
+            console.log(displayFloorElmt.children);
+            console.log(Ground.toString2());
 
             const btnNextYear = document.querySelector("#next-year-btn");
             btnNextYear.classList.remove('btn-disabled');
@@ -124,7 +127,6 @@ import { createClones} from "../main";
         var i=0;
         // Fishes grow one year older and dies from aging or hunger
         while (i < fishesArray.length) {
-            console.log("test nextyear");
             fishesArray[i].yearsOld ++;
             if (fishesArray[i].yearsOld > fishesArray[i].ageMax || fishesArray[i].hunger===true){
                 if(fishesArray[i].hunger===true) console.log('fish of color ' + fishesArray[i].color + ' died from hunger');
