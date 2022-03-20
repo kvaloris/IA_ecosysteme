@@ -7,7 +7,7 @@ import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
 import { animateChangeYear, closePresentation, showPresentation, handleSlidersConsoleDisplay } from './js/buttonActions.js';
 
 const scene = new THREE.Scene();
-
+ 
 var camera = new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,45,10000);
 camera.position.set(-100,-200,-300);
 
@@ -354,7 +354,7 @@ export function animate() {
   resizeRendererToDisplaySize(renderer);
 
   idAnim = requestAnimationFrame(animate);
-  if(FishShoal.fishesArray) FishShoal.update(c_ag, c_s, c_al, fishesGroup);
+  if(FishShoal.fishesArray.length !== 0) FishShoal.update(c_ag, c_s, c_al, fishesGroup);
 
   // Here, the code for animation
 
