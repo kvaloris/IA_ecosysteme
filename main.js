@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { FishShoal } from "./js/FishShoal.js";
 import { Fisherman } from './js/Fisherman.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
-import { animateChangeYear, closePresentation, showPresentation, handleSlidersConsoleDisplay } from './js/buttonActions.js';
+import { animateChangeYear, closePopup, showPopup, handleSlidersConsoleDisplay, fillFishingOptions, updateFishingResult, updateFishingErrorMessage } from './js/buttonUIActions.js';
 
 const scene = new THREE.Scene();
  
@@ -60,7 +60,7 @@ const manager = new THREE.LoadingManager();
 manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
-  FishShoal.init(10);
+  FishShoal.init(20);
   //console.log(FishShoal.getNbFishToString());
   console.log('moyenne score poisson peche: ' +Fisherman.getMeanScoreFish());
   console.log( 'nb poisson qui vont etre peche: '+ Fisherman.getNbGoodFish());
@@ -318,10 +318,10 @@ const btnNextYear = document.querySelector("#next-year-btn");
 let year = 1;
 btnNextYear.addEventListener('click', () => {
 
-  console.log(Ground.getGroundArray());
-
   if(FishShoal.eatingPeriod === "no") {
     btnNextYear.classList.add('btn-disabled');
+    const fishingConsoleBtn = document.querySelector('#fishing-console-btn');
+    fishingConsoleBtn.classList.add('btn-disabled');
     FishShoal.eatingPeriod = "ongoing";
     // FishShoal.nextYear();
     // deleteGroup(fishesGroup);
@@ -333,14 +333,85 @@ btnNextYear.addEventListener('click', () => {
   }
 });
 
+const presentation = document.querySelector('#presentation-wp');
+
 const closePresentationBtn = document.querySelector('#close-presentation');
-closePresentationBtn.addEventListener('click', closePresentation);
+closePresentationBtn.addEventListener('click', () => closePopup(presentation));
 
 const infoBtn = document.querySelector('#info-btn');
-infoBtn.addEventListener('click', showPresentation);
+infoBtn.addEventListener('click', () => showPopup(presentation));
 
 const slidersBtn = document.querySelector('#sliders-btn');
 slidersBtn.addEventListener('click', handleSlidersConsoleDisplay);
+
+const fishingConsole = document.querySelector('#fishing-console-wp');
+
+const closeFishingConsoleBtn = document.querySelector('#close-fishing-console');
+closeFishingConsoleBtn.addEventListener('click', () => closePopup(fishingConsole));
+
+const fishingConsoleBtn = document.querySelector('#fishing-console-btn');
+fishingConsoleBtn.addEventListener('click', () => {
+  if(FishShoal.eatingPeriod === "no") showPopup(fishingConsole);
+});
+
+const fishingResult = document.querySelector('#fishing-result-wp');
+
+function updateFishermanTarget() {
+  const colorInput = document.querySelector('[name=fishing-opt-color]');
+  const sizeInput = document.querySelector('[name=fishing-opt-size]');
+  const eyesInput = document.querySelector('[name=fishing-opt-eyes]');
+  const finsInput= document.querySelector('[name=fishing-opt-fins]');
+  const tailsInput = document.querySelector('[name=fishing-opt-tails]');
+
+  let color = 0;
+  switch (colorInput.value) {
+    case colorList[0]:
+      color = 0
+      break;
+    case colorList[1]:
+      color = 1
+      break;
+    case colorList[2]:
+      color = 2
+      break;
+    default:
+      color = -1
+      console.log("undefined color");
+      break;
+  }
+  Fisherman.colorTarget = color;
+  Fisherman.sizeTarget = sizeInput.value;
+  Fisherman.nbEyeTarget = eyesInput.value;
+  Fisherman.nbFinTarget = finsInput.value;
+  Fisherman.nbTailTarget = tailsInput.value;
+
+  console.log("Fisherman target");
+  console.log("color : ", Fisherman.colorTarget);
+  console.log("size : ", Fisherman.sizeTarget);
+  console.log("eye : ", Fisherman.nbEyeTarget);
+  console.log("fin : ", Fisherman.nbFinTarget);
+  console.log("tail : ", Fisherman.nbTailTarget);
+}
+
+const fishingBtn = document.querySelector('#fishing-btn');
+fishingBtn.addEventListener('click', () => {
+    updateFishermanTarget();
+    const fishesValid = Fisherman.getNbGoodFish();
+    Fisherman.goFishing();
+    const fishesCaugth = fishesValid;
+    deleteGroup(fishesGroup);
+    displayFishes(fishesGroup);
+
+    closePopup(fishingConsole);
+    updateFishingResult(fishesCaugth);
+    showPopup(fishingResult);
+  
+})
+
+const closeFishingResultBtn = document.querySelector('#close-fishing-result');
+closeFishingResultBtn.addEventListener('click', () => closePopup(fishingResult));
+
+fillFishingOptions();
 
 loadObjectSeparate();
 
@@ -365,11 +436,8 @@ export function animate() {
 
 animate();
 document.addEventListener('keydown', () => {
-  Fisherman.goFishing();
+
   //FishShoal.nextYear();
-  console.log(FishShoal.getNbFishToString());
-  deleteGroup();
-  displayFishes(fishesGroup);
 });
 
 //TEXT INFORMATION

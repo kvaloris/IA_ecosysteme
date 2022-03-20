@@ -26,6 +26,24 @@
   cursor: initial;
 }
 
+.text-button {
+   
+  /* Appearance of the button */
+  background-color: var(--blue);
+  padding: 6px 19px;
+  border: none;
+  border-radius: 3px;
+  
+  /* Change cursor */
+  cursor: pointer;
+
+  /* Transition */
+  transition: background-color 1s;
+}
+
+.text-button:hover {
+  background-color: var(--dark-blue);
+}
 
 
 /* SPECIES DISPLAY AND CLOSE BUTTON */
@@ -106,8 +124,8 @@
 
 .buttons-bottom {
   bottom: 0;
-  left: calc(50% - 346px);
-  transform: translateX(calc(-70px/2 - 25px));
+  left: calc(50%);
+  transform: translateX(calc(-346px - 70px - 25px - 25px/2));
   display: flex;
   flex-direction: row;
   gap: 25px;
@@ -136,24 +154,24 @@
 
 /* NEXT YEAR BUTTON */
 
-#next-year-btn {
+.btn-lg {
   /* Bigger than normal buttons */
-  width: 70px;
-  height: 35px;
+  width: 70px !important;
+  height: 35px !important;
 }
 
-.next-year-hover text {
+.text-curved text {
   fill: var(--white);
 }
 
-.next-year-hover {
+.text-curved {
   position: absolute;
   bottom: 0;
   opacity: 0;
   transition: 1s;
 }
 
-#next-year-btn:hover .next-year-hover {
+#next-year-btn:hover .text-curved, #fishing-console-btn:hover .text-curved {
   opacity: 1;
 }
 

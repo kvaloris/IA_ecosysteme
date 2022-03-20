@@ -57,6 +57,8 @@ export class FishShoal{
             this.eatingPeriod = "no";
             const btnNextYear = document.querySelector("#next-year-btn");
             btnNextYear.classList.remove('btn-disabled');
+            const fishingConsoleBtn = document.querySelector('#fishing-console-btn');
+            fishingConsoleBtn.classList.remove('btn-disabled');
             console.log("eatingPeriod finished");
         }
     }
@@ -150,7 +152,7 @@ export class FishShoal{
         return species;
     }
 
-    static remouveFish(i){
+    static removeFish(i){
         this.fishesArray.splice(i,1);
     }
 }

@@ -22,7 +22,7 @@ export class Fisherman{
         while (i< FishShoal.fishesArray.length) {
             var tmp = FishShoal.fishesArray[i].getScoreToHuman();
             if (this.isAGoodFish(i)){
-                FishShoal.remouveFish(i)
+                FishShoal.removeFish(i)
             }else{
                 i++;
             }
