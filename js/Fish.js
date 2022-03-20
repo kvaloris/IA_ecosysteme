@@ -72,7 +72,7 @@ export class Fish {
             newMaxAge,
             Math.round(Math.random() * (newMaxAge - 1)),
             true,
-            Ground.findCoordinatesType(colorRand));
+            false);
     }
 
     
@@ -264,22 +264,26 @@ export class Fish {
     moveToEat() {
         if(this.hunger === true){ // If hungry
             // Searches a target
-            const target = Ground.findCoordinatesType(getTypeOfCoral(this.color));
+            if (this.eatObjectifCoordinate==false
+                ||( this.eatObjectifCoordinate!=false &&!Ground.coralIsExiste(this.eatObjectifCoordinate.i,this.eatObjectifCoordinate.j))){
+                this.eatObjectifCoordinate = Ground.findCoordinatesType(getTypeOfCoral(this.color));
+            }
+            //Ground.coralIsExiste(x,y);
             // If no target, end
-            if(!target) return true;
+            if(!this.eatObjectifCoordinate) return true;
 
             // Target's coordinates
-            const x = target.x;
+            const x = this.eatObjectifCoordinate.x;
             const y = -270;
-            const z = target.z;
+            const z = this.eatObjectifCoordinate.z;
 
             this.moveTowardsCoral({x: x, y: y, z: z}, 0.01);
             
             if(getDistance(this.x, this.y, this.z, x, y, z) <= 10) { // If very close, eats
                 this.hunger=false;
                 // this.eatObjectifCoordinate = false;
-                console.log("Fish " + this.id + " of color " + this.color + " has eaten coral (" + target.i + ", " + target.j + ") of type " + Ground.getTypeElement(target.i, target.j));
-                Ground.eatCoral(target.i, target.j); 
+                console.log("Fish " + this.id + " of color " + this.color + " has eaten coral (" + this.eatObjectifCoordinate.i + ", " + this.eatObjectifCoordinate.j + ") of type " + Ground.getTypeElement(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j));
+                Ground.eatCoral(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j); 
                 return true;
             }
 

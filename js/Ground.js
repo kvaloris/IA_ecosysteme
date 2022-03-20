@@ -71,16 +71,29 @@ class Ground{
 
     //TODO trouver les coordonee d'un type
     static findCoordinatesType(type){
+        let tabCoordinatesCorals = new Array();
         for (let i = 0; i < this.groundArray.length; i++) {
             for (let j = 0; j < this.groundArray.length; j++) {
+                let tmp = this.groundArray[i][j];
                 if(this.groundArray[i][j].e_type==type){
-                    return {i: i, j: j, x: this.getCoralX(i, j), z: this.getCoralY(i, j)}
+                    
+                    //return{i: i, j: j, x: this.getCoralX(i, j), z: this.getCoralY(i, j)}
+                    tabCoordinatesCorals.push( {i: i, j: j, x: this.getCoralX(i, j), z: this.getCoralY(i, j)});
                 }            
             }
         }
-        return false;
+        if (tabCoordinatesCorals.length == 0){
+            return false;
+        }
+        return tabCoordinatesCorals [getRandomInt(tabCoordinatesCorals.length-1) ];
     }
 
+    static coralIsExiste(i,j){
+        if(this.groundArray[i][j].e_type!=0){
+            return true;
+        }
+        return false;
+    }
     static getCoralX(i,j){
         this.groundArray;
         var tmp = this.getGroundArray()[i][j]; 
