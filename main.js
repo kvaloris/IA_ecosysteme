@@ -146,7 +146,6 @@ function loadObjectSeparate(){
     let newFish = assembleFish(fish.color, fish.appearance);
     newFish.scale.set(fish.size,fish.size,fish.size);
     newFish.position.set(fish.x,fish.y,fish.z);
-    console.log("id 3dobject" + newFish.id);
     fish.id_3dobject = newFish.id;
 
     group.add(newFish);
@@ -509,10 +508,12 @@ export function displayFloor( i,j) {
   x = Ground.getCoralX(i,j);
   z = Ground.getCoralY(i,j);
   typeElement = Ground.getTypeElement(i, j);
+  
   if (typeElement == 1) {
     let blue_coral = floorElements.children[1].clone();
     blue_coral.position.set(x, -240, z);
     displayFloorElmt.add(blue_coral);
+    Ground.getGroundArray(i, j, blue_coral.id);
     //console.log('blue_coral ', x, ' ', z);
   }
 
@@ -520,6 +521,7 @@ export function displayFloor( i,j) {
     let yellow_coral = floorElements.children[0].clone();
     yellow_coral.position.set(x, -240, z);
     displayFloorElmt.add(yellow_coral);
+    Ground.getGroundArray(i, j, yellow_coral.id);
     //console.log('yellow_coral ', x, ' ', z);
 
   }
@@ -527,6 +529,7 @@ export function displayFloor( i,j) {
     let red_coral = floorElements.children[2].clone();
     red_coral.position.set(x, -240, z);
     displayFloorElmt.add(red_coral);
+    Ground.getGroundArray(i, j, red_coral.id);
     //console.log('red_coral ', x, ' ', z);
 
   }

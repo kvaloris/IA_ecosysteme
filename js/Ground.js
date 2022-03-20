@@ -1,5 +1,5 @@
 //import * as THREE from 'three/build/three.module.js';
-import { deleteGroup, displayFloor, displayFloorElmt } from "/main.js";
+import {displayFloor, displayFloorElmt } from "/main.js";
 
 /* Pour l'utiliser:
 *  pour créer un sol
@@ -14,6 +14,7 @@ import { deleteGroup, displayFloor, displayFloorElmt } from "/main.js";
 
 class Emement{
     e_type;
+    e_id_3d_object;
     e_deltaX;
     e_deltaY;
 
@@ -65,19 +66,20 @@ export class Ground{
             for (let j = 0; j < this.groundArray.length; j++) {
                 if(this.groundArray[i][j].type==0){
                     console.log("deleteGround");
+                    displayFloorElmt.remove(displayFloorElmt.getObjectById(this.groundArray[i][j].id_3dobject));
                     this.groundArray[i][j] = new Emement( getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j),getXYDelta(this.sizeGround,this.nbCoralsPerLine),getXYDelta(this.sizeGround,this.nbCoralsPerLine));
-                    
+                    displayFloor(i,j);
                     
                 }
             }
         }
-        displayFloorElmt.clear();
+        //displayFloorElmt.clear();
 
-        for (let i = 0; i < this.groundArray.length; i++) {
-            for (let j = 0; j < this.groundArray.length; j++) {
-                displayFloor(i,j);
-            }
-        } 
+        // for (let i = 0; i < this.groundArray.length; i++) {
+        //     for (let j = 0; j < this.groundArray.length; j++) {
+        //         displayFloor(i,j);
+        //     }
+        // } 
     }
 
     static eatCoral(i,j){
@@ -123,6 +125,10 @@ export class Ground{
 
     static getTypeElement(i,j){
         return this.groundArray[i][j].e_type;
+    }
+    
+    static setGround3DId(i,j, id){
+        this.groundArray[i][j].e_id_3d_object = id;
     }
 }
 
