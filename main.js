@@ -147,8 +147,9 @@ function loadObjectSeparate(){
     newFish.scale.set(fish.size,fish.size,fish.size);
     newFish.position.set(fish.x,fish.y,fish.z);
     fish.id_3dobject = newFish.id;
-
+    
     group.add(newFish);
+
   }
 
   function assembleFish(color, appearance){
@@ -158,24 +159,24 @@ function loadObjectSeparate(){
     let tail_object;
     let eye_object;
     for(let i=0; i<3; i++){
-      console.log(i);
-      console.log(colorList[i]);
+      // console.log(i);
+      // console.log(colorList[i]);
       if(bodyFish.children[i].name == colorList[color]){
         body = bodyFish.children[color].clone();
-        console.log(bodyFish.children[color].name);
+        // console.log(bodyFish.children[color].name);
       }
       if(finsFish.children[i].name == colorList[color]){
         fin_object = finsFish.children[color];
-        console.log(finsFish.children[color].name);
+        // console.log(finsFish.children[color].name);
       }
       if(tailFish.children[i].name == colorList[color]){
         tail_object = tailFish.children[color];
-        console.log(tailFish.children[color].name);      
+        // console.log(tailFish.children[color].name);      
       }
 
       if(eyesFish.children[i].name == colorList[color]){
         eye_object = eyesFish.children[color];
-        console.log(eyesFish.children[color].name);       
+        // console.log(eyesFish.children[color].name);       
       }
     }
 
@@ -349,6 +350,10 @@ btnNextYear.addEventListener('click', () => {
     const fishingConsoleBtn = document.querySelector('#fishing-console-btn');
     fishingConsoleBtn.classList.add('btn-disabled');
     console.log("EATING PERIOD BEGINS");
+
+    // console.log(fishesArray);
+    // console.log(fishesGroup.children.map(fish => fish.id));
+
     eatingPeriod = "ongoing";
     // FishShoal.nextYear();
     // deleteGroup(fishesGroup);

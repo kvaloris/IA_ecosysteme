@@ -60,12 +60,12 @@ export class Ground{
     }
 
     static nextYear(){
-        console.log("entrée Ground");
+        // console.log("entrée Ground");
         for (let i = 0; i < this.groundArray.length; i++) {
-            console.log("entrée boucle 1");
+            // console.log("entrée boucle 1");
             for (let j = 0; j < this.groundArray.length; j++) {
                 if(this.groundArray[i][j].type==0){
-                    console.log("deleteGround");
+                    // console.log("deleteGround");
                     displayFloorElmt.remove(displayFloorElmt.getObjectById(this.groundArray[i][j].id_3dobject));
                     this.groundArray[i][j] = new Emement( getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j),getXYDelta(this.sizeGround,this.nbCoralsPerLine),getXYDelta(this.sizeGround,this.nbCoralsPerLine));
                     displayFloor(i,j);

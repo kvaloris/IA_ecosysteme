@@ -51,13 +51,16 @@ import { createClones} from "../main";
     function update(c_ag, c_s, c_al, fishesGroup) {
         updatePosition(c_ag, c_s,c_al,fishesGroup);
         if(eatingPeriod === "ending") {
+
             nextYear(fishesGroup);
             eatingPeriod = "no";
+
             const btnNextYear = document.querySelector("#next-year-btn");
             btnNextYear.classList.remove('btn-disabled');
             const fishingConsoleBtn = document.querySelector('#fishing-console-btn');
             fishingConsoleBtn.classList.remove('btn-disabled');
-            console.log("eatingPeriod finished");
+
+            console.log("EATING PERIOD ENDS");
         }
     }
 
@@ -90,17 +93,25 @@ import { createClones} from "../main";
         fishesArray.forEach(fish => fish.update());
 
         for (let i = 0; i < fishesGroup.children.length; i++) {
+            if(fishesGroup.children.length !== fishesArray.length) {
+                console.log("Group and Array have different lengths");
+            }
             let x = fishesArray[i].x;
             let y = fishesArray[i].y;
             let z = fishesArray[i].z;
-            fishesGroup.children[i].position.x = x;
-            fishesGroup.children[i].position.y = y;
-            fishesGroup.children[i].position.z = z;
+            let id_3dobject = fishesArray[i].id_3dobject;
+            let model = fishesGroup.getObjectById( id_3dobject );
+            if(!model) {
+                console.log("Undefined model");
+            }
+            model.position.x = x;
+            model.position.y = y;
+            model.position.z = z;
 
             let dir = fishesArray[i].velocity;
             dir = addV3(dir, {x: x, y: y, z: z});
-            fishesGroup.children[i].lookAt(dir.x, dir.y, dir.z);
-            fishesGroup.children[i].rotateY(Math.PI / 2);
+            model.lookAt(dir.x, dir.y, dir.z);
+            model.rotateY(Math.PI / 2);
         }
     }
 
@@ -110,10 +121,12 @@ import { createClones} from "../main";
         while (i < fishesArray.length) {
             console.log("test nextyear");
             fishesArray[i].yearsOld ++;
-            if (fishesArray[i].yearsOld > fishesArray[i].ageMax || fishesArray[i].hunger==true){
-                if(fishesArray[i].hunger==true) console.log('fish of color ' + fishesArray[i].color + ' died from hunger');
-                fishesArray.splice(i,1);
+            if (fishesArray[i].yearsOld > fishesArray[i].ageMax || fishesArray[i].hunger===true){
+                if(fishesArray[i].hunger===true) console.log('fish of color ' + fishesArray[i].color + ' died from hunger');
+
                 fishesGroup.remove(fishesGroup.getObjectById(fishesArray[i].id_3dobject));
+                fishesArray.splice(i,1);
+
             }else{
                 i++;
             }
@@ -152,8 +165,10 @@ import { createClones} from "../main";
     }
 
     function removeFish(i){
+
         fishesArray.splice(i,1);
         fishesGroup.remove(fishesGroup.getObjectById(fishesArray[i].id_3dobject));
+
     }
 
 export { nbFishInit, mutChance, init, getNbFishToString, update, updatePosition, nextYear, setMutChance, getFishesBySpecies, removeFish }
