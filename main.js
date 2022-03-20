@@ -423,22 +423,22 @@ function updateFishermanTarget() {
   Fisherman.nbFinTarget = finsInput.value;
   Fisherman.nbTailTarget = tailsInput.value;
 
-  console.log("Fisherman target");
-  console.log("color : ", Fisherman.colorTarget);
-  console.log("size : ", Fisherman.sizeTarget);
-  console.log("eye : ", Fisherman.nbEyeTarget);
-  console.log("fin : ", Fisherman.nbFinTarget);
-  console.log("tail : ", Fisherman.nbTailTarget);
+  // console.log("Fisherman target");
+  // console.log("color : ", Fisherman.colorTarget);
+  // console.log("size : ", Fisherman.sizeTarget);
+  // console.log("eye : ", Fisherman.nbEyeTarget);
+  // console.log("fin : ", Fisherman.nbFinTarget);
+  // console.log("tail : ", Fisherman.nbTailTarget);
 }
 
 const fishingBtn = document.querySelector('#fishing-btn');
 fishingBtn.addEventListener('click', () => {
     updateFishermanTarget();
     const fishesValid = Fisherman.getNbGoodFish();
-    Fisherman.goFishing();
+    Fisherman.goFishing(fishesGroup);
     const fishesCaugth = fishesValid;
-    deleteGroup(fishesGroup);
-    displayFishes(fishesGroup);
+    // deleteGroup(fishesGroup);
+    // displayFishes(fishesGroup);
 
     closePopup(fishingConsole);
     updateFishingResult(fishesCaugth);

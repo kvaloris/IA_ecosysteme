@@ -129,8 +129,7 @@ import { createClones} from "../main";
             if (fishesArray[i].yearsOld > fishesArray[i].ageMax || fishesArray[i].hunger===true){
                 if(fishesArray[i].hunger===true) console.log('fish of color ' + fishesArray[i].color + ' died from hunger');
 
-                fishesGroup.remove(fishesGroup.getObjectById(fishesArray[i].id_3dobject));
-                fishesArray.splice(i,1);
+                removeFish(i, fishesGroup);
 
             }else{
                 i++;
@@ -169,10 +168,10 @@ import { createClones} from "../main";
         return species;
     }
 
-    function removeFish(i){
+    function removeFish(i, fishesGroup){
 
-        fishesArray.splice(i,1);
         fishesGroup.remove(fishesGroup.getObjectById(fishesArray[i].id_3dobject));
+        fishesArray.splice(i,1);
 
     }
 
