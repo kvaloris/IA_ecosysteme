@@ -60,7 +60,7 @@ const manager = new THREE.LoadingManager();
 manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
-  FishShoal.init(10);
+  FishShoal.init(3);
   //console.log(FishShoal.getNbFishToString());
   console.log('moyenne score poisson peche: ' +Fisherman.getMeanScoreFish());
   console.log( 'nb poisson qui vont etre peche: '+ Fisherman.getNbGoodFish());
@@ -349,6 +349,7 @@ btnNextYear.addEventListener('click', () => {
     btnNextYear.classList.add('btn-disabled');
     const fishingConsoleBtn = document.querySelector('#fishing-console-btn');
     fishingConsoleBtn.classList.add('btn-disabled');
+    console.log("EATING PERIOD BEGINS");
     eatingPeriod = "ongoing";
     // FishShoal.nextYear();
     // deleteGroup(fishesGroup);

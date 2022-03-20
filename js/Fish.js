@@ -253,9 +253,11 @@ export class Fish {
     moveToEat() {
         if(!this.hunger) return true;
 
+        // console.log(this.eatObjectifCoordinate);
+
             // Searches a target
-            if (this.eatObjectifCoordinate==false
-                ||( this.eatObjectifCoordinate!=false &&!Ground.coralIsExiste(this.eatObjectifCoordinate.i,this.eatObjectifCoordinate.j))){
+            if (!this.eatObjectifCoordinate
+                ||( this.eatObjectifCoordinate &&!Ground.coralIsExiste(this.eatObjectifCoordinate.i,this.eatObjectifCoordinate.j))){
                 this.eatObjectifCoordinate = Ground.findCoordinatesType(getTypeOfCoral(this.color));
             }
             //Ground.coralIsExiste(x,y);
