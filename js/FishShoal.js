@@ -70,7 +70,10 @@ import { createClones} from "../main";
         // Fishes either move aimlessly or move to eat according to if it's eating period or not
 
         if(eatingPeriod === "no") {
-            fishesArray.forEach(fish => fish.move(fishesArray, c_ag, c_s, c_al));
+            fishesArray.forEach(fish => {
+                fish.move(fishesArray, c_ag, c_s, c_al);
+                fish.update();
+            })
         }
 
         else if(eatingPeriod === "ongoing") {
@@ -82,6 +85,7 @@ import { createClones} from "../main";
                 const endEating = fish.moveToEat();
                 if(fish.hunger) fish.separate(hungry_fishes, c_s);
                 else fish.move(unhungry_fishes, c_ag, c_s, c_al);
+                fish.update();
 
                 if(!endEating) endEatingPeriod = false;
             })
@@ -89,8 +93,8 @@ import { createClones} from "../main";
                 eatingPeriod = "ending";
             };
         }
-        
-        fishesArray.forEach(fish => fish.update());
+
+        // fishesArray.forEach(fish => fish.update())k
 
         for (let i = 0; i < fishesGroup.children.length; i++) {
             if(fishesGroup.children.length !== fishesArray.length) {
@@ -139,7 +143,7 @@ import { createClones} from "../main";
         });
 
         Ground.nextYear();
-       
+
     }
 
     function setMutChance(newFloat){

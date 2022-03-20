@@ -294,14 +294,14 @@ export class Fish {
         this.z = position.z;
     }
 
-    // updatePosition(fishes, c_ag, c_s, c_a) {
-    //     this.move(fishes, c_ag, c_s, c_a);
-    //     this.limitSpeed();
-    //     let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
-    //     this.x = position.x;
-    //     this.y = position.y;
-    //     this.z = position.z;
-    // }
+    updatePosition(fishes, c_ag, c_s, c_a) {
+        this.move(fishes, c_ag, c_s, c_a);
+        this.limitSpeed();
+        let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
+        this.x = position.x;
+        this.y = position.y;
+        this.z = position.z;
+    }
     
     getSpecie() {
         // Normalize
