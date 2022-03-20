@@ -40,6 +40,8 @@ export function displaySpecies(idAnim, renderer) {
 
 function displayFishesAsItems(fishes, renderer) {
 
+    
+
     // Empty the grid in case other fishes were displayed previously
     const grid = document.querySelector('.grid-fishes');
     grid.innerHTML = "";
@@ -138,7 +140,10 @@ function displayFishesAsItems(fishes, renderer) {
         // Add the fish to the scene
         // map is a function in "utils.js" that map values from interval1 [A, B] to interval2 [a, b]
         // displayFishAt(fish, scene, map(fish.size, [MINSIZE, MAXSIZE], [1, 3]), 0, 0, 0);
-        createClones(scene, map(fish.size, [MINSIZE, MAXSIZE], [.05, .08]), fish.color, 0, 0, 0, fish.appearance);
+        
+        fish.size = map(fish.size, [MINSIZE, MAXSIZE], [.05, .08]);
+        fish.x = 0; fish.y = 0; fish.z = 0;
+        createClones(scene, fish);
         console.log(scene);
 
         // Add the html element and a render function to array sceneElement

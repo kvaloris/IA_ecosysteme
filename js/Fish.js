@@ -150,7 +150,7 @@ export class Fish {
     // Separation
     separate(fishes, c) {
 
-        const dmin = 30;
+        const dmin = 80;
 
         let v = { x: 0, y: 0, z: 0 };
 
@@ -242,11 +242,11 @@ export class Fish {
 
     // Update the position of fish
     move(fishes, c_ag, c_s, c_al) {
-        // this.velocity = addV3(this.velocity, this.separate(fishes, c_s));
-        // this.velocity = addV3(this.velocity, this.aggregate(fishes, c_ag));
-        // this.velocity = addV3(this.velocity, this.align(fishes, c_al));
-        // this.velocity = addV3(this.velocity, this.bound());
-        this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));
+        this.velocity = addV3(this.velocity, this.separate(fishes, c_s));
+        this.velocity = addV3(this.velocity, this.aggregate(fishes, c_ag));
+        this.velocity = addV3(this.velocity, this.align(fishes, c_al));
+        this.velocity = addV3(this.velocity, this.bound());
+        // this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));
     }
 
     // Return true if fish is no longer searching for food

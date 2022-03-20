@@ -147,7 +147,10 @@ function loadObjectSeparate(){
     newFish.scale.set(fish.size,fish.size,fish.size);
     newFish.position.set(fish.x,fish.y,fish.z);
     fish.id_3dobject = newFish.id;
-    
+
+    console.log("CREATE CLONES");
+    console.log(fish.id_3dobject);
+
     group.add(newFish);
 
   }
@@ -495,8 +498,8 @@ export function resizeRendererToDisplaySize(renderer) {
 
 function createFloor(nbCoralsPerLine) {
   Ground.init(boxSize, nbCoralsPerLine, 4);
-  console.log(Ground.toString());
-  console.log(Ground.getGroundArray());
+  // console.log(Ground.toString());
+  // console.log(Ground.getGroundArray());
   for (let i = 0; i < nbCoralsPerLine; i++) {
     for (let j = 0; j < nbCoralsPerLine; j++) {
 

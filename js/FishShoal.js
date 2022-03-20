@@ -107,6 +107,7 @@ import { createClones} from "../main";
             let model = fishesGroup.getObjectById( id_3dobject );
             if(!model) {
                 console.log("Undefined model");
+                console.log("Group : ", fishesGroup.children.map(fish => fish.id));
             }
             model.position.x = x;
             model.position.y = y;
