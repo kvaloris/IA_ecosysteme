@@ -61,7 +61,7 @@ const manager = new THREE.LoadingManager();
 manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
-  FishShoal.init(20);
+  FishShoal.init(5);
   //console.log(FishShoal.getNbFishToString());
   console.log('moyenne score poisson peche: ' +Fisherman.getMeanScoreFish());
   console.log( 'nb poisson qui vont etre peche: '+ Fisherman.getNbGoodFish());

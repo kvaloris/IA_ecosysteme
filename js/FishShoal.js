@@ -69,7 +69,7 @@ import { Fish } from "./Fish";
             fishesArray.forEach(fish => fish.move(fishesArray, c_ag, c_s, c_al));
         }
 
-        if(eatingPeriod === "ongoing") {
+        else if(eatingPeriod === "ongoing") {
             let endEatingPeriod = true;
             const hungry_fishes = fishesArray.filter(fish => fish.hunger);
             const unhungry_fishes = fishesArray.filter(fish => !fish.hunger);
@@ -85,7 +85,7 @@ import { Fish } from "./Fish";
                 eatingPeriod = "ending";
             };
         }
-
+        
         fishesArray.forEach(fish => fish.update());
 
         for (let i = 0; i < fishesGroup.children.length; i++) {
