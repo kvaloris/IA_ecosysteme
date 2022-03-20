@@ -1,7 +1,8 @@
 import * as THREE from 'three/build/three.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { FishShoal } from "./js/FishShoal.js";
+// import { FishShoal } from "./js/FishShoal_old.js";
+import * as FishShoal from "./js/FishShoal.js";
 import { Fisherman } from './js/Fisherman.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
 import { animateChangeYear, closePopup, showPopup, handleSlidersConsoleDisplay, fillFishingOptions, updateFishingResult, updateFishingErrorMessage } from './js/buttonUIActions.js';
@@ -268,8 +269,8 @@ function displayFish(fish,group) {
 
 // Display a certain number of fishes
 export function displayFishes(group) {
-  for (let i = 0; i < FishShoal.fishesArray.length; i++) {
-    displayFish(FishShoal.fishesArray[i], group);
+  for (let i = 0; i < fishesArray.length; i++) {
+    displayFish(fishesArray[i], group);
   }
 }
 
@@ -318,11 +319,11 @@ const btnNextYear = document.querySelector("#next-year-btn");
 let year = 1;
 btnNextYear.addEventListener('click', () => {
 
-  if(FishShoal.eatingPeriod === "no") {
+  if(eatingPeriod === "no") {
     btnNextYear.classList.add('btn-disabled');
     const fishingConsoleBtn = document.querySelector('#fishing-console-btn');
     fishingConsoleBtn.classList.add('btn-disabled');
-    FishShoal.eatingPeriod = "ongoing";
+    eatingPeriod = "ongoing";
     // FishShoal.nextYear();
     // deleteGroup(fishesGroup);
     // displayFishes(fishesGroup);
@@ -351,7 +352,7 @@ closeFishingConsoleBtn.addEventListener('click', () => closePopup(fishingConsole
 
 const fishingConsoleBtn = document.querySelector('#fishing-console-btn');
 fishingConsoleBtn.addEventListener('click', () => {
-  if(FishShoal.eatingPeriod === "no") showPopup(fishingConsole);
+  if(eatingPeriod === "no") showPopup(fishingConsole);
 });
 
 const fishingResult = document.querySelector('#fishing-result-wp');
@@ -425,7 +426,7 @@ export function animate() {
   resizeRendererToDisplaySize(renderer);
 
   idAnim = requestAnimationFrame(animate);
-  if(FishShoal.fishesArray.length !== 0) FishShoal.update(c_ag, c_s, c_al, fishesGroup);
+  FishShoal.update(c_ag, c_s, c_al, fishesGroup);
 
   // Here, the code for animation
 

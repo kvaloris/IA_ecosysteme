@@ -1,4 +1,5 @@
-import { FishShoal } from "./FishShoal.js";
+// import { FishShoal } from "./FishShoal_old.js";
+import * as FishShoal from "./FishShoal.js";
 
 export class Fisherman{
     static delta = 2;
@@ -19,8 +20,8 @@ export class Fisherman{
     static goFishing(){
         
         var i=0;
-        while (i< FishShoal.fishesArray.length) {
-            var tmp = FishShoal.fishesArray[i].getScoreToHuman();
+        while (i< fishesArray.length) {
+            var tmp = fishesArray[i].getScoreToHuman();
             if (this.isAGoodFish(i)){
                 FishShoal.removeFish(i)
             }else{
@@ -31,7 +32,7 @@ export class Fisherman{
 
     static getNbGoodFish(){
         var count = 0;
-        for (let i = 0; i < FishShoal.fishesArray.length; i++) {
+        for (let i = 0; i < fishesArray.length; i++) {
             if (this.isAGoodFish(i)){
                 count++;
             }
@@ -43,7 +44,7 @@ export class Fisherman{
     }
 
     static getScoreFish(i){
-        return FishShoal.fishesArray[i].getScoreToFishObjectif(
+        return fishesArray[i].getScoreToFishObjectif(
             this.colorTarget, this.colorFactor,
             this.sizeTarget, this.sizeFactor, 
             this.nbEyeTarget, this.nbTailTarget, this.nbFinTarget, this.appearanceFactor, 
@@ -52,9 +53,9 @@ export class Fisherman{
 
     static getMeanScoreFish(){
         var mean = 0;
-        for (let i = 0; i < FishShoal.fishesArray.length; i++) {
+        for (let i = 0; i < fishesArray.length; i++) {
             mean+= this.getScoreFish(i);
         }
-        return mean/FishShoal.fishesArray.length;
+        return mean/fishesArray.length;
     }
 }

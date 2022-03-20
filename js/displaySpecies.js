@@ -1,7 +1,8 @@
 import * as THREE from 'three/build/three.module.js';
 import { createClones, animate, resizeRendererToDisplaySize } from './../main.js';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
-import { FishShoal } from './FishShoal.js';
+// import { FishShoal } from './FishShoal_old';
+import * as FishShoal from "./FishShoal.js";
 
 let idAnim2;
 
