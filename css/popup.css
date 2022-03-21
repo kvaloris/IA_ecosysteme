@@ -48,13 +48,11 @@
   margin-bottom: 1em;
 }
 
-.error-msg {
-  font-family: "Roboto";
-  font-size: 12px;
-  color: orange;
-}
 
 
+
+
+/* FISHING CONSOLE */
 
 #fishing-console {
   display: flex;
