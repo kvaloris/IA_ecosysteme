@@ -256,9 +256,6 @@ function getXYDelta(sizeGround,nbCoralsPerLine){
 const CONST_sizeElement_MIN= 300;
 const CONST_sizeElement_MAX= 800;
 
-const CONST_sizeElement_MIN= 300;
-const CONST_sizeElement_MAX= 800;
-
 const MATRIX_RULE_2 = 
     [//  0   1 
         [55,45], //0
