@@ -86,11 +86,14 @@ import { createClones, displayFloorElmt } from "../main";
 
             fishesArray.forEach(fish => {
                 const endEating = fish.moveToEat();
-                if(fish.hunger) fish.separate(hungry_fishes, c_s);
-                else fish.move(unhungry_fishes, c_ag, c_s, c_al);
+                if(endEating) { // Fish has found no coral to eat or has already eaten
+                    fish.move(unhungry_fishes, c_ag, c_s, c_al);
+                }
+                else { // Fish is still searching for food
+                    fish.separate(hungry_fishes, c_s);
+                    endEatingPeriod = false;
+                }
                 fish.update();
-
-                if(!endEating) endEatingPeriod = false;
             })
             if(endEatingPeriod) {
                 eatingPeriod = "ending";

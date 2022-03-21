@@ -76,7 +76,7 @@ export class Ground{
                 if(this.groundArray[i][j].e_type==0){
                     // console.log("deleteGround");
                     displayFloorElmt.remove(displayFloorElmt.getObjectById(this.groundArray[i][j].e_id_3d_object));
-                    // this.groundArray[i][j] = new Emement( getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j),getXYDelta(this.sizeGround,this.nbCoralsPerLine),getXYDelta(this.sizeGround,this.nbCoralsPerLine));
+                    this.groundArray[i][j] = new Emement( getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j),getXYDelta(this.sizeGround,this.nbCoralsPerLine),getXYDelta(this.sizeGround,this.nbCoralsPerLine));
                     displayFloor(i,j);
                     
                 }
