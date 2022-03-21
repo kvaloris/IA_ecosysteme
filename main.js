@@ -146,6 +146,7 @@ function loadObjectSeparate(){
     newFish.scale.set(fish.size,fish.size,fish.size);
     newFish.position.set(fish.x,fish.y,fish.z);
     fish.id_3dobject = newFish.id;
+    newFish.name= newFish.id;
 
     group.add(newFish);
   }
@@ -278,7 +279,9 @@ scene.add(fishesGroup);
 // CONTROL
 
 var controls = new OrbitControls(camera, renderer.domElement);
-controls.maxDistance = BOXSIZE-400;
+//controls.addEventListener('change', renderer);
+controls.maxDistance = BOXSIZE-500;
+controls.update();
 
 // LIGHT
 
@@ -288,6 +291,19 @@ const ambientLight = new THREE.AmbientLight(0x111111);
 scene.add(ambientLight);
 scene.add(pointLight);
 scene.add(directionalLight);
+
+//SOUND
+
+const listener = new THREE.AudioListener();
+camera.add(listener);
+const sound = new THREE.Audio(listener);
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load('./sound/underwater.wav', function(buffer){
+  sound.setBuffer(buffer);
+  sound.setLoop(true);
+  sound.setVolume(0.5);
+  sound.play();
+});
 
 
 // SLIDERS
