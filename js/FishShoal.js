@@ -14,7 +14,7 @@ let mutChance = 0.1;
 // Initialize array fish random fishes
 function init(number) {
     for (let i = 0; i < number; i++) {
-        const fish = Fish.fishRandom(i, fishesArray);
+        const fish = Fish.fishRandom(i);
         fishesArray.push(fish);
     }
     nbFishInit = number;
@@ -201,7 +201,7 @@ function generateNewGeneration(fishesTab, nbFInit, mutChance, fishesGroup) {
 
     couples.forEach(couple => {
         if (Math.random() < getChanceReproduction(fishesTab, nbFInit)) {
-            let child1 = Fish.generateChild(fishesTab.length, couple[0], couple[1], fishesTab, mutChance);
+            let child1 = Fish.generateChild(fishesTab.length, couple[0], couple[1], mutChance);
             fishesTab.push(child1);
             createClones(fishesGroup, child1);
 

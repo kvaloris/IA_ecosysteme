@@ -43,7 +43,6 @@ export function displaySpecies(idAnim, renderer) {
 
 function displayFishesAsItems(fishes, renderer) {
 
-    // const fishesCpy = [...fishes];
     let fishesCpy = [];
     fishes.forEach(fish => fishesCpy.push(Object.assign({}, fish)));
 
@@ -120,7 +119,6 @@ function displayFishesAsItems(fishes, renderer) {
         const elem = document.createElement('span');
         elem.classList.add('diagram');
         elem.id = 'list-fish-' + i;
-        // grid.appendChild(elem);
 
         // Create html elements for display of fish stats
 
@@ -144,12 +142,10 @@ function displayFishesAsItems(fishes, renderer) {
         const { scene, camera, controls } = makeScene(elem);
         // Add the fish to the scene
         // map is a function in "utils.js" that map values from interval1 [A, B] to interval2 [a, b]
-        // displayFishAt(fish, scene, map(fish.size, [MINSIZE, MAXSIZE], [1, 3]), 0, 0, 0);
         
         fish.size = map(fish.size, [MINSIZE, MAXSIZE], [.05, .08]);
         fish.x = 0; fish.y = 0; fish.z = 0;
         createClones(scene, fish);
-        console.log(scene);
 
         // Add the html element and a render function to array sceneElement
         addScene(elem, (renderer, rect) => {
@@ -171,7 +167,6 @@ function displayFishesAsItems(fishes, renderer) {
         renderer.setScissorTest(true);
 
         // The canvas's transform is set to move it so the top of the canvas is at the top of whatever part the page is currently scrolled to.
-        // const transform = `translateY(${window.scrollY}px)`;
         const display = document.querySelector('#display-2');
         const transform = `translate(${display.scrollLeft}px, ${display.scrollTop}px)`;
         renderer.domElement.style.transform = transform;
@@ -203,26 +198,7 @@ function displayFishesAsItems(fishes, renderer) {
     requestAnimationFrame(() => render(renderer));
 }
 
-// Display the fish passed in parameter 
-
-function displayFishAt(fish, group, size, x, y, z) {
-    var fichierName;
-
-    switch (fish.color) {
-        case 0:
-            fichierName = "poisson2.glb"; // red
-            break;
-        case 1:
-            fichierName = "poisson.glb"; // blue
-            break;
-        default:
-            fichierName = "poisson3.glb"; // yellow
-            break;
-    }
-
-    loadObject(size, fichierName, x, y, z, group);
-}
-
+// Dynamically create html 
 function createSpeciesTab(renderer) {
     const div = document.querySelector('.species-tabs');
     div.innerHTML = "";

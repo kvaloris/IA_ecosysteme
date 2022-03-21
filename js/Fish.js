@@ -1,10 +1,10 @@
 import { NeuralNetwork } from "./NeuralNetwork";
 import { Ground } from "./Ground"
 
-const pat = [ //modif
-    [[0], [0 / (SPECIES.length - 1)]], // Specie A
-    [[0.5], [1 / (SPECIES.length - 1)]], // Specie B
-    [[1], [2 / (SPECIES.length - 1)]], // Specie C
+const pat = [
+    [[0], [0 / (SPECIES.length - 1)]],
+    [[0.5], [1 / (SPECIES.length - 1)]], 
+    [[1], [2 / (SPECIES.length - 1)]],
 ];
 
 //Creation of the Neural Network
@@ -12,9 +12,7 @@ const neuralNetwork = new NeuralNetwork(1, 2, 1);
 
 //Training of the Neural Network
 neuralNetwork.train(pat);
-console.log("TEST");
 neuralNetwork.test(pat);
-console.log("FIN TEST");
 
 export class Fish {
     id_3dobject;
@@ -57,7 +55,7 @@ export class Fish {
     }
 
     // Return a random fish
-    static fishRandom(id, fishes) {
+    static fishRandom(id) {
         let pos = positionRamdon();
         let colorRand = colorRandom(); 
         let newMaxAge = ageMaxRandom();
@@ -68,7 +66,7 @@ export class Fish {
             pos[2],
             colorRand,
             sizeRandom(),
-            appearanceRamdon(),
+            appearanceRandom(),
             newMaxAge,
             Math.round(Math.random() * (newMaxAge - 1)),
             true,
@@ -76,7 +74,7 @@ export class Fish {
     }
 
     // Return the child of fish 1 and fish 2
-    static generateChild(id, fish1, fish2, fishes, mutChance) {
+    static generateChild(id, fish1, fish2, mutChance) {
         if (fish1 instanceof Fish && fish2 instanceof Fish) {
 
             let pos = mixPosition([fish1.x,fish1.y,fish1.z], [fish2.x,fish2.y,fish2.z]);
@@ -95,8 +93,8 @@ export class Fish {
             }
             return child;
         }
-        console.error(" Erreur generateChild fish1 or fish2 is not a fish; return fishRandom ");
-        return "Erreur";
+        console.error(" Error generateChild fish1 or fish2 is not a fish; return fishRandom ");
+        return "Error";
     }
 
 
@@ -235,7 +233,6 @@ export class Fish {
         this.velocity = addV3(this.velocity, this.aggregate(fishes, c_ag));
         this.velocity = addV3(this.velocity, this.align(fishes, c_al));
         this.velocity = addV3(this.velocity, this.bound());
-        // this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));
     }
 
     // Return true if fish is no longer searching for food
@@ -247,7 +244,6 @@ export class Fish {
                 ||( this.eatObjectifCoordinate &&!Ground.coralIsExiste(this.eatObjectifCoordinate.i,this.eatObjectifCoordinate.j))){
                 this.eatObjectifCoordinate = Ground.findCoordinatesType(getTypeOfCoral(this.color));
             }
-            //Ground.coralIsExiste(x,y);
             // If no target, end
             if(!this.eatObjectifCoordinate) return true;
 
@@ -263,8 +259,6 @@ export class Fish {
             
             if(getDistance(this.x, this.y, this.z, x, y, z) <= 10) { // If very close, eats
                 this.hunger=false;
-                // this.eatObjectifCoordinate = false;
-                const type = Ground.getTypeElement(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j);
                 Ground.eatCoral(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j); 
                 return true;
             }
@@ -293,10 +287,10 @@ export class Fish {
     getSpecie() {
         // Normalize
         const size = map(this.size, [MINSIZE, MAXSIZE], [0, 1]);
+        const eyes = map(this.color, [0, MAXeye], [0, 1]);
         const ageMax = map(this.ageMax, [MINAGEMAX, MAXAGEMAX], [0, 1]);
         const color = map(this.color, [0, TABColor.length - 1], [0, 1]);
-        const eyes = map(this.color, [0, MAXeye], [0, 1]);
-        const index = neuralNetwork.output([color]); //modif
+        const index = neuralNetwork.output([color]);
         return SPECIES[index];
     }
 }
@@ -335,8 +329,9 @@ function mixColor(color1, color2) {
 function sizeRandom() {
     return Math.round(Math.random() * (MAXSIZE - MINSIZE) + MINSIZE);
 }
+
 // Return a random appearance 
-function appearanceRamdon() { //TODO
+function appearanceRandom() {
 
     return [
         Math.round(Math.random() * MAXeye),
@@ -345,7 +340,7 @@ function appearanceRamdon() { //TODO
 }
 
 // Return a recombination of appearance with random pivot
-function mixAppearance(appearance1, appearance2) { //TODO
+function mixAppearance(appearance1, appearance2) {
     var indice = Math.round(Math.random() * (appearance1.length))
     for (var i = 0; i < indice; i++) {
         appearance1[i] = appearance2[i];
@@ -367,7 +362,7 @@ function mutFish(fishInit) {
             fishInit.size = sizeRandom();
             break;
         case 2:
-            fishInit.appearance = appearanceRamdon();
+            fishInit.appearance = appearanceRandom();
             break;
         default:
             fishInit.ageMax = ageMaxRandom();
@@ -434,18 +429,3 @@ var importanceLife = {
     "appearanceFactor": 0,
     "yearsOldFactor": 0 / MAXAGEMAX
 };
-
-// Reference for fish most suited for being eaten by humans
-const bestFishToHuman = new Fish(0, 0, 0, 0, 1, 10, [2, 1, 2], 2);
-// Importance coefficient
-var importanceToHuman = {
-    "xFactor": 0 / XMAX,
-    "yFactor": 0 / YMAX,
-    "zFactor": 0 / ZMAX,
-    "colorFactor": 3,
-    "sizeFactor": 1 / MAXSIZE,
-    "appearanceFactor": 3,
-    "yearsOldFactor": 0 / MAXAGEMAX
-};
-
-
