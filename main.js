@@ -66,7 +66,7 @@ manager.onLoad = function ( ) {
   displayFishes(fishesGroup);
 
   FishShoal.setMutChance(slider_mutChance.value);
-  createFloor(5);
+  createFloor(40);
 
 };
 
