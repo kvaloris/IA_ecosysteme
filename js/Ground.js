@@ -4,12 +4,14 @@ import {displayFloor, displayFloorElmt } from "/main.js";
 // class defining the possible elements
 class Emement{
     e_type;
+    e_size;
     e_id_3d_object;
     e_deltaX;
     e_deltaY;
 
     constructor(type=0,x=0,y=0){
        this.e_type=type;
+       this.e_size= getRandomInt(CONST_sizeElement_MAX , CONST_sizeElement_MIN);
        this.e_deltaX=x;
        this.e_deltaY=y; 
     }
@@ -115,6 +117,10 @@ export class Ground{
 
     static getTypeElement(i,j){
         return this.groundArray[i][j].e_type;
+    }
+
+    static getSizeElement(i,j){
+        return this.groundArray[i][j].e_size;
     }
     
     static setGround3DId(i,j, id){
@@ -243,7 +249,8 @@ function getXYDelta(sizeGround,nbCoralsPerLine){
 /*--------------------------------------------------------------------*/
 /*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
-
+const CONST_sizeElement_MIN= 300;
+const CONST_sizeElement_MAX= 800;
 
 const MATRIX_RULE_2 = 
     [//  0   1 

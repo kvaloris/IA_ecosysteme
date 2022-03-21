@@ -74,42 +74,48 @@ manager.onError = function (url) {
   console.error('There was an error loading ' + url);
 };
 
+function loadObjectSeparate() {
+  var loader = new GLTFLoader(manager);
+  for (let i = 0; i < colorList.length; i++) {
+    loader.load('./3dobjects/fishmain' + colorList[i] + '.glb', function (gltf) {
+      let body = gltf.scene;
+      body.scale.set(5, 5, 5);
+      body.position.set(0, 0, 0);
+      body.name = colorList[i];
+      bodyFish.add(body);
 
     }, undefined, function (error) {
       console.error(error);
     });
-    loader.load('./3dobjects/queue_fish_'+ colorList[i]+'.glb', function (gltf)
-    {
-        let queue = gltf.scene;
-        queue.scale.set(5,5,5);
-        queue.position.set(0,0,0);
-        queue.name =colorList[i];
-        tailFish.add(queue);
+    loader.load('./3dobjects/queuefish' + colorList[i] + '.glb', function (gltf) {
+      let queue = gltf.scene;
+      queue.scale.set(5, 5, 5);
+      queue.position.set(0, 0, 0);
+      queue.name = colorList[i];
+      tailFish.add(queue);
 
     }, undefined, function (error) {
       console.error(error);
     });
 
-    loader.load('./3dobjects/fins_fish_'+colorList[i]+'.glb', function (gltf)
-    {
-        let fin = gltf.scene;
-        fin.scale.set(5,5,5);
-        fin.position.set(0,0,0);
-        fin.name =colorList[i];
-        finsFish.add(fin);
-        
+    loader.load('./3dobjects/finsfish' + colorList[i] + '.glb', function (gltf) {
+      let fin = gltf.scene;
+      fin.scale.set(5, 5, 5);
+      fin.position.set(0, 0, 0);
+      fin.name = colorList[i];
+      finsFish.add(fin);
+
     }, undefined, function (error) {
       console.error(error);
     });
 
-    loader.load('./3dobjects/eyes_fish_'+colorList[i]+'.glb', function (gltf)
-    {
-        let eye = gltf.scene;
-        eye.scale.set(5,5,5);
-        eye.position.set(0,0,0);
-        eye.name = colorList[i];
-        eyesFish.add(eye);
-        
+    loader.load('./3dobjects/eyesfish' + colorList[i] + '.glb', function (gltf) {
+      let eye = gltf.scene;
+      eye.scale.set(5, 5, 5);
+      eye.position.set(0, 0, 0);
+      eye.name = colorList[i];
+      eyesFish.add(eye);
+
     }, undefined, function (error) {
       console.error(error);
     });
@@ -118,8 +124,8 @@ manager.onError = function (url) {
       let floorElement = gltf.scene;
       floorElement.scale.set(300, 300, 300);
       floorElement.position.set(0, -240, 0);
-      floorElement.name=colorList[i];
-  
+      floorElement.name = colorList[i];
+
       floorElements.add(floorElement);
     }, undefined, function (error) {
       console.error(error);
@@ -140,8 +146,6 @@ manager.onError = function (url) {
 
   function assembleFish(color, colorAppearance, appearance){
     let assembleFish = new THREE.Group();
-    console.log(colorList[color] + "couleur à afficher");
-    console.log(bodyFish);
     let body = bodyFish.getObjectByName(colorList[color]).clone(); //add body
     let fins = new THREE.Group();
     let coupleFins = new THREE.Group();
@@ -654,23 +658,27 @@ export function displayFloor(i, j) {
   let x;
   let z;
   let typeElement;
-  x = Ground.getCoralX(i, j);
-  z = Ground.getCoralY(i, j);
+  let size;
+  x = Ground.getCoralX(i,j);
+  z = Ground.getCoralY(i,j);
   typeElement = Ground.getTypeElement(i, j);
+  size = Ground.getSizeElement(i, j)
 
   let element;
 
   // Blue coral
   if (typeElement == 1) {
     element = floorElements.getObjectByName("blue").clone();
-    element.position.set(x, -BOXSIZE / 2, z);
+    element.position.set(x, -BOXSIZE/2, z);
+    element.scale.set(size, size, size);
     displayFloorElmt.add(element);
   }
 
   // Yellow coral
   if (typeElement == 2) {
     element = floorElements.getObjectByName("yellow").clone();
-    element.position.set(x, -BOXSIZE / 2, z);
+    element.position.set(x, -BOXSIZE/2, z);
+    element.scale.set(size, size, size);
     displayFloorElmt.add(element);
 
   }
@@ -678,7 +686,8 @@ export function displayFloor(i, j) {
   // Red coral
   if (typeElement == 3) {
     element = floorElements.getObjectByName("red").clone();
-    element.position.set(x, -BOXSIZE / 2, z);
+    element.position.set(x, -BOXSIZE/2, z);
+    element.scale.set(size, size, size);
     displayFloorElmt.add(element);
 
   }
