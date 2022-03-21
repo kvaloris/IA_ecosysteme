@@ -20,9 +20,10 @@ export class Fish {
     id_3dobject;
     id;
     x; y; z;
-    color = [0, 0, 0];
+    color;
     size;
     appearance = [0, 0, 0]; // [eyes, tail, fin]
+    colorAppearance = [0,0,0];
     ageMax;
     yearsOld = 0;
     velocity = { x: 0, y: 0, z: 0 }
@@ -30,7 +31,7 @@ export class Fish {
     hunger;
     eatObjectifCoordinate;
 
-    constructor(id, x, y, z, color, size, appearance, ageMax, yearsOld = 0, hunger=true, eatObjectifCoordinate) {
+    constructor(id, x, y, z, color, size, appearance,colorAppearance, ageMax, yearsOld = 0, hunger=true, eatObjectifCoordinate) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -38,6 +39,7 @@ export class Fish {
         this.color = color;
         this.size = size;
         this.appearance = appearance;
+        this.colorAppearance= colorAppearance;
         this.ageMax = ageMax;
         this.yearsOld = yearsOld;
         this.specie = this.getSpecie();
@@ -51,6 +53,7 @@ export class Fish {
             ' color: ' + this.color + ';' +
             ' size: ' + this.size + ';' +
             ' appearance: ' + this.appearance + ';' +
+            ' colorAppearance: ' + this.colorAppearance + ';' +
             ' ageMax: ' + this.ageMax + ';' +
             ' yearsOld: ' + this.yearsOld + ';' +
             ' scoreLife: ' + this.getScoreLife() + ';' +
@@ -62,6 +65,7 @@ export class Fish {
 
         let pos = generateCorrectPosition(fishes);
         let colorRand = colorRandom(); 
+        let colorAppRand = colorAppearanceRamdon();
         let newMaxAge = ageMaxRandom();
         return new this(
             id,
@@ -71,6 +75,7 @@ export class Fish {
             colorRand,
             sizeRandom(),
             appearanceRamdon(),
+            colorAppRand,
             newMaxAge,
             Math.round(Math.random() * (newMaxAge - 1)),
             true,
@@ -94,6 +99,7 @@ export class Fish {
                 mixColor(fish1.color, fish2.color),
                 Math.round((fish1.size + fish2.size) / 2),
                 mixAppearance(fish1.appearance, fish2.appearance),
+                mixColorAppearance(fish1.colorAppearance, fish2.colorAppearance),
                 Math.round((fish1.ageMax + fish2.ageMax) / 2)
             );
             if (Math.random() < mutChance) {
@@ -373,7 +379,7 @@ function appearanceRamdon() { //TODO
 }
 
 // Return a recombination of appearance with random pivot
-function mixAppearance(appearance1, appearance2) { //TODO
+function mixAppearance(appearance1, appearance2) {
     var indice = Math.round(Math.random() * (appearance1.length))
     for (var i = 0; i < indice; i++) {
         appearance1[i] = appearance2[i];
@@ -381,12 +387,22 @@ function mixAppearance(appearance1, appearance2) { //TODO
     return appearance1;
 }
 
+function colorAppearanceRamdon() {
+
+    return [colorRandom(),colorRandom(),colorRandom()];
+}
+function mixColorAppearance(colorAppearance1,colorAppearance2){
+    return [mixColor(colorAppearance1[0], colorAppearance2[0]),
+            mixColor(colorAppearance1[1], colorAppearance2[1]),
+            mixColor(colorAppearance1[2], colorAppearance2[2])]
+}
+
 function ageMaxRandom() {
     return Math.round(Math.random() * (MAXAGEMAX - MINAGEMAX) + MINAGEMAX);
 }
 
 function mutFish(fishInit) {
-    var parameter = Math.floor(Math.random() * 4) //return 0, 1, 2, 3
+    var parameter = Math.floor(Math.random() * 5) //return 0, 1, 2, 3, 4
     //console.log(parameter);
     switch (parameter) {
         case 0:
@@ -397,6 +413,9 @@ function mutFish(fishInit) {
             break;
         case 2:
             fishInit.appearance = appearanceRamdon();
+            break;
+        case 3:
+            fishInit.colorAppearance = colorAppearanceRamdon();
             break;
         default:
             fishInit.ageMax = ageMaxRandom();
