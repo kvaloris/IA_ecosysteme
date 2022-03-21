@@ -18,12 +18,12 @@ document.querySelector("#display-1").appendChild(renderer.domElement);
 // SKYBOX
 
 let materialArray = [];
-let texture_ft = new THREE.TextureLoader().load( 'aqua9_ft.jpg');
-let texture_bk = new THREE.TextureLoader().load( 'aqua9_bk.jpg');
-let texture_up = new THREE.TextureLoader().load( 'aqua9_up.jpg');
-let texture_dn = new THREE.TextureLoader().load( 'aqua9_dn.jpg');
-let texture_rt = new THREE.TextureLoader().load( 'aqua9_rt.jpg');
-let texture_lf = new THREE.TextureLoader().load( 'aqua9_lf.jpg');
+let texture_ft = new THREE.TextureLoader().load( '/images/aqua9_ft.jpg');
+let texture_bk = new THREE.TextureLoader().load( '/images/aqua9_bk.jpg');
+let texture_up = new THREE.TextureLoader().load( '/images/aqua9_up.jpg');
+let texture_dn = new THREE.TextureLoader().load( '/images/aqua9_dn.jpg');
+let texture_rt = new THREE.TextureLoader().load( '/images/aqua9_rt.jpg');
+let texture_lf = new THREE.TextureLoader().load( '/images/aqua9_lf.jpg');
 
 materialArray.push(new THREE.MeshBasicMaterial({ map: texture_ft }));
 materialArray.push(new THREE.MeshBasicMaterial({ map: texture_bk }));
