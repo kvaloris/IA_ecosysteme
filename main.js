@@ -62,10 +62,9 @@ manager.onLoad = function () {
   // Initialize and display fishes and floor
   FishShoal.init(30);
   displayFishes(fishesGroup);
-  createFloor(40);
+  createFloor(20);
 
   FishShoal.setMutChance(slider_mutChance.value);
-  createFloor(40);
   
 };
 manager.onError = function (url) {
