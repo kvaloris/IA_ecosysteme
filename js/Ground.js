@@ -94,6 +94,7 @@ export class Ground{
 
     static eatCoral(i,j){
         this.groundArray[i][j].e_type=0;
+        displayFloorElmt.remove(displayFloorElmt.getObjectById(this.groundArray[i][j].e_id_3d_object));
     }
 
     //TODO trouver les coordonee d'un type
