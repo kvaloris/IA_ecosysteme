@@ -654,23 +654,27 @@ export function displayFloor(i, j) {
   let x;
   let z;
   let typeElement;
-  x = Ground.getCoralX(i, j);
-  z = Ground.getCoralY(i, j);
+  let size;
+  x = Ground.getCoralX(i,j);
+  z = Ground.getCoralY(i,j);
   typeElement = Ground.getTypeElement(i, j);
+  size = Ground.getSizeElement(i, j)
 
   let element;
 
   // Blue coral
   if (typeElement == 1) {
     element = floorElements.getObjectByName("blue").clone();
-    element.position.set(x, -BOXSIZE / 2, z);
+    element.position.set(x, -BOXSIZE/2, z);
+    element.scale.set(size, size, size);
     displayFloorElmt.add(element);
   }
 
   // Yellow coral
   if (typeElement == 2) {
     element = floorElements.getObjectByName("yellow").clone();
-    element.position.set(x, -BOXSIZE / 2, z);
+    element.position.set(x, -BOXSIZE/2, z);
+    element.scale.set(size, size, size);
     displayFloorElmt.add(element);
 
   }
@@ -678,7 +682,8 @@ export function displayFloor(i, j) {
   // Red coral
   if (typeElement == 3) {
     element = floorElements.getObjectByName("red").clone();
-    element.position.set(x, -BOXSIZE / 2, z);
+    element.position.set(x, -BOXSIZE/2, z);
+    element.scale.set(size, size, size);
     displayFloorElmt.add(element);
 
   }
