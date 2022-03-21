@@ -241,7 +241,7 @@ export class Fish {
 
             // Searches a target
             if (!this.eatObjectifCoordinate
-                ||( this.eatObjectifCoordinate &&!Ground.coralIsExiste(this.eatObjectifCoordinate.i,this.eatObjectifCoordinate.j))){
+                ||( this.eatObjectifCoordinate &&!Ground.coralExists(this.eatObjectifCoordinate.i,this.eatObjectifCoordinate.j))){
                 this.eatObjectifCoordinate = Ground.findCoordinatesType(getTypeOfCoral(this.color));
             }
             // If no target, end
