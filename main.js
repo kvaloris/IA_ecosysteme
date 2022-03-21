@@ -278,6 +278,7 @@ scene.add(fishesGroup);
 // CONTROL
 
 var controls = new OrbitControls(camera, renderer.domElement);
+controls.maxDistance = BOXSIZE-400;
 
 // LIGHT
 
