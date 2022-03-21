@@ -4,9 +4,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as FishShoal from "./js/FishShoal.js";
 import { Fisherman } from './js/Fisherman.js';
 import { Ground } from './js/Ground.js';
-import { Fish } from './js/Fish.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
-import { animateChangeYear, closePopup, showPopup, handleSlidersConsoleDisplay, fillFishingOptions, updateFishingResult, updateFishingErrorMessage } from './js/buttonUIActions.js';
+import { animateChangeYear, closePopup, showPopup, handleSlidersConsoleDisplay, fillFishingOptions, updateFishingResult } from './js/buttonUIActions.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 45, 10000);
@@ -69,212 +68,9 @@ manager.onLoad = function () {
   createFloor(40);
   
 };
-
 manager.onError = function (url) {
   console.error('There was an error loading ' + url);
 };
-
-function loadObjectSeparate() {
-  var loader = new GLTFLoader(manager);
-  for (let i = 0; i < colorList.length; i++) {
-    loader.load('./3dobjects/fishmain' + colorList[i] + '.glb', function (gltf) {
-      let body = gltf.scene;
-      body.scale.set(5, 5, 5);
-      body.position.set(0, 0, 0);
-      body.name = colorList[i];
-      bodyFish.add(body);
-
-    }, undefined, function (error) {
-      console.error(error);
-    });
-    loader.load('./3dobjects/queuefish' + colorList[i] + '.glb', function (gltf) {
-      let queue = gltf.scene;
-      queue.scale.set(5, 5, 5);
-      queue.position.set(0, 0, 0);
-      queue.name = colorList[i];
-      tailFish.add(queue);
-
-    }, undefined, function (error) {
-      console.error(error);
-    });
-
-    loader.load('./3dobjects/finsfish' + colorList[i] + '.glb', function (gltf) {
-      let fin = gltf.scene;
-      fin.scale.set(5, 5, 5);
-      fin.position.set(0, 0, 0);
-      fin.name = colorList[i];
-      finsFish.add(fin);
-
-    }, undefined, function (error) {
-      console.error(error);
-    });
-
-    loader.load('./3dobjects/eyesfish' + colorList[i] + '.glb', function (gltf) {
-      let eye = gltf.scene;
-      eye.scale.set(5, 5, 5);
-      eye.position.set(0, 0, 0);
-      eye.name = colorList[i];
-      eyesFish.add(eye);
-
-    }, undefined, function (error) {
-      console.error(error);
-    });
-
-    loader.load('./3dobjects/' + colorList[i] + '_coral.glb', function (gltf) {
-      let floorElement = gltf.scene;
-      floorElement.scale.set(300, 300, 300);
-      floorElement.position.set(0, -240, 0);
-      floorElement.name = colorList[i];
-
-      floorElements.add(floorElement);
-    }, undefined, function (error) {
-      console.error(error);
-    });
-  }
-
-}
-
-  export function createClones(group, fish){
-    let newFish = assembleFish(fish.color, fish.colorAppearance, fish.appearance);
-    newFish.scale.set(fish.size,fish.size,fish.size);
-    newFish.position.set(fish.x,fish.y,fish.z);
-    fish.id_3dobject = newFish.id;
-    newFish.name= newFish.id;
-
-    group.add(newFish);
-  }
-
-  function assembleFish(color, colorAppearance, appearance){
-    let assembleFish = new THREE.Group();
-    let body = bodyFish.getObjectByName(colorList[color]).clone(); //add body
-    let fins = new THREE.Group();
-    let coupleFins = new THREE.Group();
-
-    let fin = finsFish.getObjectByName(colorList[colorAppearance[2]]).clone();
-    let fin2 = finsFish.getObjectByName(colorList[colorAppearance[2]]).clone();
-    fin2.rotation.set(0,-179,0);
-    fin2.position.set(-0.6,0,2.6);
-    coupleFins.add(fin);
-    coupleFins.add(fin2);
-    
-    //Add tails
-    let tails = new THREE.Group();
-    let tail = tailFish.getObjectByName(colorList[colorAppearance[1]]).clone();
-    //Add eyes
-    let eyes = new THREE.Group();
-    let eye = eyesFish.getObjectByName(colorList[colorAppearance[0]]).clone();
-    let eye2 =eyesFish.getObjectByName(colorList[colorAppearance[0]]).clone();
-    let coupleEyes = new THREE.Group();
-    eye2.position.set(0,0,-0.7);
-    coupleEyes.add(eye);
-    coupleEyes.add(eye2);
-
-    let tail1 = tailFish.getObjectByName(colorList[color]).clone();
-    let tail2 = tailFish.getObjectByName(colorList[color]).clone();
-    tail1.rotation.set(0,0.5,0);
-    tail1.position.set(2, 0, 1);
-    tail2.rotation.set(0,-0.5,0);
-    tail2.position.set(2, 0, 1.4);
-    tail.position.set(2, 0, 1.2);
-
-    switch(appearance[1]){ //add tails
-      case 1:
-        tails.add(tail);
-        tails.position.set(-0.30, -0.16, 0.1);
-        break;
-      case 2:
-        tails.add(tail1);
-        tails.add(tail2);
-        tails.position.set(-0.5,-0.2,0.1);
-        break;
-
-      case 3:
-        tails.add(tail1);
-        tails.add(tail2);
-        tails.add(tail);
-        tails.position.set(-0.5,-0.2,0.1);
-        break;
-    }
-
-
-    switch(appearance[2]){//add fins
-      case 1:
-        fins.add(fin);
-        break;
-      case 2:
-        fins.add(coupleFins);
-        break;
-
-      case 3:
-        fin.position.set(0, 0.5, 0);
-        fins.add(coupleFins);
-        fins.add(fin);
-        break;
-
-      case 4:
-        let couple2 = coupleFins.clone();
-        couple2.position.set(0,0.2,0);
-        fins.add(coupleFins);
-        fins.add(couple2);
-        break;
-    }
-
-    switch(appearance[0]){//add eyes
-      case 1:
-        eyes.add(eye);
-        break;
-      case 2:
-        eyes.add(coupleEyes);
-        break;
-
-      case 3:
-        eye.position.set(0, 0, 0.2);
-        eyes.add(coupleEyes);
-        eyes.add(eye);
-        break;
-
-      case 4:
-        let couple2 = coupleEyes.clone();
-        couple2.position.set(0.1,0.1,0);
-        eyes.add(coupleEyes);
-        eyes.add(couple2);
-        break;
-    }
-
-
-    assembleFish.add(body);
-    assembleFish.add(tails);
-    assembleFish.add(fins);
-    assembleFish.add(eyes);
-
-    
-    return assembleFish;
-  }
-
-  export function getFishesGroup(){
-    return fishesGroup;
-  }
-
-// Allow to empty a group of fishes
-export function deleteGroup(group) {
-  for (var i = group.children.length - 1; i >= 0; i--) {
-    group.remove(group.children[i]);
-  }
-}
-
-// Display the fish passed in parameter 
-function displayFish(fish,group) {
-  createClones(group, fish);
-  }
-
-// Display a certain number of fishes
-export function displayFishes(group) {
-  for (let i = 0; i < fishesArray.length; i++) {
-    displayFish(fishesArray[i], group);
-  }
-}
-
-scene.add(fishesGroup);
 
 // CONTROL
 
@@ -301,10 +97,7 @@ audioLoader.load('./sound/underwater.wav', function (buffer) {
   sound.setBuffer(buffer);
   sound.setLoop(true);
   sound.setVolume(0.5);
-  sound.play();
 });
-
-
 
 
 
@@ -351,6 +144,24 @@ btnNextYear.addEventListener('click', () => {
 
   }
 });
+
+const btnSound = document.querySelector("#sound-btn");
+let playSound = false;
+let imageSound = document.getElementById("soundImg");
+btnSound.addEventListener('click', () => {
+  if(playSound == false){
+    imageSound.setAttribute("src", "/assets/volume.png");
+    playSound = true;
+    sound.play();
+  }
+  else {
+    imageSound.setAttribute("src", "/assets/mute.png");
+    playSound = false;
+    sound.stop();
+  }
+  
+});
+
 
 const presentation = document.querySelector('#presentation-wp');
 
@@ -492,7 +303,7 @@ function loadObjectSeparate() {
 
 // Add 3D fish to the group 
 export function createClones(group, fish) {
-  let newFish = assembleFish(fish.color, fish.appearance);
+  let newFish = assembleFish(fish.color, fish.colorAppearance, fish.appearance);
   newFish.scale.set(fish.size, fish.size, fish.size);
   newFish.position.set(fish.x, fish.y, fish.z);
   fish.id_3dobject = newFish.id;
@@ -502,14 +313,14 @@ export function createClones(group, fish) {
 }
 
 // Create a 3D fish with modular body parts
-function assembleFish(color, appearance) {
+function assembleFish(color, colorAppearance, appearance) {
   let assembleFish = new THREE.Group();
   let body = bodyFish.getObjectByName(colorList[color]).clone(); //add body
   let fins = new THREE.Group();
   let coupleFins = new THREE.Group();
 
-  let fin = finsFish.getObjectByName(colorList[color]).clone();
-  let fin2 = finsFish.getObjectByName(colorList[color]).clone();
+  let fin = finsFish.getObjectByName(colorList[colorAppearance[2]]).clone();
+  let fin2 = finsFish.getObjectByName(colorList[colorAppearance[2]]).clone();
   fin2.rotation.set(0, -179, 0);
   fin2.position.set(-0.6, 0, 2.6);
   coupleFins.add(fin);
@@ -517,11 +328,11 @@ function assembleFish(color, appearance) {
 
   //Add tails
   let tails = new THREE.Group();
-  let tail = tailFish.getObjectByName(colorList[color]).clone();
+  let tail = tailFish.getObjectByName(colorList[colorAppearance[1]]).clone();
   //Add eyes
   let eyes = new THREE.Group();
-  let eye = eyesFish.getObjectByName(colorList[color]).clone();
-  let eye2 = eyesFish.getObjectByName(colorList[color]).clone();
+  let eye = eyesFish.getObjectByName(colorList[colorAppearance[0]]).clone();
+  let eye2 = eyesFish.getObjectByName(colorList[colorAppearance[0]]).clone();
   let coupleEyes = new THREE.Group();
   eye2.position.set(0, 0, -0.7);
   coupleEyes.add(eye);
@@ -659,17 +470,17 @@ export function displayFloor(i, j) {
   let z;
   let typeElement;
   let size;
-  x = Ground.getCoralX(i,j);
-  z = Ground.getCoralY(i,j);
+  x = Ground.getCoralX(i, j);
+  z = Ground.getCoralY(i, j);
   typeElement = Ground.getTypeElement(i, j);
-  size = Ground.getSizeElement(i, j)
+  size = Ground.getSizeElement(i, j);
 
   let element;
 
   // Blue coral
   if (typeElement == 1) {
     element = floorElements.getObjectByName("blue").clone();
-    element.position.set(x, -BOXSIZE/2, z);
+    element.position.set(x, -BOXSIZE / 2, z);
     element.scale.set(size, size, size);
     displayFloorElmt.add(element);
   }
@@ -677,7 +488,7 @@ export function displayFloor(i, j) {
   // Yellow coral
   if (typeElement == 2) {
     element = floorElements.getObjectByName("yellow").clone();
-    element.position.set(x, -BOXSIZE/2, z);
+    element.position.set(x, -BOXSIZE / 2, z);
     element.scale.set(size, size, size);
     displayFloorElmt.add(element);
 
@@ -686,7 +497,7 @@ export function displayFloor(i, j) {
   // Red coral
   if (typeElement == 3) {
     element = floorElements.getObjectByName("red").clone();
-    element.position.set(x, -BOXSIZE/2, z);
+    element.position.set(x, -BOXSIZE / 2, z);
     element.scale.set(size, size, size);
     displayFloorElmt.add(element);
 

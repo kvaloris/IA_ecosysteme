@@ -70,6 +70,7 @@ export function showPopup(node) {
   });
 }
 
+// Close and display sliders console
 export function handleSlidersConsoleDisplay() {
   const slidersBtnImg = document.querySelector('#sliders-btn > img');
   const slidersConsole = document.querySelector('.sliders-console');
@@ -79,6 +80,7 @@ export function handleSlidersConsoleDisplay() {
   slidersBtnImg.setAttribute('style', 'transform: rotate(180deg)');
 }
 
+// Fill html inputs dynamically with values
 export function fillFishingOptions() {
 
   function fillOption(inputNode, minValue, maxValue) {
@@ -100,22 +102,11 @@ export function fillFishingOptions() {
   fillOption(tailsInput, 0, MAXtail);
 }
 
+// Display the number of fishes caught
 export function updateFishingResult(number) {
   const placeholder = document.querySelector('#fishing-result-ph');
 
   if(number === 0) placeholder.innerHTML = "You have caught no fish.";
   else if(number === 1) placeholder.innerHTML = "You have caught " + number + " fish.";
   else placeholder.innerHTML = "You have caught " + number + " fishes.";
-}
-
-export function updateFishingErrorMessage(number) {
-  const placeholder = document.querySelector('#fishing-error');
-  if(number === 0) {
-    placeholder.innerHTML = "There is no fish with those caracteristics";
-    return false;
-  }
-  else {
-    placeholder.innerHTML = "";
-    return true;
-  }
 }
