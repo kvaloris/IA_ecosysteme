@@ -184,11 +184,13 @@ function loadObjectSeparate(){
     tail1.position.set(2, 0, 1);
     tail2.rotation.set(0,-0.5,0);
     tail2.position.set(2, 0, 1.4);
+    tail.position.set(2, 0, 1.2);
 
     switch(appearance[1]){ //add tails
       case 1:
         tails.add(tail);
-        tails.position.set(1.5, -0.3, 1.2);
+        // tails.position.set(1.5, -0.3, 1.2);
+        tails.position.set(-0.25,-0.16,0.1);
         break;
       case 2:
         tails.add(tail1);
