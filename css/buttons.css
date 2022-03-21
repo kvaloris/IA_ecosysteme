@@ -1,0 +1,238 @@
+/* BUTTONS */
+
+.button {
+
+  /* Color of the button */
+  background-color: var(--blue-transparent);
+  
+  /* Center img inside button */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Change cursor */
+  cursor: pointer;
+
+  /* Transition */
+  transition: background-color 1s;
+}
+
+.button:not(.btn-disabled):hover {
+  background-color: var(--blue);
+}
+
+.btn-disabled {
+  background-color: rgb(189, 189, 189);
+  cursor: initial;
+}
+
+.text-button {
+   
+  /* Appearance of the button */
+  background-color: var(--blue);
+  padding: 6px 19px;
+  border: none;
+  border-radius: 3px;
+  
+  /* Change cursor */
+  cursor: pointer;
+
+  /* Transition */
+  transition: background-color 1s;
+}
+
+.text-button:hover {
+  background-color: var(--dark-blue);
+}
+
+
+/* SPECIES DISPLAY AND CLOSE BUTTON */
+
+#species-display-btn, #species-close-btn {
+  width: 35px;
+  height: 70px;
+  border-top-right-radius: 70px;
+  border-bottom-right-radius: 70px;
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#species-display-btn .btn-img, #species-close-btn .btn-img {
+  width: 50%;
+}
+
+#species-display-btn .btn-img {
+  transform: rotate(90deg);
+}
+#species-close-btn .btn-img {
+  transform: rotate(-90deg);
+}
+
+#species-display-btn::after, #species-display-btn::before,
+#species-close-btn::after, #species-close-btn::before
+{
+
+  /* Content */
+  width: max-content;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+
+  /* Position */
+  position: absolute;
+
+  /* Transition */
+  opacity: 0;
+  transition: 1s;
+}
+
+#species-display-btn::before, #species-close-btn::before {
+  top: 0;
+  transform: translateY(calc(-100% - 17px));
+}
+
+#species-display-btn::before {
+  content: "Show";
+}
+
+#species-close-btn::before {
+  content: "Close";
+}
+
+#species-display-btn::after, #species-close-btn::after {
+  content: "species";
+  bottom: 0;
+  transform: translateY(calc(100% + 17px));
+}
+
+#species-display-btn:hover::after, #species-display-btn:hover::before,
+#species-close-btn:hover::after, #species-close-btn:hover::before
+{
+  opacity: 1;
+}
+
+#species-close-btn { 
+  background-color: var(--white);
+}
+
+
+
+
+
+/* BUTTONS AT THE BOTTOM */
+
+.buttons-bottom {
+  bottom: 0;
+  left: calc(50%);
+  transform: translateX(calc(-346px - 70px - 25px - 25px/2));
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: flex-end;
+}
+
+.buttons-bottom .button {
+
+  /* Form of the button */
+  width: 50px;
+  height: 25px;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+
+  /* For positioning button text */
+  position: relative;
+}
+
+.buttons-bottom .btn-img {
+  height: 50%;
+}
+
+
+
+
+
+/* NEXT YEAR BUTTON */
+
+.btn-lg {
+  /* Bigger than normal buttons */
+  width: 70px !important;
+  height: 35px !important;
+}
+
+.text-curved text {
+  fill: var(--white);
+}
+
+.text-curved {
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+  transition: 1s;
+}
+
+#next-year-btn:hover .text-curved, #fishing-console-btn:hover .text-curved {
+  opacity: 1;
+}
+
+
+
+
+/* DISPLAY SLIDERS BUTTON */
+
+#sliders-btn:hover+.sliders {
+  background-color: var(--blue);
+}
+
+#sliders-btn {
+  position: relative;
+}
+
+#sliders-btn::before {
+
+  /* Content */
+  content: "Parameters";
+
+  /* Position */
+  position: absolute;
+  left: 0;
+  transform: translateX(calc(-100% - 17px));
+
+  /* Transition */
+  opacity: 0;
+  transition: 1s;
+}
+
+#sliders-btn:hover::before {
+  opacity: 1;
+}
+
+.goDown {
+  transform: translateY(calc(100% - 25px));
+}
+
+
+
+
+
+/* DISPLAY PRESENTATION POPUP BUTTON */
+
+#info-btn::after {
+
+  /* Content */
+  content: "About the project";
+  width: max-content;
+
+  /* Position */
+  position: absolute;
+  right: 0;
+  transform: translateX(calc(100% + 17px));
+
+  /* Transition */
+  opacity: 0;
+  transition: 1s;
+}
+
+#info-btn:hover::after {
+  opacity: 1;
+}

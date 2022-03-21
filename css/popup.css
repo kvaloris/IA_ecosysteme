@@ -1,0 +1,70 @@
+/* PRESENTATION POPUP */
+
+.hidden {
+  display: none;
+}
+
+.popup-wp {
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  height: 100%;
+  z-index: 99 !important;
+}
+
+.popup {
+
+  /* Appearance */
+  background-color: var(--blue-transparent);
+  width: 500px;
+  padding: 40px;
+  border-radius: 7px;
+
+  /* Center vertically and horizontally */
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.popup>h2 {
+  text-align: center;
+  margin: 0 0 30px 0;
+}
+
+.popup>p, .popup>ul {
+  text-align: justify;
+  font-family: "Roboto";
+}
+
+.popup>ul {
+  padding-inline-start: 14px;
+}
+
+.popup span {
+  position: relative;
+  left: 15px;
+}
+
+.popup li {
+  margin-bottom: 1em;
+}
+
+.error-msg {
+  font-family: "Roboto";
+  font-size: 12px;
+  color: orange;
+}
+
+
+
+#fishing-console {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+#fishing-options {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}

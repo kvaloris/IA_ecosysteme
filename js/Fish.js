@@ -1,3 +1,6 @@
+import { NeuralNetwork } from "./NeuralNetwork";
+import { Ground } from "./Ground"
+
 const pat = [ //modif
     [[0], [0 / (SPECIES.length - 1)]], // Specie A
     [[0.5], [1 / (SPECIES.length - 1)]], // Specie B
@@ -13,7 +16,8 @@ console.log("TEST");
 neuralNetwork.test(pat);
 console.log("FIN TEST");
 
-class Fish {
+export class Fish {
+    id_3dobject;
     id;
     x; y; z;
     color = [0, 0, 0];
@@ -23,8 +27,10 @@ class Fish {
     yearsOld = 0;
     velocity = { x: 0, y: 0, z: 0 }
     specie = SPECIES[0];
+    hunger;
+    eatObjectifCoordinate;
 
-    constructor(id, x, y, z, color, size, appearance, ageMax, yearsOld = 0) {
+    constructor(id, x, y, z, color, size, appearance, ageMax, yearsOld = 0, hunger=true, eatObjectifCoordinate) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -35,6 +41,9 @@ class Fish {
         this.ageMax = ageMax;
         this.yearsOld = yearsOld;
         this.specie = this.getSpecie();
+        this.hunger = hunger;
+        this.eatObjectifCoordinate= eatObjectifCoordinate;
+
     }
 
     toString() {
@@ -52,22 +61,27 @@ class Fish {
     static fishRandom(id, fishes) {
 
         let pos = generateCorrectPosition(fishes);
+        let colorRand = colorRandom(); 
         let newMaxAge = ageMaxRandom();
         return new this(
             id,
             pos[0],
             pos[1],
             pos[2],
-            colorRandom(),
+            colorRand,
             sizeRandom(),
             appearanceRamdon(),
             newMaxAge,
-            Math.round(Math.random() * (newMaxAge - 1)));
+            Math.round(Math.random() * (newMaxAge - 1)),
+            true,
+            false);
     }
+
+    
 
     // Return the child of fish 1 and fish 2
     static generateChild(id, fish1, fish2, fishes, mutChance) {
-        console.log(mutChance);
+        // console.log(mutChance);
         if (fish1 instanceof Fish && fish2 instanceof Fish) {
 
             let pos = generateCorrectPosition(fishes);
@@ -102,14 +116,45 @@ class Fish {
         return getScoreComparedToTheBestFish(this, bestFishToHuman, importanceToHuman)
     }
 
+    getScoreToFishObjectif(color, colorFactor, size,sizeFactor, eye, tail, fin, appearanceFactor, yearsOld, yearsOldFactor) {
+        var score = 0; //  best score = 0
+
+        if(color!=null){
+            score = score + (this.color === color ? 0 : 1 * colorFactor); // color
+        }
+        
+        if(size!=null){
+            score = score + Math.abs(this.size - size) * sizeFactor;
+        }
+        if(eye!=null){
+            score = score + Math.abs(this.appearance[0] - eye) * appearanceFactor; //yeux
+        }
+
+        if(tail!=null){
+            score = score + Math.abs(this.appearance[1] - tail) * appearanceFactor; //yeux
+        }
+
+        if(fin!=null){
+            score = score + Math.abs(this.appearance[2] - fin) * appearanceFactor; //yeux
+        }
+
+        if(yearsOld!=null){
+            score = score + Math.abs(this.yearsOld - yearsOld) * yearsOldFactor;
+        }
+        return score;
+    }
+
+
     // BOIDS
 
     // Separation
     separate(fishes, c) {
 
-        const dmin = 30;
+        const dmin = 50;
 
         let v = { x: 0, y: 0, z: 0 };
+
+        if(fishes.length < 2) return v;
 
         // Operate on all fishes other than this
         fishes.filter(fish => fish !== this).forEach(fish => {
@@ -132,6 +177,8 @@ class Fish {
 
         let v = { x: 0, y: 0, z: 0 };
 
+        if(fishes.length < 2) return v;
+
         // Operate on all fishes other than this
         fishes.filter(fish => fish !== this).forEach(fish => {
             v = addV3(v, fish.velocity);
@@ -148,6 +195,8 @@ class Fish {
     aggregate(fishes, c) {
 
         let v = { x: 0, y: 0, z: 0 };
+        
+        if(fishes.length < 2) return v;
 
         // Operate on all fishes other than this
         fishes.filter(fish => fish !== this).forEach(fish => {
@@ -183,7 +232,7 @@ class Fish {
 
     // Limit the speed of the boid
     limitSpeed() {
-        const vlim = 1;
+        const vlim = 2;
 
         if (moduleV3(this.velocity) > vlim) {
             this.velocity = divideV3(this.velocity, moduleV3(this.velocity));
@@ -193,7 +242,52 @@ class Fish {
 
     // Update the position of fish
     move(fishes, c_ag, c_s, c_al) {
-        this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));
+        this.velocity = addV3(this.velocity, this.separate(fishes, c_s));
+        this.velocity = addV3(this.velocity, this.aggregate(fishes, c_ag));
+        this.velocity = addV3(this.velocity, this.align(fishes, c_al));
+        this.velocity = addV3(this.velocity, this.bound());
+        // this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));
+    }
+
+    // Return true if fish is no longer searching for food
+    moveToEat() {
+        if(!this.hunger) return true;
+
+        // console.log(this.eatObjectifCoordinate);
+
+            // Searches a target
+            if (!this.eatObjectifCoordinate
+                ||( this.eatObjectifCoordinate &&!Ground.coralIsExiste(this.eatObjectifCoordinate.i,this.eatObjectifCoordinate.j))){
+                this.eatObjectifCoordinate = Ground.findCoordinatesType(getTypeOfCoral(this.color));
+            }
+            //Ground.coralIsExiste(x,y);
+            // If no target, end
+            if(!this.eatObjectifCoordinate) return true;
+
+            // Target's coordinates
+            const x = this.eatObjectifCoordinate.x;
+            const y = -290;
+            const z = this.eatObjectifCoordinate.z;
+            const coralPositionVector = {x: x, y: y, z: z};
+            
+            let v = substractV3(coralPositionVector, {x: this.x, y: this.y, z: this.z});
+            v = multiplyV3(v, 0.01);
+            this.velocity = addV3(this.velocity, v);
+            
+            if(getDistance(this.x, this.y, this.z, x, y, z) <= 10) { // If very close, eats
+                this.hunger=false;
+                // this.eatObjectifCoordinate = false;
+                const type = Ground.getTypeElement(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j);
+                console.log("Fish " + this.id + " of color " + this.color + " has eaten coral (" + this.eatObjectifCoordinate.i + ", " + this.eatObjectifCoordinate.j + ") of type " + type);
+                Ground.eatCoral(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j); 
+                return true;
+            }
+
+            return false;
+        
+    }
+
+    update(){
         this.limitSpeed();
         let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
         this.x = position.x;
@@ -201,6 +295,14 @@ class Fish {
         this.z = position.z;
     }
 
+    updatePosition(fishes, c_ag, c_s, c_a) {
+        this.move(fishes, c_ag, c_s, c_a);
+        this.limitSpeed();
+        let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
+        this.x = position.x;
+        this.y = position.y;
+        this.z = position.z;
+    }
     
     getSpecie() {
         // Normalize
@@ -214,6 +316,13 @@ class Fish {
         //console.log("Species index (0, 1 or 2) : " + index);
         return SPECIES[index];
     }
+
+    findEatObjectifCoordinate(ground,){//TODO
+        ground
+
+        eatObjectifCoordinate
+    }
+
 }
 
 // Return an array of correct coordinates 
@@ -224,7 +333,7 @@ function generateCorrectPosition(fishes) {
     let y = getRandomFloat(YMIN, YMAX);
     let z = getRandomFloat(ZMIN, ZMAX);
 
-    if (fishes.length != 0) {
+    if (fishes.length !== 0) {
         fishes.forEach(fish => {
             while (getDistance(x, y, z, fish.x, fish.y, fish.z) <= 1 + Fish.MAXSIZE) {
                 x = getRandomFloat(XMIN, XMAX);
@@ -296,6 +405,19 @@ function mutFish(fishInit) {
     return fishInit;
 }
 
+function getTypeOfCoral(color) {
+    switch (color) {
+        case 0: // yellow fish
+            return 2; // yellow coral
+        case 1: // blue fish
+            return 1; // blue coral
+        case 2: // red fish
+            return 3; // red coral
+        default:
+            return -1;
+    }
+}
+
 // Compare a fish and a reference with importance coefficients
 function getScoreComparedToTheBestFish(fishToComp, bestFish, importanceFactor) {
     var score = 0; //  best score = 0
@@ -326,21 +448,10 @@ function getScoreComparedToTheBestFish(fishToComp, bestFish, importanceFactor) {
 }
 
 
-/*--------------------------------------------------------------------*/
-/*--------------------        CONSTANTES          --------------------*/
-/*--------------------------------------------------------------------*/
-
-const XMIN = 0, XMAX = 200, YMIN = 0, YMAX = 200, ZMIN = 0, ZMAX = 200;
-const TABColor = [0, 1, 2];
-const MINSIZE = 3, MAXSIZE = 10;
-const MINAGEMAX = 1, MAXAGEMAX = 6;
-const MAXeye = 4, MAXtail = 2, MAXfin = 4; //yeux, queue, nageoir
-
-
 /* -------------------   FISHES FOR REFERENCE  --------------------*/
 
 // Reference for fish most suited for living
-bestFishlife = new Fish(0, 0, 0, 0, 1, 5, [2, 1, 2], 5);
+const bestFishlife = new Fish(0, 0, 0, 0, 1, 5, [2, 1, 2], 5);
 
 // Importance coefficient
 var importanceLife = {
@@ -354,16 +465,16 @@ var importanceLife = {
 };
 
 // Reference for fish most suited for being eaten by humans
-bestFishToHuman = new Fish(0, 0, 0, 0, 1, 10, [2, 1, 2], 2);
+const bestFishToHuman = new Fish(0, 0, 0, 0, 1, 10, [2, 1, 2], 2);
 // Importance coefficient
 var importanceToHuman = {
     "xFactor": 0 / XMAX,
     "yFactor": 0 / YMAX,
     "zFactor": 0 / ZMAX,
-    "colorFactor": 0.05,
-    "sizeFactor": 2 / MAXSIZE,
+    "colorFactor": 3,
+    "sizeFactor": 1 / MAXSIZE,
     "appearanceFactor": 3,
-    "yearsOldFactor": 10 / MAXAGEMAX
+    "yearsOldFactor": 0 / MAXAGEMAX
 };
 
 

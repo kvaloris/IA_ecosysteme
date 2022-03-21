@@ -1,6 +1,8 @@
 import * as THREE from 'three/build/three.module.js';
-import { loadObject, animate, resizeRendererToDisplaySize } from './../main.js';
+import { createClones, animate, resizeRendererToDisplaySize } from './../main.js';
 import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js';
+// import { FishShoal } from './FishShoal_old';
+import * as FishShoal from "./FishShoal.js";
 
 let idAnim2;
 
@@ -13,24 +15,50 @@ export function displaySpecies(idAnim, renderer) {
 
     // Make the display visible
     const display = document.querySelector('#display-2');
-    display.style.display = "inherit";
+    display.style.display = "initial";
 
-    // Create tabs for the different species
-    createSpeciesTab(renderer);
+    const stats = document.querySelector('.fish-stats');
+    if(stats) stats.style.display = "initial";
 
-    // When the display is opened, fishes of the first specie are displayed
-    const firstSpecie = Object.keys(FishShoal.getFishesBySpecies())[0];
-    const fishesOfFirstSpecie = FishShoal.getFishesBySpecies()[firstSpecie];
-    displayFishesAsItems(fishesOfFirstSpecie, renderer);
+    display.animate([
+        { transform: "translateX(-100%)" }, { transform: "translateX(0)"}
+    ], {
+        duration: 1000
+    })
+
+    
+
+    setTimeout(() => {
+
+        // Create tabs for the different species
+        createSpeciesTab(renderer);
+
+        // When the display is opened, fishes of the first specie are displayed
+        const firstSpecie = Object.keys(FishShoal.getFishesBySpecies())[0];
+        const fishesOfFirstSpecie = FishShoal.getFishesBySpecies()[firstSpecie];
+        displayFishesAsItems(fishesOfFirstSpecie, renderer);
+    }, 1000);
 }
 
 // Display fishes passed in paramaters as items
 
 function displayFishesAsItems(fishes, renderer) {
 
+    // const fishesCpy = [...fishes];
+    let fishesCpy = [];
+    fishes.forEach(fish => fishesCpy.push(Object.assign({}, fish)));
+
     // Empty the grid in case other fishes were displayed previously
     const grid = document.querySelector('.grid-fishes');
     grid.innerHTML = "";
+
+    if(fishesCpy.length === 0) {
+        const text = document.createElement("div");
+        text.classList.add("empty-grid");
+        text.innerText = "None";
+        grid.appendChild(text);
+        return;
+    }
 
     // For each fish, the render function and element will be added to an array sceneElements
     const sceneElements = [];
@@ -41,6 +69,7 @@ function displayFishesAsItems(fishes, renderer) {
     // For each fish, will be created a scene, camera and controls
     function makeScene(elem) {
         const scene = new THREE.Scene();
+        scene.background = new THREE.Color( 0xffffff ); // TEST
 
         const fov = 45;
         const aspect = 2;  // the canvas default
@@ -52,8 +81,10 @@ function displayFishesAsItems(fishes, renderer) {
         scene.add(camera);
 
         const controls = new TrackballControls(camera, elem);
-        controls.noZoom = true;
+        controls.noZoom = false;
         controls.noPan = true;
+        controls.minDistance = .25;
+        controls.maxDistance = 1;
 
         {
             const color = 0xFFFFFF;
@@ -66,21 +97,60 @@ function displayFishesAsItems(fishes, renderer) {
         return { scene, camera, controls };
     }
 
+    function createStatElement(id, text, path) {
+        const statValue = document.createElement('span');
+        statValue.innerText = text;
+        const statIcon = document.createElement('img');
+        statIcon.setAttribute('src', path);
+        const statIconWp = document.createElement('div');
+        statIconWp.classList.add('stat-icon');
+        statIconWp.appendChild(statIcon);
+        const stat = document.createElement('div');
+        stat.classList.add('fish-stat');
+        stat.id = id;
+        stat.appendChild(statValue);
+        stat.appendChild(statIconWp);
+        return stat;
+    }
+
     // For each fish
-    for (let i = 0; i < fishes.length; i++) {
-        let fish = fishes[i];
+    for (let i = 0; i < fishesCpy.length; i++) {
+        let fish = fishesCpy[i];
 
         // Create an html element
         const elem = document.createElement('span');
         elem.classList.add('diagram');
         elem.id = 'list-fish-' + i;
-        grid.appendChild(elem);
+        // grid.appendChild(elem);
+
+        // Create html elements for display of fish stats
+
+        const statElements = [
+            createStatElement("stat-age", fish.yearsOld + " years", "/assets/birthday.png"),
+            createStatElement("stat-life", fish.ageMax + " years", "/assets/timer.png"),
+            createStatElement("stat-size", fish.size + " cm", "/assets/ruler.png")
+        ];
+
+        const stats = document.createElement('div');
+        stats.classList.add('fish-stats');
+        statElements.forEach(stat => stats.appendChild(stat));
+
+        const elemWp = document.createElement('span');
+        elemWp.classList.add('diagram-wp');
+        elemWp.appendChild(elem);
+        elemWp.appendChild(stats);
+        grid.appendChild(elemWp);
 
         // Create scene, camera and controls
         const { scene, camera, controls } = makeScene(elem);
         // Add the fish to the scene
         // map is a function in "utils.js" that map values from interval1 [A, B] to interval2 [a, b]
-        displayFishAt(fish, scene, map(fish.size, [MINSIZE, MAXSIZE], [1, 3]), 0, 0, 0);
+        // displayFishAt(fish, scene, map(fish.size, [MINSIZE, MAXSIZE], [1, 3]), 0, 0, 0);
+        
+        fish.size = map(fish.size, [MINSIZE, MAXSIZE], [.05, .08]);
+        fish.x = 0; fish.y = 0; fish.z = 0;
+        createClones(scene, fish);
+        console.log(scene);
 
         // Add the html element and a render function to array sceneElement
         addScene(elem, (renderer, rect) => {
@@ -91,7 +161,6 @@ function displayFishesAsItems(fishes, renderer) {
             renderer.render(scene, camera);
         });
     }
-
     const clearColor = new THREE.Color('#000');
     function render(renderer) {
 
@@ -103,7 +172,9 @@ function displayFishesAsItems(fishes, renderer) {
         renderer.setScissorTest(true);
 
         // The canvas's transform is set to move it so the top of the canvas is at the top of whatever part the page is currently scrolled to.
-        const transform = `translateY(${window.scrollY}px)`;
+        // const transform = `translateY(${window.scrollY}px)`;
+        const display = document.querySelector('#display-2');
+        const transform = `translate(${display.scrollLeft}px, ${display.scrollTop}px)`;
         renderer.domElement.style.transform = transform;
         
         // Render only the fishes that are on screen
@@ -176,6 +247,15 @@ function createSpeciesTab(renderer) {
 export function closeSpeciesDisplay() {
     cancelAnimationFrame(idAnim2);
     const display = document.querySelector('#display-2');
-    display.style.display = "none";
+    display.animate([
+        { transform: "translateX(0)"}, { transform: "translateX(-100%)" }
+    ], {    
+        duration: 1000
+    })
+    setTimeout(() => {
+        display.style.display = "none";
+        const stats = document.querySelector('.fish-stats');
+        if(stats) stats.style.display = "none";
+    }, 1000);
     animate();
 }

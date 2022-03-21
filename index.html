@@ -4,51 +4,169 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Poissons</title>
-  <link rel="shortcut icon" href="#" />
-  <link rel="stylesheet" href="style.css">
-  <script type="text/javascript" src="js/utils.js"></script>
-  <script type="text/javascript" src="js/NeuralNetwork.js"></script>
-  <script type="text/javascript" src="js/FishShoal.js"></script>
-  <script type="text/javascript" src="js/Fish.js"></script>
-  <script type="text/javascript" src="js/selection.js"></script>
-  <script type="text/javascript" src="js/Ground.js"></script>
+  <title>Underwater ecosystem</title>
+  <link rel="icon" href="/assets/fish.png"/>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/sliders.css">
+  <link rel="stylesheet" href="/css/buttons.css">
+  <link rel="stylesheet" href="/css/popup.css">
+  <link rel="stylesheet" href="/css/speciesDisplay.css">
+  <script type="text/javascript" src="/js/utils.js"></script>
+  <script type="module" src="/js/NeuralNetwork.js"></script>
+  <script type="module" src="/js/FishShoal.js"></script>
+  <script type="module" src="/js/Fish.js"></script>
+  <script type="text/javascript" src="/js/selection.js"></script>
+  <script type="module" src="/js/Ground.js"></script>
+  <script type="module" src="/js/Fisherman.js"></script>
 </head>
 
 <body>
 
   <div id="display-1">
+
     <div class="nbPoisson"></div>
-    <div class="inputs">
 
-      <div class="slider">
-        <label for="slider-cohesion">Cohesion</label>
-        <input name="slider-cohesion" class="slider-cohesion" type="range" min="0" max="0.01" value="0.0005" step="0.0005">
-  
+    <div class="popup-wp" id="presentation-wp">
+      <div class="popup">
+        <h2>Underwater ecosystem</h2>
+        <p>Watch a submarine ecosystem composed of fishes and corals evolve from year to year.</p>
+        <p>We have implemented AI in different elements of our ecosystem:</p>
+        <ul>
+          <li><span>Our fishes are boids.</span></li>
+          <li><span>A neural network divides them into species.</span></li>
+          <li><span>A genetic algorithm defines how they reproduce and if they will live.</span></li>
+          <li><span>A WFC places our corals on the floor.</span></li>
+        </ul>
+
+        <div id="close-presentation" class="close"></div>
+      </div>
+    </div>
+
+    <div class="popup-wp hidden" id="fishing-console-wp">
+      <div class="popup" id="fishing-console">
+
+        <p>What kind of fish do you want to catch?</p>
+
+        <div id="fishing-options">
+
+          <div>
+            <label for="fishing-opt-color">Color</label>
+            <select name="fishing-opt-color" class="fishing-opt">
+              <option value="yellow">Yellow</option>
+              <option value="red">Red</option>
+              <option value="blue">Blue</option>
+            </select>
+          </div>
+          
+          <div>
+            <label for="fishing-opt-size">Size</label>
+            <input type="number" name="fishing-opt-size" class="fishing-opt">
+          </div>
+          
+          <div>
+            <label for="fishing-opt-eyes">Eyes</label>
+            <input type="number" name="fishing-opt-eyes" class="fishing-opt">
+          </div>
+          
+          <div>
+            <label for="fishing-opt-fins">Fins</label>
+            <input type="number" name="fishing-opt-fins" class="fishing-opt">
+          </div>
+          
+          <div>
+            <label for="fishing-opt-tails">Tails</label>
+            <input type="number" name="fishing-opt-tails" class="fishing-opt">
+          </div>
+        </div>
+
+        <span id="fishing-error" class="error-msg"></span>
+        
+        <input class="text-button" id="fishing-btn" type="button" value="Fish">
+
+        <div id="close-fishing-console" class="close"></div>
+      </div>
+    </div>
+
+    <div class="popup-wp hidden" id="fishing-result-wp">
+      <div class="popup" id="fishing-result">
+        <p id="fishing-result-ph"></p>
+        <div id="close-fishing-result" class="close"></div>
+      </div>
+    </div>
+
+    <div class="backdrop"></div>
+    <h2 class="year">Year 1</h2>
+
+    <div class="buttons-bottom">
+
+      <div class="sliders-console goDown">
+
+        <div class="button" id="sliders-btn">
+          <img class="btn-img" src="/assets/slider.png" alt="Show the parameters">
+        </div>
+
+        <div class="sliders">
+
+          <label for="slider-cohesion">Cohesion</label>
+          <input name="slider-cohesion" class="slider-cohesion" type="range" min="0" max="0.001" value="0.0005"
+            step="0.0001">
+
+          <label for="slider-separation">Separation</label>
+          <input name="slider-separation" class="slider-separation" type="range" min="0" max="0.001" value="0.0005"
+            step="0.0001">
+
+          <label for="slider-alignment">Alignment</label>
+          <input name="slider-alignment" class="slider-alignment" type="range" min="0" max="0.05" value="0.025"
+            step="0.005">
+
+          <label for="slider-mutChance">Mutation rate</label>
+          <input name="slider-mutChance" class="slider-mutChance" type="range" min="0" max="1" value="0.01"
+            step="0.005">
+
+        </div>
+
       </div>
 
-      <div class="slider">
-        <label for="slider-separation">Separation</label>
-        <input name="slider-separation" class="slider-separation" type="range" min="0" max="0.01" value="0.0005"
-          step="0.0005">
+      <div class="button btn-lg" id="next-year-btn">
+        <img class="btn-img" src="/assets/play.png" alt="Next Year">
+
+        <svg class="text-curved" id="next-year-hover" viewBox="0 -12 97.75 60.87" width="97">      
+          <defs>
+            <path id="curve" d="M.5,48.87a48.38,48.38,0,0,1,96.75,0" />
+          </defs>
+          <text width="500">
+            <textPath xlink:href="#curve">
+              &nbsp;&nbsp;&nbsp;&nbsp;Next Year
+            </textPath>
+          </text>
+        </svg>
+
       </div>
 
-      <div class="slider">
-        <label for="slider-alignment">Alignment</label>
-        <input name="slider-alignment" class="slider-alignment" type="range" min="0" max="0.01" value="0.0005"
-          step="0.0005">
-  
+      <div class="button btn-lg" id="fishing-console-btn">
+        <img class="btn-img" src="/assets/hook.png" alt="fish">
+
+        <svg class="text-curved" id="fish-hover" viewBox="0 -12 97.75 60.87" width="97">      
+          <defs>
+            <path id="curve" d="M.5,48.87a48.38,48.38,0,0,1,96.75,0" />
+          </defs>
+          <text width="500">
+            <textPath xlink:href="#curve">
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fish
+            </textPath>
+          </text>
+        </svg>
+
       </div>
 
-      <div class="slider">
-        <label for="slider-mutChance">Mutation rate</label>
-        <input name="slider-mutChance" class="slider-mutChance" type="range" min="0" max="1" value="0.01" step="0.005">  
+      <div class="button" id="info-btn">
+        <img class="btn-img" src="/assets/info.png" alt="About the project">
       </div>
-  
-      <input type="button" value="Next Year" id="button-next-year" class="button-next-year">
-      
-      <input type="button" value="Display Species" id="display-species">
 
+    </div>
+
+    <div class="button" id="species-display-btn">
+      <img class="btn-img" src="/assets/arrow.png" alt="Show species display">
     </div>
 
     <canvas id="canvas-1"></canvas>
@@ -56,11 +174,28 @@
   </div>
 
   <div id="display-2">
+
+    <div class="button" id="species-close-btn">
+      <img class="btn-img" src="/assets/arrow-blue.png" alt="Close species display">
+    </div>
+
     <div id="container-2">
-      <h1>Espèces de poissons</h1>
-      <div class="species-tabs"></div>
-      <div id="close-display-2" class="close"></div>
+
+      <div class="header-2">
+
+        <div class="specie-icon-wp">
+          <img class="specie-icon" src="/assets/fish.png" alt="Species">
+        </div>
+
+        <div class="species-tabs-wp">
+          <div class="line-h"></div>
+          <div class="species-tabs"></div>
+          <div class="line-h"></div>
+        </div>
+      </div>
+
       <div class="grid-fishes"></div>
+
       <canvas id="canvas-2"></canvas>
     </div>
   </div>

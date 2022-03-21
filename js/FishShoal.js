@@ -1,35 +1,41 @@
-class FishShoal{
+import { Fish } from "./Fish";
+import { Ground } from "./Ground";
+import { createClones, displayFloorElmt } from "../main";
 
-    static fishesArray = [];
-    static nbFishInit;
-    static mutChance= 0.1;
+    let nbFishInit;
+    let mutChance= 0.1;
 
-    static init(number) {
+    function init(number) {
+        console.log('fishhsoal init');
         for(let i=0; i< number; i++){
-            this.fishesArray.push(Fish.fishRandom(i, this.fishesArray));
+            const fish = Fish.fishRandom(i, fishesArray);
+            fishesArray.push(fish);
         }
-        this.nbFishInit =number;
+        nbFishInit =number;
     }
-        
-    static getNbFishToString(){
-        var text="Number of fish in the band: " + this.fishesArray.length+ "</br>";
+
+    function getNbFishToString(){
+        var text="Number of fish in the band: " + fishesArray.length+ "</br>";
         // Calculation of the number of fish per color, mean ageMax and mean size
         var nbColor= [0];
         var meanAgeMax=0;
         var meanSize=0;
-        this.fishesArray.forEach(fish => {
+        var scoreLife=0;
+        fishesArray.forEach(fish => {
             while ((nbColor.length-1) < fish.color){
                 nbColor.push(0);
             }
             nbColor[fish.color]++;
             meanAgeMax+=fish.ageMax;
             meanSize+=fish.size;
+            scoreLife+=fish.getScoreLife();
         });
 
-        meanSize= meanSize/this.fishesArray.length;
+        meanSize= meanSize/fishesArray.length;
         text+= "Average life expectancy: "+meanAgeMax+"</br>"
-        meanAgeMax= meanAgeMax/this.fishesArray.length;
+        meanAgeMax= meanAgeMax/fishesArray.length;
         text+= "Average size: "+meanSize+"</br>"
+        text+= "Average score Life: "+scoreLife/fishesArray.length+"</br>"
 
         for(var i=0; i< nbColor.length; i++){
             let color;
@@ -41,62 +47,145 @@ class FishShoal{
 
         return text;
     }
-    
+
+    function update(c_ag, c_s, c_al, fishesGroup) {
+        updatePosition(c_ag, c_s,c_al,fishesGroup);
+        if(eatingPeriod === "ending") {
+
+            nextYear(fishesGroup);
+            eatingPeriod = "no";
+
+            console.log(displayFloorElmt.children);
+            console.log(Ground.toString2());
+
+            const btnNextYear = document.querySelector("#next-year-btn");
+            btnNextYear.classList.remove('btn-disabled');
+            const fishingConsoleBtn = document.querySelector('#fishing-console-btn');
+            fishingConsoleBtn.classList.remove('btn-disabled');
+
+            console.log("EATING PERIOD ENDS");
+        }
+    }
 
     // Update the positions of the fishes and rotate them correctly
-    static updatePosition(c_ag, c_s,c_al,fishesGroup){
-        this.fishesArray.forEach(fish => fish.move(this.fishesArray, c_ag, c_s, c_al));
-        for (let i = 0; i < fishesGroup.children.length; i++) {
-            let x = this.fishesArray[i].x;
-            let y = this.fishesArray[i].y;
-            let z = this.fishesArray[i].z;
-            fishesGroup.children[i].position.x = x;
-            fishesGroup.children[i].position.y = y;
-            fishesGroup.children[i].position.z = z;
+    function updatePosition(c_ag, c_s,c_al,fishesGroup){
 
-            let dir = this.fishesArray[i].velocity;
+        // Fishes either move aimlessly or move to eat according to if it's eating period or not
+
+        if(eatingPeriod === "no") {
+            fishesArray.forEach(fish => {
+                fish.move(fishesArray, c_ag, c_s, c_al);
+                fish.update();
+            })
+        }
+
+        else if(eatingPeriod === "ongoing") {
+            let endEatingPeriod = true;
+            const hungry_fishes = fishesArray.filter(fish => fish.hunger);
+            const unhungry_fishes = fishesArray.filter(fish => !fish.hunger);
+
+            fishesArray.forEach(fish => {
+                const endEating = fish.moveToEat();
+                if(endEating) { // Fish has found no coral to eat or has already eaten
+                    fish.move(unhungry_fishes, c_ag, c_s, c_al);
+                }
+                else { // Fish is still searching for food
+                    fish.separate(hungry_fishes, c_s);
+                    endEatingPeriod = false;
+                }
+                fish.update();
+            })
+            if(endEatingPeriod) {
+                eatingPeriod = "ending";
+            };
+        }
+
+        // fishesArray.forEach(fish => fish.update())k
+
+        for (let i = 0; i < fishesGroup.children.length; i++) {
+            if(fishesGroup.children.length !== fishesArray.length) {
+                console.log("Group and Array have different lengths");
+            }
+            let x = fishesArray[i].x;
+            let y = fishesArray[i].y;
+            let z = fishesArray[i].z;
+            let id_3dobject = fishesArray[i].id_3dobject;
+            let model = fishesGroup.getObjectById( id_3dobject );
+            if(!model) {
+                console.log("Undefined model");
+                console.log("Group : ", fishesGroup.children.map(fish => fish.id));
+            }
+            model.position.x = x;
+            model.position.y = y;
+            model.position.z = z;
+
+            let dir = fishesArray[i].velocity;
             dir = addV3(dir, {x: x, y: y, z: z});
-            fishesGroup.children[i].lookAt(dir.x, dir.y, dir.z);
-            fishesGroup.children[i].rotateY(Math.PI / 2);
+            model.lookAt(dir.x, dir.y, dir.z);
+            model.rotateY(Math.PI / 2);
         }
     }
 
+    function nextYear(fishesGroup){
+        var i=0;
+        // Fishes grow one year older and dies from aging or hunger
+        while (i < fishesArray.length) {
+            fishesArray[i].yearsOld ++;
+            if (fishesArray[i].yearsOld > fishesArray[i].ageMax || fishesArray[i].hunger===true){
+                if(fishesArray[i].hunger===true) console.log('fish of color ' + fishesArray[i].color + ' died from hunger');
 
-    static nextYear(){
-        for(var i=0; i< this.fishesArray.length; i++){
-            this.fishesArray[i].yearsOld ++;
-            if (this.fishesArray[i].yearsOld > this.fishesArray[i].ageMax){
-                this.fishesArray.splice(i,1);
+                removeFish(i, fishesGroup);
+
+            }else{
+                i++;
             }
         }
-        this.fishesArray = generateNewGeneration(this.fishesArray, this.nbFishInit, this.mutChance);
+        // New fishes are born
+        fishesArray = generateNewGeneration(fishesArray, nbFishInit, mutChance, fishesGroup);
+        // They are hungry
+        fishesArray.forEach(fish => {
+            fish.hunger= true;
+        });
+
+        Ground.nextYear();
+
     }
 
-    static setMutChance(newFloat){
-        this.mutChance=newFloat;
-        console.log("set mut "+ this.mutChance);
+    function setMutChance(newFloat){
+        mutChance=newFloat;
+        // console.log("set mut "+ mutChance);
     }
 
-    static getFishesBySpecies() {
+    function getFishesBySpecies() {
 
         // Create an object with species names as keys and arrays as values
         const species = new Object();
         SPECIES.forEach(specie => {
             species[specie] = [];
         });
-        
+
         // Fill species arrays with corresponding fishes
-        this.fishesArray.forEach(fish => {
+        fishesArray.forEach(fish => {
             let specie = fish.specie;
             species[specie].push(fish);
         })
 
         return species;
     }
-}
+
+    function removeFish(i, fishesGroup){
+
+        fishesGroup.remove(fishesGroup.getObjectById(fishesArray[i].id_3dobject));
+        fishesArray.splice(i,1);
+
+    }
+
+export { nbFishInit, mutChance, init, getNbFishToString, update, updatePosition, nextYear, setMutChance, getFishesBySpecies, removeFish }
 
 // Generate a new generation of fishes
-function generateNewGeneration(fishesTab, nbFInit, mutChance) {
+function generateNewGeneration(fishesTab, nbFInit, mutChance, fishesGroup) {
+
+    if(fishesTab.length < 2) return fishesTab;
 
     const couples = selection(fishesTab); // [  [fish1, fish2], ...]
 
@@ -104,6 +193,8 @@ function generateNewGeneration(fishesTab, nbFInit, mutChance) {
         if(Math.random() < getChanceReproduction(fishesTab,nbFInit)){
             let child1 = Fish.generateChild(fishesTab.length, couple[0], couple[1], fishesTab, mutChance);
             fishesTab.push(child1);
+            createClones(fishesGroup, child1);
+
         }
     });
     return fishesTab;
@@ -122,4 +213,3 @@ function getChanceReproduction(fishesTab, nbFInit){
 
 const CHANCEreproductionInitial= 0.2;
 const GROWpopulation=2; //tolérence du nombre de membre (multiplicateur)
-const SPECIES = ["Specie A", "Specie B",  "Specie C"];
