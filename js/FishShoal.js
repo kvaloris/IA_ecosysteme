@@ -211,5 +211,5 @@ function getChanceReproduction(fishesTab, nbFInit){
 /*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
 
-const CHANCEreproductionInitial= 0.2;
+const CHANCEreproductionInitial= 0.6;
 const GROWpopulation=2; //tolérence du nombre de membre (multiplicateur)

@@ -53,14 +53,12 @@ export class Fish {
             ' appearance: ' + this.appearance + ';' +
             ' ageMax: ' + this.ageMax + ';' +
             ' yearsOld: ' + this.yearsOld + ';' +
-            ' scoreLife: ' + this.getScoreLife() + ';' +
-            ' scoreToHuman: ' + this.getScoreToHuman() + ';';
+            ' scoreLife: ' + this.getScoreLife() + ';';
     }
 
     // Return a random fish
     static fishRandom(id, fishes) {
-
-        let pos = generateCorrectPosition(fishes);
+        let pos = positionRamdon();
         let colorRand = colorRandom(); 
         let newMaxAge = ageMaxRandom();
         return new this(
@@ -77,15 +75,11 @@ export class Fish {
             false);
     }
 
-    
-
     // Return the child of fish 1 and fish 2
     static generateChild(id, fish1, fish2, fishes, mutChance) {
-        // console.log(mutChance);
         if (fish1 instanceof Fish && fish2 instanceof Fish) {
 
-            let pos = generateCorrectPosition(fishes);
-
+            let pos = mixPosition([fish1.x,fish1.y,fish1.z], [fish2.x,fish2.y,fish2.z]);
             var child = new this(
                 id,
                 pos[0],
@@ -109,11 +103,6 @@ export class Fish {
     // Return the score for its ability to live ( 0 = best)
     getScoreLife() {
         return getScoreComparedToTheBestFish(this, bestFishlife, importanceLife)
-    }
-
-    // Return its score for human interest ( 0 = best)
-    getScoreToHuman() {
-        return getScoreComparedToTheBestFish(this, bestFishToHuman, importanceToHuman)
     }
 
     getScoreToFishObjectif(color, colorFactor, size,sizeFactor, eye, tail, fin, appearanceFactor, yearsOld, yearsOldFactor) {
@@ -253,8 +242,6 @@ export class Fish {
     moveToEat() {
         if(!this.hunger) return true;
 
-        // console.log(this.eatObjectifCoordinate);
-
             // Searches a target
             if (!this.eatObjectifCoordinate
                 ||( this.eatObjectifCoordinate &&!Ground.coralIsExiste(this.eatObjectifCoordinate.i,this.eatObjectifCoordinate.j))){
@@ -278,7 +265,6 @@ export class Fish {
                 this.hunger=false;
                 // this.eatObjectifCoordinate = false;
                 const type = Ground.getTypeElement(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j);
-                console.log("Fish " + this.id + " of color " + this.color + " has eaten coral (" + this.eatObjectifCoordinate.i + ", " + this.eatObjectifCoordinate.j + ") of type " + type);
                 Ground.eatCoral(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j); 
                 return true;
             }
@@ -306,45 +292,31 @@ export class Fish {
     
     getSpecie() {
         // Normalize
-        //console.log("FISH ID : " + this.id);
         const size = map(this.size, [MINSIZE, MAXSIZE], [0, 1]);
         const ageMax = map(this.ageMax, [MINAGEMAX, MAXAGEMAX], [0, 1]);
         const color = map(this.color, [0, TABColor.length - 1], [0, 1]);
         const eyes = map(this.color, [0, MAXeye], [0, 1]);
-        //console.log("color : " + color + " / size : " + size + " / ageMax : " + ageMax);
         const index = neuralNetwork.output([color]); //modif
-        //console.log("Species index (0, 1 or 2) : " + index);
         return SPECIES[index];
     }
-
-    findEatObjectifCoordinate(ground,){//TODO
-        ground
-
-        eatObjectifCoordinate
-    }
-
 }
 
-// Return an array of correct coordinates 
-function generateCorrectPosition(fishes) {
 
-    // Generate random coordinates
-    let x = getRandomFloat(XMIN, XMAX);
-    let y = getRandomFloat(YMIN, YMAX);
-    let z = getRandomFloat(ZMIN, ZMAX);
-
-    if (fishes.length !== 0) {
-        fishes.forEach(fish => {
-            while (getDistance(x, y, z, fish.x, fish.y, fish.z) <= 1 + Fish.MAXSIZE) {
-                x = getRandomFloat(XMIN, XMAX);
-                y = getRandomFloat(YMIN, YMAX);
-                z = getRandomFloat(ZMIN, ZMAX);
-            }
-        });
-    }
-
-    return [x, y, z];
+function positionRamdon() {
+    return [
+        getRandomFloat(XMIN, XMAX),
+        getRandomFloat(YMIN, YMAX),
+        getRandomFloat(ZMIN, ZMAX)];
 }
+
+function mixPosition(position1, position2){
+    return[
+        Math.round((position1[0] + position2[0]) / 2),
+        Math.round((position1[1] + position2[1]) / 2),
+        Math.round((position1[2] + position2[2]) / 2)
+    ]
+}
+
 
 // Return a random color
 function colorRandom() {
@@ -387,7 +359,6 @@ function ageMaxRandom() {
 
 function mutFish(fishInit) {
     var parameter = Math.floor(Math.random() * 4) //return 0, 1, 2, 3
-    //console.log(parameter);
     switch (parameter) {
         case 0:
             fishInit.color = colorRandom();

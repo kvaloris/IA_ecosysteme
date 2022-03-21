@@ -175,7 +175,7 @@ function generateNewGeneration(fishesTab, nbFInit, mutChance) {
 }
 
 function getChanceReproduction(fishesTab, nbFInit){
-    if(fishesTab.length>nbFInit){
+    if(fishesTab.length>nbFInit*1.5){
         return CHANCEreproductionInitial/GROWpopulation;
     }
     return CHANCEreproductionInitial;
@@ -185,5 +185,5 @@ function getChanceReproduction(fishesTab, nbFInit){
 /*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
 
-const CHANCEreproductionInitial= 0.2;
+const CHANCEreproductionInitial= 0.9;
 const GROWpopulation=2; //tolérence du nombre de membre (multiplicateur)
