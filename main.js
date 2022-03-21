@@ -290,8 +290,8 @@ scene.add(fishesGroup);
 
 var controls = new OrbitControls(camera, renderer.domElement);
 //controls.addEventListener('change', renderer);
-controls.maxDistance = BOXSIZE-500;
-controls.update();
+//controls.maxDistance = BOXSIZE-500;
+//controls.update();
 
 // LIGHT
 
@@ -511,9 +511,11 @@ export function displayFloor(i, j) {
   let x;
   let z;
   let typeElement;
+  let size;
   x = Ground.getCoralX(i,j);
   z = Ground.getCoralY(i,j);
   typeElement = Ground.getTypeElement(i, j);
+  size = Ground.getSizeElement(i, j)
 
   let element;
   
@@ -521,6 +523,7 @@ export function displayFloor(i, j) {
   if (typeElement == 1) {
     element = floorElements.getObjectByName("blue").clone();
     element.position.set(x, -BOXSIZE/2, z);
+    element.scale.set(size, size, size);
     displayFloorElmt.add(element);
     // Ground.getGroundArray(i, j, blue_coral.id);
     //console.log('blue_coral ', x, ' ', z);
@@ -530,6 +533,7 @@ export function displayFloor(i, j) {
   if (typeElement == 2) {
     element = floorElements.getObjectByName("yellow").clone();
     element.position.set(x, -BOXSIZE/2, z);
+    element.scale.set(size, size, size);
     displayFloorElmt.add(element);
     // Ground.getGroundArray(i, j, yellow_coral.id);
     //console.log('yellow_coral ', x, ' ', z);
@@ -540,6 +544,7 @@ export function displayFloor(i, j) {
   if (typeElement == 3) {
     element = floorElements.getObjectByName("red").clone();
     element.position.set(x, -BOXSIZE/2, z);
+    element.scale.set(size, size, size);
     displayFloorElmt.add(element);
     // Ground.getGroundArray(i, j, red_coral.id);
     //console.log('red_coral ', x, ' ', z);

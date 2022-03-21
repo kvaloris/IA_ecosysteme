@@ -118,6 +118,10 @@ export class Ground{
     static getTypeElement(i,j){
         return this.groundArray[i][j].e_type;
     }
+
+    static getSizeElement(i,j){
+        return this.groundArray[i][j].e_size;
+    }
     
     static setGround3DId(i,j, id){
         this.groundArray[i][j].e_id_3d_object = id;
@@ -246,7 +250,7 @@ function getXYDelta(sizeGround,nbCoralsPerLine){
 /*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
 const CONST_sizeElement_MIN= 300;
-const CONST_sizeElement_MAX= 500;
+const CONST_sizeElement_MAX= 800;
 
 const MATRIX_RULE_2 = 
     [//  0   1 
