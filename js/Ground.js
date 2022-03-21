@@ -1,17 +1,7 @@
 //import * as THREE from 'three/build/three.module.js';
 import {displayFloor, displayFloorElmt } from "/main.js";
 
-/* Pour l'utiliser:
-*  pour créer un sol
-*  Ground.init(5,5, nombreDeType); avec la taille que tu veux
-*
-*  pour l'utiliser
-*  Ground.getGroundArray());
-*
-*  pour passer un année:
-*  Ground.nextYear()
-*/
-
+// class defining the possible elements
 class Emement{
     e_type;
     e_id_3d_object;
@@ -37,7 +27,8 @@ export class Ground{
         this.ruleMatrix= generateRuleMatrix(ruleMatrixSize); 
         this.groundArray= getNewTabWFC (this.nbCoralsPerLine, this.ruleMatrix); 
 
-        for (let i = 0; i < this.groundArray.length; i++) { //permet de ramd un peu la position
+        //ramdomize more the position of the corals
+        for (let i = 0; i < this.groundArray.length; i++) { 
             for (let j = 0; j < this.groundArray.length; j++) {
                 if(this.groundArray[i][j].e_type!=0){
                     this.groundArray[i][j].e_deltaX=getXYDelta(this.sizeGround,this.nbCoralsPerLine);
@@ -45,8 +36,6 @@ export class Ground{
                 }
             }
         }
-
-        
     }
 
     static toString(){
@@ -69,43 +58,32 @@ export class Ground{
     }
 
     static nextYear(){
-        // console.log("entrée Ground");
         for (let i = 0; i < this.groundArray.length; i++) {
-            // console.log("entrée boucle 1");
             for (let j = 0; j < this.groundArray.length; j++) {
                 if(this.groundArray[i][j].e_type==0){
-                    // console.log("deleteGround");
+                    //remove items that no longer exist
                     displayFloorElmt.remove(displayFloorElmt.getObjectById(this.groundArray[i][j].e_id_3d_object));
+                    //generate a new element in the empty location 
                     this.groundArray[i][j] = new Emement( getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j),getXYDelta(this.sizeGround,this.nbCoralsPerLine),getXYDelta(this.sizeGround,this.nbCoralsPerLine));
                     displayFloor(i,j);
-                    
                 }
             }
         }
-
-        //displayFloorElmt.clear();
-
-        // for (let i = 0; i < this.groundArray.length; i++) {
-        //     for (let j = 0; j < this.groundArray.length; j++) {
-        //         displayFloor(i,j);
-        //     }
-        // } 
     }
 
+    //remove eaten corals
     static eatCoral(i,j){
         this.groundArray[i][j].e_type=0;
         displayFloorElmt.remove(displayFloorElmt.getObjectById(this.groundArray[i][j].e_id_3d_object));
     }
 
-    //TODO trouver les coordonee d'un type
+    //find the coordinates of a type 
     static findCoordinatesType(type){
         let tabCoordinatesCorals = new Array();
         for (let i = 0; i < this.groundArray.length; i++) {
             for (let j = 0; j < this.groundArray.length; j++) {
                 let tmp = this.groundArray[i][j];
                 if(this.groundArray[i][j].e_type==type){
-                    
-                    //return{i: i, j: j, x: this.getCoralX(i, j), z: this.getCoralY(i, j)}
                     tabCoordinatesCorals.push( {i: i, j: j, x: this.getCoralX(i, j), z: this.getCoralY(i, j)});
                 }            
             }
@@ -122,6 +100,7 @@ export class Ground{
         }
         return false;
     }
+
     static getCoralX(i,j){
         this.groundArray;
         var tmp = this.getGroundArray()[i][j]; 
@@ -148,27 +127,21 @@ function generateRuleMatrix(ruleMatrixSize){
     switch (ruleMatrixSize) {
         case 0:
             console.error("ruleMatrixSize ==0")
-
             break;
         case 1:
             console.error("ruleMatrixSize ==1")
-
             break;
         case 2:
             newMatRule= MATRIX_RULE_2;
-
             break;
         case 3:
             newMatRule= MATRIX_RULE_3;
-
             break;
         case 4:
             newMatRule= MATRIX_RULE_4;
-
             break;
         case 5:
             newMatRule= MATRIX_RULE_5;
-
             break;
         default:
             console.error("ruleMatrixSize >5 ou non defini")
@@ -177,28 +150,28 @@ function generateRuleMatrix(ruleMatrixSize){
     return newMatRule;
 }
 
-/*renvoi un tableau d'entier en fonction des paramètres
-*   I,J taille du tableau
-*   ruleMatrix matrice des règles
-*
-*    les entiers seront compris entre 0 et ruleMatrix.lenght-1
+/*returns a 2D array of elements
+*   I,J array size
+*   ruleMatrix
+* the elements type will be between 0 and ruleMatrix.lenght-1
 */
 function getNewTabWFC (sizeTabElement, ruleMatrix){
-    //assert sizeTabElement  != 0
+    // array of type elements = 0
     var newTab= makeIntMatrix (sizeTabElement,sizeTabElement , new Emement());
-    newTab = getTabWithWFC( ruleMatrix, newTab);
-    newTab = getTabWithWFC( ruleMatrix, newTab);
-    return getTabWithWFC( ruleMatrix, newTab);
+    // generate with WFC (several times to increase the number of corals)
+    newTab = applyWFCtoArray( ruleMatrix, newTab);
+    newTab = applyWFCtoArray( ruleMatrix, newTab);
+    return applyWFCtoArray( ruleMatrix, newTab);
 }
 
-function getTabWithWFC(ruleMatrix, tab){
+//apply the WFC to each array element
+function applyWFCtoArray(ruleMatrix, tab){
     for (let i = 0; i < tab.length; i++) {
         for (let j = 0; j < tab.length; j++) {
             tab[i][j] = new Emement( getSolutionWithNeibourgh(ruleMatrix,tab, i, j),0,0) ;
         }
     }
     return tab;
-
 }
 
 /*
@@ -206,8 +179,7 @@ function getTabWithWFC(ruleMatrix, tab){
 *  0|X|1
 *  2|0|2 
 *
-* retourne la valeur de X en fonction de ses voisins existant
-*
+* returns the value of X given its neighbors
 */
 function getSolutionWithNeibourgh(ruleMatrix,tab, x, y){
     var tabOfType= getTypeOfNeibourgh(tab, ruleMatrix.length, x, y);
@@ -215,6 +187,7 @@ function getSolutionWithNeibourgh(ruleMatrix,tab, x, y){
     return getSolutionWhitTabState(ruleMatrix,tabOfType);
 }
 
+//counts the number of elements of each type 
 function getTypeOfNeibourgh(tab,nbType, x, y){
     var tabOfType = new Array(nbType) // nombre d'éléments du même type 
     tabOfType.fill(0);
@@ -233,15 +206,15 @@ function getTypeOfNeibourgh(tab,nbType, x, y){
     return tabOfType;
 }
 
-/* à partir d'un tableau du nombre de chaque type d'éléments
-*  retourne le choix de l'élément du milieu
+/* from an array of the number of each type of elements
+* returns the choice of the middle element
 */
-function getSolutionWhitTabState (ruleMatrix, tabStateElement){
-    var chanceForElement = new Array(ruleMatrix.length); //pour chaque élément sa chance de définir la case actuel
+function getSolutionWhitTabState (ruleMatrix, tabTypeElement){
+    var chanceForElement = new Array(ruleMatrix.length); //for each element its chance to set the current square
     chanceForElement.fill(0);
     for (let element = 0; element < ruleMatrix.length; element++) {
         for (let index = 0; index < chanceForElement.length; index++) {
-            chanceForElement[index]+= tabStateElement[element]*ruleMatrix[element][index]; //on ajoute les poucentages
+            chanceForElement[index]+= tabTypeElement[element]*ruleMatrix[element][index]; // add the percentages together
         }
     };
 
@@ -251,7 +224,7 @@ function getSolutionWhitTabState (ruleMatrix, tabStateElement){
         chanceForElementMap[i+1]=chanceForElementMap[i]+chanceForElementMap[i+1];
     }
 
-    //on map les élément: 0 a total ->  0 a 1
+    //map element: 0 a total ->  0 a 1
     chanceForElementMap = chanceForElementMap.map(x => x /total);
 
     var valAleat = rand();

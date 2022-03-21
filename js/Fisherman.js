@@ -21,7 +21,6 @@ export class Fisherman{
         
         var i=0;
         while (i< fishesArray.length) {
-            var tmp = fishesArray[i].getScoreToHuman();
             if (this.isAGoodFish(i)){
                 FishShoal.removeFish(i, fishesGroup);
             }else{
