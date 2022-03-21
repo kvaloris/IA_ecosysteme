@@ -153,7 +153,6 @@ import { createClones, displayFloorElmt } from "../main";
 
     function setMutChance(newFloat){
         mutChance=newFloat;
-        // console.log("set mut "+ mutChance);
     }
 
     function getFishesBySpecies() {
