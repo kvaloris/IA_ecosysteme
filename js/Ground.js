@@ -245,8 +245,8 @@ function getXYDelta(sizeGround,nbCoralsPerLine){
 /*--------------------------------------------------------------------*/
 /*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
-CONST_sizeElement_MIN= 300;
-CONST_sizeElement_MAX= 500;
+const CONST_sizeElement_MIN= 300;
+const CONST_sizeElement_MAX= 500;
 
 const MATRIX_RULE_2 = 
     [//  0   1 
