@@ -4,7 +4,6 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as FishShoal from "./js/FishShoal.js";
 import { Fisherman } from './js/Fisherman.js';
 import { Ground } from './js/Ground.js';
-import { Fish } from './js/Fish.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
 import { animateChangeYear, closePopup, showPopup, handleSlidersConsoleDisplay, fillFishingOptions, updateFishingResult } from './js/buttonUIActions.js';
 
@@ -98,7 +97,6 @@ audioLoader.load('./sound/underwater.wav', function (buffer) {
   sound.setBuffer(buffer);
   sound.setLoop(true);
   sound.setVolume(0.5);
-  sound.play();
 });
 
 
@@ -146,6 +144,24 @@ btnNextYear.addEventListener('click', () => {
 
   }
 });
+
+const btnSound = document.querySelector("#sound-btn");
+let playSound = false;
+let imageSound = document.getElementById("soundImg");
+btnSound.addEventListener('click', () => {
+  if(playSound == false){
+    imageSound.setAttribute("src", "/assets/volume.png");
+    playSound = true;
+    sound.play();
+  }
+  else {
+    imageSound.setAttribute("src", "/assets/mute.png");
+    playSound = false;
+    sound.stop();
+  }
+  
+});
+
 
 const presentation = document.querySelector('#presentation-wp');
 
