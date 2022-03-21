@@ -2,12 +2,13 @@
 /*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
 
-const XMIN = -200-60, XMAX = 200-60, YMIN = -200, YMAX = 200, ZMIN = -200, ZMAX = 200;
+const BOXSIZE = 600;
+const MARGIN = 80;
+const XMIN = -BOXSIZE/2 + MARGIN, XMAX = BOXSIZE/2 - MARGIN, YMIN = - BOXSIZE/2 + MARGIN, YMAX = BOXSIZE/2 - MARGIN, ZMIN = - BOXSIZE/2 + MARGIN, ZMAX = BOXSIZE/2 - MARGIN;
 const TABColor = [0, 1, 2];
 const MINSIZE = 3, MAXSIZE = 10;
 const MINAGEMAX = 1, MAXAGEMAX = 6;
 const MAXeye = 4, MAXtail = 2, MAXfin = 4; //yeux, queue, nageoir
-const BOXSIZE = 600;
 
 const SPECIES = ["Specie A", "Specie B",  "Specie C"];
 
