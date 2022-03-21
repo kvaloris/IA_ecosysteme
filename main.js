@@ -303,7 +303,7 @@ function loadObjectSeparate() {
 
 // Add 3D fish to the group 
 export function createClones(group, fish) {
-  let newFish = assembleFish(fish.color, fish.appearance);
+  let newFish = assembleFish(fish.color, fish.colorAppearance, fish.appearance);
   newFish.scale.set(fish.size, fish.size, fish.size);
   newFish.position.set(fish.x, fish.y, fish.z);
   fish.id_3dobject = newFish.id;
@@ -313,14 +313,14 @@ export function createClones(group, fish) {
 }
 
 // Create a 3D fish with modular body parts
-function assembleFish(color, appearance) {
+function assembleFish(color, colorAppearance, appearance) {
   let assembleFish = new THREE.Group();
   let body = bodyFish.getObjectByName(colorList[color]).clone(); //add body
   let fins = new THREE.Group();
   let coupleFins = new THREE.Group();
 
-  let fin = finsFish.getObjectByName(colorList[color]).clone();
-  let fin2 = finsFish.getObjectByName(colorList[color]).clone();
+  let fin = finsFish.getObjectByName(colorList[colorAppearance[2]]).clone();
+  let fin2 = finsFish.getObjectByName(colorList[colorAppearance[2]]).clone();
   fin2.rotation.set(0, -179, 0);
   fin2.position.set(-0.6, 0, 2.6);
   coupleFins.add(fin);
@@ -328,11 +328,11 @@ function assembleFish(color, appearance) {
 
   //Add tails
   let tails = new THREE.Group();
-  let tail = tailFish.getObjectByName(colorList[color]).clone();
+  let tail = tailFish.getObjectByName(colorList[colorAppearance[1]]).clone();
   //Add eyes
   let eyes = new THREE.Group();
-  let eye = eyesFish.getObjectByName(colorList[color]).clone();
-  let eye2 = eyesFish.getObjectByName(colorList[color]).clone();
+  let eye = eyesFish.getObjectByName(colorList[colorAppearance[0]]).clone();
+  let eye2 = eyesFish.getObjectByName(colorList[colorAppearance[0]]).clone();
   let coupleEyes = new THREE.Group();
   eye2.position.set(0, 0, -0.7);
   coupleEyes.add(eye);
