@@ -236,3 +236,9 @@
 #info-btn:hover::after {
   opacity: 1;
 }
+
+/* BUTTON SOUND */
+
+#sound-btn {
+  right:0px;
+}
