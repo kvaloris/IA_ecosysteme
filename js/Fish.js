@@ -232,7 +232,7 @@ export class Fish {
 
     // Limit the speed of the boid
     limitSpeed() {
-        const vlim = 1;
+        const vlim = 2;
 
         if (moduleV3(this.velocity) > vlim) {
             this.velocity = divideV3(this.velocity, moduleV3(this.velocity));
