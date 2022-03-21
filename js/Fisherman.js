@@ -1,7 +1,8 @@
-// import { FishShoal } from "./FishShoal_old.js";
 import * as FishShoal from "./FishShoal.js";
 
 export class Fisherman{
+
+    // Criterias for fish to catch
     static delta = 2;
     static colorTarget = 1;
     static colorFactor = 5;
@@ -17,6 +18,7 @@ export class Fisherman{
     static yearsOldTarget = 4;
     static yearsOldFactor = 0;
 
+    // Remove fishes corresponding to criteria from the 3D group and the array of fishes
     static goFishing(fishesGroup){
         
         var i=0;
