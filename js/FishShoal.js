@@ -6,7 +6,7 @@ import { createClones, displayFloorElmt } from "../main";
 /*--------------------        CONSTANTES          --------------------*/
 /*--------------------------------------------------------------------*/
 
-const CHANCEreproductionInitial = 0.2;
+const CHANCEreproductionInitial= 0.6;
 const GROWpopulation = 2; // Tolerance of the number of membres (multiplicator)
 let nbFishInit;
 let mutChance = 0.1;
@@ -211,10 +211,3 @@ function getChanceReproduction(fishesTab, nbFInit) {
     }
     return CHANCEreproductionInitial;
 }
-
-/*--------------------------------------------------------------------*/
-/*--------------------        CONSTANTES          --------------------*/
-/*--------------------------------------------------------------------*/
-
-const CHANCEreproductionInitial= 0.6;
-const GROWpopulation=2; //tolérence du nombre de membre (multiplicateur)
