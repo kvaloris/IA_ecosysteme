@@ -142,7 +142,7 @@ function loadObjectSeparate(){
 
 
   export function createClones(group, fish){
-    let newFish = assembleFish(fish.color, fish.appearance);
+    let newFish = assembleFish(fish.color, fish.colorAppearance, fish.appearance);
     newFish.scale.set(fish.size,fish.size,fish.size);
     newFish.position.set(fish.x,fish.y,fish.z);
     fish.id_3dobject = newFish.id;
@@ -151,7 +151,7 @@ function loadObjectSeparate(){
     group.add(newFish);
   }
 
-  function assembleFish(color, appearance){
+  function assembleFish(color, colorAppearance, appearance){
     let assembleFish = new THREE.Group();
     console.log(colorList[color] + "couleur à afficher");
     console.log(bodyFish);
@@ -159,8 +159,8 @@ function loadObjectSeparate(){
     let fins = new THREE.Group();
     let coupleFins = new THREE.Group();
 
-    let fin = finsFish.getObjectByName(colorList[color]).clone();
-    let fin2 = finsFish.getObjectByName(colorList[color]).clone();
+    let fin = finsFish.getObjectByName(colorList[colorAppearance[2]]).clone();
+    let fin2 = finsFish.getObjectByName(colorList[colorAppearance[2]]).clone();
     fin2.rotation.set(0,-179,0);
     fin2.position.set(-0.6,0,2.6);
     coupleFins.add(fin);
@@ -168,11 +168,11 @@ function loadObjectSeparate(){
     
     //Add tails
     let tails = new THREE.Group();
-    let tail = tailFish.getObjectByName(colorList[color]).clone();
+    let tail = tailFish.getObjectByName(colorList[colorAppearance[1]]).clone();
     //Add eyes
     let eyes = new THREE.Group();
-    let eye = eyesFish.getObjectByName(colorList[color]).clone();
-    let eye2 =eyesFish.getObjectByName(colorList[color]).clone();
+    let eye = eyesFish.getObjectByName(colorList[colorAppearance[0]]).clone();
+    let eye2 =eyesFish.getObjectByName(colorList[colorAppearance[0]]).clone();
     let coupleEyes = new THREE.Group();
     eye2.position.set(0,0,-0.7);
     coupleEyes.add(eye);
@@ -184,11 +184,12 @@ function loadObjectSeparate(){
     tail1.position.set(2, 0, 1);
     tail2.rotation.set(0,-0.5,0);
     tail2.position.set(2, 0, 1.4);
+    tail.position.set(2, 0, 1.2);
 
     switch(appearance[1]){ //add tails
       case 1:
         tails.add(tail);
-        tails.position.set(1.5, -0.3, 1.2);
+        tails.position.set(-0.25, -0.16, 0.1);
         break;
       case 2:
         tails.add(tail1);
