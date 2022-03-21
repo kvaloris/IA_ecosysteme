@@ -1,6 +1,6 @@
 import { Fish } from "./Fish";
 import { Ground } from "./Ground";
-import { createClones, displayFloorElmt } from "../main";
+import { createClones } from "../main";
 
 /*--------------------------------------------------------------------*/
 /*--------------------        CONSTANTES          --------------------*/
@@ -11,15 +11,17 @@ const GROWpopulation = 2; // Tolerance of the number of membres (multiplicator)
 let nbFishInit;
 let mutChance = 0.1;
 
+// Initialize array fish random fishes
 function init(number) {
-    console.log('fishhsoal init');
     for (let i = 0; i < number; i++) {
-        const fish = Fish.fishRandom(i, fishesArray);
+        const fish = Fish.fishRandom(i);
         fishesArray.push(fish);
     }
     nbFishInit = number;
 }
 
+
+// Get informations on fish shoal as string
 function getNbFishToString() {
     var text = "Number of fish in the band: " + fishesArray.length + "</br>";
     // Calculation of the number of fish per color, mean ageMax and mean size
@@ -56,35 +58,31 @@ function getNbFishToString() {
 
 function update(c_ag, c_s, c_al, fishesGroup) {
     updatePosition(c_ag, c_s, c_al, fishesGroup);
+
+    // Events to be triggered when all fishes finish eating
     if (eatingPeriod === "ending") {
 
         nextYear(fishesGroup);
         eatingPeriod = "no";
 
-        console.log(displayFloorElmt.children);
-        console.log(Ground.toString2());
-
         const btnNextYear = document.querySelector("#next-year-btn");
         btnNextYear.classList.remove('btn-disabled');
         const fishingConsoleBtn = document.querySelector('#fishing-console-btn');
         fishingConsoleBtn.classList.remove('btn-disabled');
-
-        console.log("EATING PERIOD ENDS");
     }
 }
 
 // Update the positions of the fishes and rotate them correctly
 function updatePosition(c_ag, c_s, c_al, fishesGroup) {
 
-    // Fishes either move aimlessly or move to eat according to if it's eating period or not
-
+    // Fishes either move aimlessly
+    // If button Next Year has been clicked, eatingPeriod is ongoing and fishes will move to eat
     if (eatingPeriod === "no") {
         fishesArray.forEach(fish => {
             fish.move(fishesArray, c_ag, c_s, c_al);
             fish.update();
         })
     }
-
     else if (eatingPeriod === "ongoing") {
         let endEatingPeriod = true;
         const hungry_fishes = fishesArray.filter(fish => fish.hunger);
@@ -106,11 +104,11 @@ function updatePosition(c_ag, c_s, c_al, fishesGroup) {
         };
     }
 
-    // fishesArray.forEach(fish => fish.update())k
-
+    // Give to corresponding 3D fishes the same position as fishes in array
+    // And rotate in the direction of their movement
     for (let i = 0; i < fishesGroup.children.length; i++) {
         if (fishesGroup.children.length !== fishesArray.length) {
-            console.log("Group and Array have different lengths");
+            console.error("Group and Array have different lengths");
         }
         let x = fishesArray[i].x;
         let y = fishesArray[i].y;
@@ -118,8 +116,7 @@ function updatePosition(c_ag, c_s, c_al, fishesGroup) {
         let id_3dobject = fishesArray[i].id_3dobject;
         let model = fishesGroup.getObjectById(id_3dobject);
         if (!model) {
-            console.log("Undefined model");
-            console.log("Group : ", fishesGroup.children.map(fish => fish.id));
+            console.error("Undefined model");
         }
         model.position.x = x;
         model.position.y = y;
@@ -132,16 +129,15 @@ function updatePosition(c_ag, c_s, c_al, fishesGroup) {
     }
 }
 
+// Happen after fishes have finished eating or didn't find anything to eat
 function nextYear(fishesGroup) {
-    var i = 0;
-    // Fishes grow one year older and dies from aging or hunger
+    let i = 0;
+
+    // Fishes grow one year older and die from aging or hunger
     while (i < fishesArray.length) {
         fishesArray[i].yearsOld++;
         if (fishesArray[i].yearsOld > fishesArray[i].ageMax || fishesArray[i].hunger === true) {
-            if (fishesArray[i].hunger === true) console.log('fish of color ' + fishesArray[i].color + ' died from hunger');
-
             removeFish(i, fishesGroup);
-
         } else {
             i++;
         }
@@ -153,14 +149,22 @@ function nextYear(fishesGroup) {
         fish.hunger = true;
     });
 
+    // New corals are born
     Ground.nextYear();
-
 }
 
 function setMutChance(newFloat) {
     mutChance = newFloat;
 }
-
+ 
+/*
+Return an object in this form
+species = {
+    "name_specie_1": [Fish, Fish...],
+    "name_specie_2": [Fish, Fish...]
+    ...
+}
+*/
 function getFishesBySpecies() {
 
     // Create an object with species names as keys and arrays as values
@@ -178,6 +182,7 @@ function getFishesBySpecies() {
     return species;
 }
 
+// Remove a fish from the 3D group
 function removeFish(i, fishesGroup) {
 
     fishesGroup.remove(fishesGroup.getObjectById(fishesArray[i].id_3dobject));
@@ -192,11 +197,11 @@ function generateNewGeneration(fishesTab, nbFInit, mutChance, fishesGroup) {
 
     if (fishesTab.length < 2) return fishesTab;
 
-    const couples = selection(fishesTab); // [  [fish1, fish2], ...]
+    const couples = selection(fishesTab); // has this form [  [fish1, fish2], ...]
 
     couples.forEach(couple => {
         if (Math.random() < getChanceReproduction(fishesTab, nbFInit)) {
-            let child1 = Fish.generateChild(fishesTab.length, couple[0], couple[1], fishesTab, mutChance);
+            let child1 = Fish.generateChild(fishesTab.length, couple[0], couple[1], mutChance);
             fishesTab.push(child1);
             createClones(fishesGroup, child1);
 

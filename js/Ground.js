@@ -1,8 +1,7 @@
-//import * as THREE from 'three/build/three.module.js';
 import {displayFloor, displayFloorElmt } from "/main.js";
 
-// class defining the possible elements
-class Emement{
+// Class defining the possible elements
+class Element{
     e_type;
     e_size;
     e_id_3d_object;
@@ -29,7 +28,7 @@ export class Ground{
         this.ruleMatrix= generateRuleMatrix(ruleMatrixSize); 
         this.groundArray= getNewTabWFC (this.nbCoralsPerLine, this.ruleMatrix); 
 
-        //ramdomize more the position of the corals
+        // Ramdomize more the position of the corals
         for (let i = 0; i < this.groundArray.length; i++) { 
             for (let j = 0; j < this.groundArray.length; j++) {
                 if(this.groundArray[i][j].e_type!=0){
@@ -50,41 +49,31 @@ export class Ground{
         return tabTmp;
     }
 
-    static toString2() {
-        let array = [];
-        this.groundArray.forEach(row => {
-            row = row.map(element => element.e_type);
-            array.push(row);
-        })
-        return array;
-    }
-
     static nextYear(){
         for (let i = 0; i < this.groundArray.length; i++) {
             for (let j = 0; j < this.groundArray.length; j++) {
                 if(this.groundArray[i][j].e_type==0){
-                    //remove items that no longer exist
+                    // Remove items that no longer exist
                     displayFloorElmt.remove(displayFloorElmt.getObjectById(this.groundArray[i][j].e_id_3d_object));
-                    //generate a new element in the empty location 
-                    this.groundArray[i][j] = new Emement( getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j),getXYDelta(this.sizeGround,this.nbCoralsPerLine),getXYDelta(this.sizeGround,this.nbCoralsPerLine));
+                    // Generate a new element in the empty location 
+                    this.groundArray[i][j] = new Element( getSolutionWithNeibourgh(this.ruleMatrix,this.groundArray, i, j),getXYDelta(this.sizeGround,this.nbCoralsPerLine),getXYDelta(this.sizeGround,this.nbCoralsPerLine));
                     displayFloor(i,j);
                 }
             }
         }
     }
 
-    //remove eaten corals
+    // Remove eaten coral
     static eatCoral(i,j){
         this.groundArray[i][j].e_type=0;
         displayFloorElmt.remove(displayFloorElmt.getObjectById(this.groundArray[i][j].e_id_3d_object));
     }
 
-    //find the coordinates of a type 
+    // Find the coordinates of a type 
     static findCoordinatesType(type){
         let tabCoordinatesCorals = new Array();
         for (let i = 0; i < this.groundArray.length; i++) {
             for (let j = 0; j < this.groundArray.length; j++) {
-                let tmp = this.groundArray[i][j];
                 if(this.groundArray[i][j].e_type==type){
                     tabCoordinatesCorals.push( {i: i, j: j, x: this.getCoralX(i, j), z: this.getCoralY(i, j)});
                 }            
@@ -96,7 +85,7 @@ export class Ground{
         return tabCoordinatesCorals [getRandomInt(tabCoordinatesCorals.length-1) ];
     }
 
-    static coralIsExiste(i,j){
+    static coralExists(i,j){
         if(this.groundArray[i][j].e_type!=0){
             return true;
         }
@@ -105,7 +94,6 @@ export class Ground{
 
     static getCoralX(i,j){
         this.groundArray;
-        var tmp = this.getGroundArray()[i][j]; 
         return i *(this.sizeGround/this.nbCoralsPerLine) -((this.sizeGround)/2)+(this.sizeGround/this.nbCoralsPerLine)/2
                 +this.getGroundArray()[i][j].e_deltaX;
     }
@@ -154,31 +142,31 @@ function generateRuleMatrix(ruleMatrixSize){
             newMatRule= MATRIX_RULE_5;
             break;
         default:
-            console.error("ruleMatrixSize >5 ou non defini")
+            console.error("ruleMatrixSize > 5 or undefined");
             break;
     }
     return newMatRule;
 }
 
-/*returns a 2D array of elements
+/* Returns a 2D array of elements
 *   I,J array size
 *   ruleMatrix
-* the elements type will be between 0 and ruleMatrix.lenght-1
+* The elements' type will be between 0 and ruleMatrix.lenght-1
 */
 function getNewTabWFC (sizeTabElement, ruleMatrix){
-    // array of type elements = 0
-    var newTab= makeIntMatrix (sizeTabElement,sizeTabElement , new Emement());
-    // generate with WFC (several times to increase the number of corals)
+    // Array of type elements = 0
+    var newTab= makeIntMatrix (sizeTabElement,sizeTabElement , new Element());
+    // Generate with WFC (several times to increase the number of corals)
     newTab = applyWFCtoArray( ruleMatrix, newTab);
     newTab = applyWFCtoArray( ruleMatrix, newTab);
     return applyWFCtoArray( ruleMatrix, newTab);
 }
 
-//apply the WFC to each array element
+// Apply the WFC to each array element
 function applyWFCtoArray(ruleMatrix, tab){
     for (let i = 0; i < tab.length; i++) {
         for (let j = 0; j < tab.length; j++) {
-            tab[i][j] = new Emement( getSolutionWithNeibourgh(ruleMatrix,tab, i, j),0,0) ;
+            tab[i][j] = new Element( getSolutionWithNeibourgh(ruleMatrix,tab, i, j),0,0) ;
         }
     }
     return tab;
@@ -189,7 +177,7 @@ function applyWFCtoArray(ruleMatrix, tab){
 *  0|X|1
 *  2|0|2 
 *
-* returns the value of X given its neighbors
+* Returns the value of X given its neighbors
 */
 function getSolutionWithNeibourgh(ruleMatrix,tab, x, y){
     var tabOfType= getTypeOfNeibourgh(tab, ruleMatrix.length, x, y);
@@ -197,18 +185,18 @@ function getSolutionWithNeibourgh(ruleMatrix,tab, x, y){
     return getSolutionWhitTabState(ruleMatrix,tabOfType);
 }
 
-//counts the number of elements of each type 
+// Counts the number of elements of each type 
 function getTypeOfNeibourgh(tab,nbType, x, y){
-    var tabOfType = new Array(nbType) // nombre d'éléments du même type 
+    var tabOfType = new Array(nbType) // number of elements of same type
     tabOfType.fill(0);
     let minI = Math.max(0, x-1);
-    let maxI = Math.min(tab.length , x+2); //car boucle <maxI
+    let maxI = Math.min(tab.length , x+2); // because loop < maxI
     let minJ = Math.max(0, y-1);
     let maxJ = Math.min(tab.length , y+2);
 
     for (let i = minI; i < maxI; i++) {
         for (let j = minJ; j < maxJ; j++) {
-            if (! (i==x && j==y)){ //ne doit pas etre lui meme
+            if (! (i==x && j==y)){ // mustn't be itself
                 tabOfType[tab[i][j].e_type]+=1;
             }
         }
@@ -216,11 +204,11 @@ function getTypeOfNeibourgh(tab,nbType, x, y){
     return tabOfType;
 }
 
-/* from an array of the number of each type of elements
-* returns the choice of the middle element
+/* From an array of the number of each type of elements
+* Returns the choice of the middle element
 */
 function getSolutionWhitTabState (ruleMatrix, tabTypeElement){
-    var chanceForElement = new Array(ruleMatrix.length); //for each element its chance to set the current square
+    var chanceForElement = new Array(ruleMatrix.length); // for each element its chance to set the current square
     chanceForElement.fill(0);
     for (let element = 0; element < ruleMatrix.length; element++) {
         for (let index = 0; index < chanceForElement.length; index++) {
@@ -234,7 +222,7 @@ function getSolutionWhitTabState (ruleMatrix, tabTypeElement){
         chanceForElementMap[i+1]=chanceForElementMap[i]+chanceForElementMap[i+1];
     }
 
-    //map element: 0 a total ->  0 a 1
+    // Map element: 0 a total ->  0 a 1
     chanceForElementMap = chanceForElementMap.map(x => x /total);
 
     var valAleat = rand();
@@ -251,7 +239,7 @@ function getXYDelta(sizeGround,nbCoralsPerLine){
     return getRandomFloat(-maxDelta,maxDelta) ;
 }
 /*--------------------------------------------------------------------*/
-/*--------------------        CONSTANTES          --------------------*/
+/*--------------------        CONSTANTS          --------------------*/
 /*--------------------------------------------------------------------*/
 const CONST_sizeElement_MIN= 300;
 const CONST_sizeElement_MAX= 800;
@@ -269,7 +257,7 @@ const MATRIX_RULE_3 =
         [15,15,70], //2
     ];
 const MATRIX_RULE_4 = 
-    [//  0   1  2  3   // 3 color + neutre
+    [//  0   1  2  3   // 3 color + neutral
         [94,2,2,2], //0
         [20,80,0,0], //1
         [20,0,80,0], //2
@@ -277,7 +265,7 @@ const MATRIX_RULE_4 =
     ];
 
 const MATRIX_RULE_5 = 
-    [//  0   1  2  3  4  // 3 color + neutre
+    [//  0   1  2  3  4  // 3 color + neutral
         [40,15,15,15,15], //0
         [10,60,10,10,10], //1
         [10,10,60,10,10], //2

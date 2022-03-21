@@ -6,7 +6,7 @@ import { Fisherman } from './js/Fisherman.js';
 import { Ground } from './js/Ground.js';
 import { Fish } from './js/Fish.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
-import { animateChangeYear, closePopup, showPopup, handleSlidersConsoleDisplay, fillFishingOptions, updateFishingResult, updateFishingErrorMessage } from './js/buttonUIActions.js';
+import { animateChangeYear, closePopup, showPopup, handleSlidersConsoleDisplay, fillFishingOptions, updateFishingResult } from './js/buttonUIActions.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 45, 10000);

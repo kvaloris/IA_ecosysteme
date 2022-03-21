@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------*/
-/*--------------------        CONSTANTES          --------------------*/
+/*--------------------        CONSTANTS          --------------------*/
 /*--------------------------------------------------------------------*/
 
 const BOXSIZE = 600;
@@ -8,7 +8,7 @@ const XMIN = -BOXSIZE/2 + MARGIN, XMAX = BOXSIZE/2 - MARGIN, YMIN = - BOXSIZE/2 
 const TABColor = [0, 1, 2];
 const MINSIZE = 3, MAXSIZE = 10;
 const MINAGEMAX = 1, MAXAGEMAX = 6;
-const MAXeye = 4, MAXtail = 2, MAXfin = 4; //yeux, queue, nageoir
+const MAXeye = 4, MAXtail = 2, MAXfin = 4; // eyes, tail, fin
 
 const SPECIES = ["Mola Mola", "Triclopse",  "Creeps"];
 
@@ -24,11 +24,8 @@ function getRandomInt(max, min = 0) {
 }
 
 const rand = mulberry32(1);
-// const randNb = rand();
-// console.log("rand : ", randNb);
 
 function getRandomFloat(min, max) {
-    // return Math.random() * (max - min) + min;
     return rand() * (max - min) + min;
 }
 

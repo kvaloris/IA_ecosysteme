@@ -30,7 +30,6 @@ export class NeuralNetwork{
 		this.aOutput= (new Array (nOutput)).fill(1.0);
 
 		this.wInput = makeRandMatrix (this.nInput , this.nHidden);
-        //console.log ("wInput",this.wInput);
 		this.wOutput = makeRandMatrix (this.nHidden , this.nOutput);
 
 		this.cInput = makeMatrix (this.nInput , this.nHidden);
@@ -40,15 +39,13 @@ export class NeuralNetwork{
 	update(inputs){
 		if (inputs.length != this.nInput-1){
 			console.error("wrong number of inputs ");
-			return "Erreur";
+			return "Error";
 		}
 
 		//input activations
 		for (var i=0; i<this.nInput-1; i++) {
 		    this.aInput[i]= inputs[i];
 		}
-        //console.log ("aInput",this.aInput);
-        //console.log ("inputs",inputs);
         
 		//hidden activations
 		for (var j=0; j<this.nHidden; j++) {
@@ -58,27 +55,23 @@ export class NeuralNetwork{
 			}
 			this.aHidden[j]= Math.tanh(sum);
 		} 
-        //console.log ("aHidden",this.aHidden);
 
-        //console.log(this.aHidden[j]);
 		//output activations
 		for (var j=0; j<this.nOutput; j++) {
 			var sum = 0.0;
 			for (var i=0; i<this.nHidden; i++) {
 				sum=sum +this.aHidden[i]*this.wOutput[i][j];
 			}
-            //console.log(sum)
 			this.aOutput[j]= Math.tanh(sum)
 		}
 
-        //console.log(tabToString(this.aOutput));
-		return this.aOutput; //? copi?
+		return this.aOutput;
 	}
 
 	backPropagate(targets, N, M){
         if (targets.length != this.nOutput){
             console.error("wrong number of target values ");
-			return "Erreur";
+			return "Error";
         }
 
         // calculate error terms for output
@@ -127,7 +120,6 @@ export class NeuralNetwork{
 
     test( patterns){
         for (var p=0; p<patterns.length; p++) {
-            //console.log(patterns[p]);
             console.log(tabToString(patterns[p][0]), '->', tabToString(this.update(patterns[p][0])));
         }
     }
@@ -147,7 +139,6 @@ export class NeuralNetwork{
         // N: learning rate
         // M: momentum factor
 
-        
         for (var i=0; i<iterations; i++){
             var error = 0.0;
             for (var p=0; p<patterns.length; p++) {
@@ -173,30 +164,23 @@ export class NeuralNetwork{
             [[1,0], [0]],
             [[1,1], [1]]
         ];
-        //console.log(tabToString(pat));
-        // create a network with two input, two hidden, and one output nodes
+        // Create a network with two input, two hidden, and one output nodes
         var n =  new NeuralNetwork(2, 3, 1);
-        // train it with some patterns
+        // Train it with some patterns
         n.train(pat);
-        // test it
+        // Test it
         n.test(pat);
 
     }
     
     output(pat) {
-        // this.test([[pat]]);
         const r = this.update(pat);
-        // console.log(r);
         const output = Math.round(r[0]*2)/2; // round to 0.5
         if(output<0 || output>1)  {
-            // throw "output is negative or greater than 1";
             console.log("output is negative or greater than 1");
-            // console.log("color : "+pat[0]+" output : "+output);
             return 0;
         }
         const specieIndex = output * (SPECIES.length-1);
-        // const max = Math.max(...r);
-        // const specieIndex = r.indexOf(max) 
         return specieIndex;
     }
 }
