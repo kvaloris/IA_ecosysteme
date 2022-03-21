@@ -5,6 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as FishShoal from "./js/FishShoal.js";
 import { Fisherman } from './js/Fisherman.js';
 import { Ground } from './js/Ground.js';
+import { Fish } from './js/Fish.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
 import { animateChangeYear, closePopup, showPopup, handleSlidersConsoleDisplay, fillFishingOptions, updateFishingResult, updateFishingErrorMessage } from './js/buttonUIActions.js';
 
@@ -67,7 +68,7 @@ manager.onLoad = function ( ) {
 
   FishShoal.setMutChance(slider_mutChance.value);
   createFloor(40);
-
+  
 };
 
 manager.onError = function ( url ) {
@@ -140,7 +141,6 @@ function loadObjectSeparate(){
 
 }
 
-
   export function createClones(group, fish){
     let newFish = assembleFish(fish.color, fish.colorAppearance, fish.appearance);
     newFish.scale.set(fish.size,fish.size,fish.size);
@@ -189,19 +189,19 @@ function loadObjectSeparate(){
     switch(appearance[1]){ //add tails
       case 1:
         tails.add(tail);
-        tails.position.set(-0.25, -0.16, 0.1);
+        tails.position.set(-0.30, -0.16, 0.1);
         break;
       case 2:
         tails.add(tail1);
         tails.add(tail2);
-        tails.position.set(-0.4,-0.2,0.1);
+        tails.position.set(-0.5,-0.2,0.1);
         break;
 
       case 3:
         tails.add(tail1);
         tails.add(tail2);
         tails.add(tail);
-        tails.position.set(-0.4,-0.2,0.1);
+        tails.position.set(-0.5,-0.2,0.1);
         break;
     }
 
@@ -222,7 +222,7 @@ function loadObjectSeparate(){
 
       case 4:
         let couple2 = coupleFins.clone();
-        couple2.position.set(0,0.5,0);
+        couple2.position.set(0,0.2,0);
         fins.add(coupleFins);
         fins.add(couple2);
         break;
