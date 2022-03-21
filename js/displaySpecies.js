@@ -16,23 +16,27 @@ export function displaySpecies(idAnim, renderer) {
     // Make the display visible
     const display = document.querySelector('#display-2');
     display.style.display = "initial";
+
+    const stats = document.querySelector('.fish-stats');
+    if(stats) stats.style.display = "initial";
+
     display.animate([
         { transform: "translateX(-100%)" }, { transform: "translateX(0)"}
     ], {
         duration: 1000
     })
 
-
-    // Create tabs for the different species
-    createSpeciesTab(renderer);
+    
 
     setTimeout(() => {
+
+        // Create tabs for the different species
+        createSpeciesTab(renderer);
 
         // When the display is opened, fishes of the first specie are displayed
         const firstSpecie = Object.keys(FishShoal.getFishesBySpecies())[0];
         const fishesOfFirstSpecie = FishShoal.getFishesBySpecies()[firstSpecie];
         displayFishesAsItems(fishesOfFirstSpecie, renderer);
-        
     }, 1000);
 }
 
@@ -40,11 +44,15 @@ export function displaySpecies(idAnim, renderer) {
 
 function displayFishesAsItems(fishes, renderer) {
 
+    // const fishesCpy = [...fishes];
+    let fishesCpy = [];
+    fishes.forEach(fish => fishesCpy.push(Object.assign({}, fish)));
+
     // Empty the grid in case other fishes were displayed previously
     const grid = document.querySelector('.grid-fishes');
     grid.innerHTML = "";
 
-    if(fishes.length === 0) {
+    if(fishesCpy.length === 0) {
         const text = document.createElement("div");
         text.classList.add("empty-grid");
         text.innerText = "None";
@@ -106,8 +114,8 @@ function displayFishesAsItems(fishes, renderer) {
     }
 
     // For each fish
-    for (let i = 0; i < fishes.length; i++) {
-        let fish = fishes[i];
+    for (let i = 0; i < fishesCpy.length; i++) {
+        let fish = fishesCpy[i];
 
         // Create an html element
         const elem = document.createElement('span');
@@ -138,7 +146,10 @@ function displayFishesAsItems(fishes, renderer) {
         // Add the fish to the scene
         // map is a function in "utils.js" that map values from interval1 [A, B] to interval2 [a, b]
         // displayFishAt(fish, scene, map(fish.size, [MINSIZE, MAXSIZE], [1, 3]), 0, 0, 0);
-        createClones(scene, map(fish.size, [MINSIZE, MAXSIZE], [.05, .08]), fish.color, 0, 0, 0, fish.appearance);
+        
+        fish.size = map(fish.size, [MINSIZE, MAXSIZE], [.05, .08]);
+        fish.x = 0; fish.y = 0; fish.z = 0;
+        createClones(scene, fish);
         console.log(scene);
 
         // Add the html element and a render function to array sceneElement
@@ -243,6 +254,8 @@ export function closeSpeciesDisplay() {
     })
     setTimeout(() => {
         display.style.display = "none";
+        const stats = document.querySelector('.fish-stats');
+        if(stats) stats.style.display = "none";
     }, 1000);
     animate();
 }

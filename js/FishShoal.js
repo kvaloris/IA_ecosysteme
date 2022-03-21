@@ -1,6 +1,6 @@
 import { Fish } from "./Fish";
 import { Ground } from "./Ground";
-import { createClones} from "../main";
+import { createClones, displayFloorElmt } from "../main";
 
     let nbFishInit;
     let mutChance= 0.1;
@@ -55,6 +55,9 @@ import { createClones} from "../main";
             nextYear(fishesGroup);
             eatingPeriod = "no";
 
+            console.log(displayFloorElmt.children);
+            console.log(Ground.toString2());
+
             const btnNextYear = document.querySelector("#next-year-btn");
             btnNextYear.classList.remove('btn-disabled');
             const fishingConsoleBtn = document.querySelector('#fishing-console-btn');
@@ -70,7 +73,10 @@ import { createClones} from "../main";
         // Fishes either move aimlessly or move to eat according to if it's eating period or not
 
         if(eatingPeriod === "no") {
-            fishesArray.forEach(fish => fish.move(fishesArray, c_ag, c_s, c_al));
+            fishesArray.forEach(fish => {
+                fish.move(fishesArray, c_ag, c_s, c_al);
+                fish.update();
+            })
         }
 
         else if(eatingPeriod === "ongoing") {
@@ -82,6 +88,7 @@ import { createClones} from "../main";
                 const endEating = fish.moveToEat();
                 if(fish.hunger) fish.separate(hungry_fishes, c_s);
                 else fish.move(unhungry_fishes, c_ag, c_s, c_al);
+                fish.update();
 
                 if(!endEating) endEatingPeriod = false;
             })
@@ -89,8 +96,8 @@ import { createClones} from "../main";
                 eatingPeriod = "ending";
             };
         }
-        
-        fishesArray.forEach(fish => fish.update());
+
+        // fishesArray.forEach(fish => fish.update())k
 
         for (let i = 0; i < fishesGroup.children.length; i++) {
             if(fishesGroup.children.length !== fishesArray.length) {
@@ -103,6 +110,7 @@ import { createClones} from "../main";
             let model = fishesGroup.getObjectById( id_3dobject );
             if(!model) {
                 console.log("Undefined model");
+                console.log("Group : ", fishesGroup.children.map(fish => fish.id));
             }
             model.position.x = x;
             model.position.y = y;
@@ -119,13 +127,11 @@ import { createClones} from "../main";
         var i=0;
         // Fishes grow one year older and dies from aging or hunger
         while (i < fishesArray.length) {
-            console.log("test nextyear");
             fishesArray[i].yearsOld ++;
             if (fishesArray[i].yearsOld > fishesArray[i].ageMax || fishesArray[i].hunger===true){
                 if(fishesArray[i].hunger===true) console.log('fish of color ' + fishesArray[i].color + ' died from hunger');
 
-                fishesGroup.remove(fishesGroup.getObjectById(fishesArray[i].id_3dobject));
-                fishesArray.splice(i,1);
+                removeFish(i, fishesGroup);
 
             }else{
                 i++;
@@ -139,7 +145,7 @@ import { createClones} from "../main";
         });
 
         Ground.nextYear();
-       
+
     }
 
     function setMutChance(newFloat){
@@ -164,10 +170,10 @@ import { createClones} from "../main";
         return species;
     }
 
-    function removeFish(i){
+    function removeFish(i, fishesGroup){
 
-        fishesArray.splice(i,1);
         fishesGroup.remove(fishesGroup.getObjectById(fishesArray[i].id_3dobject));
+        fishesArray.splice(i,1);
 
     }
 

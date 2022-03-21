@@ -36,10 +36,9 @@ materialArray.push(new THREE.MeshBasicMaterial( { map: texture_lf }));
 for (let i = 0; i < 6; i++)
   materialArray[i].side = THREE.BackSide;
 
-let boxSize = 600;
-let skyboxGeo = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+let skyboxGeo = new THREE.BoxGeometry(BOXSIZE, BOXSIZE, BOXSIZE);
 let skybox = new THREE.Mesh(skyboxGeo, materialArray);
-skybox.position.x = -60;
+// skybox.position.x = -60;
 skybox.position.y = 0;
 skybox.position.z = 0;
 scene.add(skybox);
@@ -60,14 +59,14 @@ const manager = new THREE.LoadingManager();
 manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
-  FishShoal.init(3);
+  FishShoal.init(10);
   //console.log(FishShoal.getNbFishToString());
   console.log('moyenne score poisson peche: ' +Fisherman.getMeanScoreFish());
   console.log( 'nb poisson qui vont etre peche: '+ Fisherman.getNbGoodFish());
   displayFishes(fishesGroup);
 
   FishShoal.setMutChance(slider_mutChance.value);
-  createFloor(40);
+  createFloor(10);
 
 };
 
@@ -147,47 +146,21 @@ function loadObjectSeparate(){
     newFish.scale.set(fish.size,fish.size,fish.size);
     newFish.position.set(fish.x,fish.y,fish.z);
     fish.id_3dobject = newFish.id;
-    
-    group.add(newFish);
+    newFish.name= newFish.id;
 
+    group.add(newFish);
   }
 
   function assembleFish(color, appearance){
     let assembleFish = new THREE.Group();
-    let body;
-    let fin_object;
-    let tail_object;
-    let eye_object;
-    for(let i=0; i<3; i++){
-      // console.log(i);
-      // console.log(colorList[i]);
-      if(bodyFish.children[i].name == colorList[color]){
-        body = bodyFish.children[color].clone();
-        // console.log(bodyFish.children[color].name);
-      }
-      if(finsFish.children[i].name == colorList[color]){
-        fin_object = finsFish.children[color];
-        // console.log(finsFish.children[color].name);
-      }
-      if(tailFish.children[i].name == colorList[color]){
-        tail_object = tailFish.children[color];
-        // console.log(tailFish.children[color].name);      
-      }
-
-      if(eyesFish.children[i].name == colorList[color]){
-        eye_object = eyesFish.children[color];
-        // console.log(eyesFish.children[color].name);       
-      }
-    }
-
-    //let body = bodyFish.children[color].clone(); //add body
+    console.log(colorList[color] + "couleur à afficher");
+    console.log(bodyFish);
+    let body = bodyFish.getObjectByName(colorList[color]).clone(); //add body
     let fins = new THREE.Group();
     let coupleFins = new THREE.Group();
-    let fin = fin_object.clone();
-    let fin2 = fin_object.clone();
-    //let fin = finsFish.children[color].clone();
-    //let fin2 = finsFish.children[color].clone();
-    //let fin2 = fin.clone();
+
+    let fin = finsFish.getObjectByName(colorList[color]).clone();
+    let fin2 = finsFish.getObjectByName(colorList[color]).clone();
     fin2.rotation.set(0,-179,0);
     fin2.position.set(-0.6,0,2.6);
     coupleFins.add(fin);
@@ -195,25 +168,23 @@ function loadObjectSeparate(){
     
     //Add tails
     let tails = new THREE.Group();
-    let tail = tail_object.clone();
-    //let tail = tailFish.children[color].clone();
+    let tail = tailFish.getObjectByName(colorList[color]).clone();
     //Add eyes
     let eyes = new THREE.Group();
-    let eye = eye_object.clone();
-    let eye2 = eye_object.clone();
+    let eye = eyesFish.getObjectByName(colorList[color]).clone();
+    let eye2 =eyesFish.getObjectByName(colorList[color]).clone();
     let coupleEyes = new THREE.Group();
     eye2.position.set(0,0,-0.7);
     coupleEyes.add(eye);
     coupleEyes.add(eye2);
 
-    //let tail1 = tailFish.children[color].clone();
-    //let tail2 = tailFish.children[color].clone();
-    let tail1 = tail.clone();
-    let tail2 = tail.clone();
+    let tail1 = tailFish.getObjectByName(colorList[color]).clone();
+    let tail2 = tailFish.getObjectByName(colorList[color]).clone();
     tail1.rotation.set(0,0.5,0);
     tail1.position.set(2, 0, 1);
     tail2.rotation.set(0,-0.5,0);
     tail2.position.set(2, 0, 1.4);
+
     switch(appearance[1]){ //add tails
       case 1:
         tails.add(tail);
@@ -232,6 +203,8 @@ function loadObjectSeparate(){
         tails.position.set(-0.4,-0.2,0.1);
         break;
     }
+
+
     switch(appearance[2]){//add fins
       case 1:
         fins.add(fin);
@@ -253,6 +226,7 @@ function loadObjectSeparate(){
         fins.add(couple2);
         break;
     }
+
     switch(appearance[0]){//add eyes
       case 1:
         eyes.add(eye);
@@ -274,11 +248,19 @@ function loadObjectSeparate(){
         eyes.add(couple2);
         break;
     }
+
+
     assembleFish.add(body);
     assembleFish.add(tails);
     assembleFish.add(fins);
     assembleFish.add(eyes);
+
+    
     return assembleFish;
+  }
+
+  export function getFishesGroup(){
+    return fishesGroup;
   }
 
 // Allow to empty a group of fishes
@@ -305,6 +287,9 @@ scene.add(fishesGroup);
 // CONTROL
 
 var controls = new OrbitControls(camera, renderer.domElement);
+//controls.addEventListener('change', renderer);
+controls.maxDistance = BOXSIZE-500;
+controls.update();
 
 // LIGHT
 
@@ -314,6 +299,19 @@ const ambientLight = new THREE.AmbientLight(0x111111);
 scene.add(ambientLight);
 scene.add(pointLight);
 scene.add(directionalLight);
+
+//SOUND
+
+const listener = new THREE.AudioListener();
+camera.add(listener);
+const sound = new THREE.Audio(listener);
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load('./sound/underwater.wav', function(buffer){
+  sound.setBuffer(buffer);
+  sound.setLoop(true);
+  sound.setVolume(0.5);
+  sound.play();
+});
 
 
 // SLIDERS
@@ -417,22 +415,22 @@ function updateFishermanTarget() {
   Fisherman.nbFinTarget = finsInput.value;
   Fisherman.nbTailTarget = tailsInput.value;
 
-  console.log("Fisherman target");
-  console.log("color : ", Fisherman.colorTarget);
-  console.log("size : ", Fisherman.sizeTarget);
-  console.log("eye : ", Fisherman.nbEyeTarget);
-  console.log("fin : ", Fisherman.nbFinTarget);
-  console.log("tail : ", Fisherman.nbTailTarget);
+  // console.log("Fisherman target");
+  // console.log("color : ", Fisherman.colorTarget);
+  // console.log("size : ", Fisherman.sizeTarget);
+  // console.log("eye : ", Fisherman.nbEyeTarget);
+  // console.log("fin : ", Fisherman.nbFinTarget);
+  // console.log("tail : ", Fisherman.nbTailTarget);
 }
 
 const fishingBtn = document.querySelector('#fishing-btn');
 fishingBtn.addEventListener('click', () => {
     updateFishermanTarget();
     const fishesValid = Fisherman.getNbGoodFish();
-    Fisherman.goFishing();
+    Fisherman.goFishing(fishesGroup);
     const fishesCaugth = fishesValid;
-    deleteGroup(fishesGroup);
-    displayFishes(fishesGroup);
+    // deleteGroup(fishesGroup);
+    // displayFishes(fishesGroup);
 
     closePopup(fishingConsole);
     updateFishingResult(fishesCaugth);
@@ -494,9 +492,9 @@ export function resizeRendererToDisplaySize(renderer) {
 
 
 function createFloor(nbCoralsPerLine) {
-  Ground.init(boxSize, nbCoralsPerLine, 4);
-  console.log(Ground.toString());
-  console.log(Ground.getGroundArray());
+  Ground.init(BOXSIZE, nbCoralsPerLine, 4);
+  console.log(Ground.toString2());
+
   for (let i = 0; i < nbCoralsPerLine; i++) {
     for (let j = 0; j < nbCoralsPerLine; j++) {
 
@@ -506,7 +504,7 @@ function createFloor(nbCoralsPerLine) {
   }
 }
 
-export function displayFloor( i,j) {
+export function displayFloor(i, j) {
 
   let x;
   let z;
@@ -514,31 +512,39 @@ export function displayFloor( i,j) {
   x = Ground.getCoralX(i,j);
   z = Ground.getCoralY(i,j);
   typeElement = Ground.getTypeElement(i, j);
+
+  let element;
   
+  // Blue coral
   if (typeElement == 1) {
-    let blue_coral = floorElements.children[1].clone();
-    blue_coral.position.set(x, -240, z);
-    displayFloorElmt.add(blue_coral);
-    Ground.getGroundArray(i, j, blue_coral.id);
+    element = floorElements.getObjectByName("blue").clone();
+    element.position.set(x, -BOXSIZE/2, z);
+    displayFloorElmt.add(element);
+    // Ground.getGroundArray(i, j, blue_coral.id);
     //console.log('blue_coral ', x, ' ', z);
   }
 
+  // Yellow coral
   if (typeElement == 2) {
-    let yellow_coral = floorElements.children[0].clone();
-    yellow_coral.position.set(x, -240, z);
-    displayFloorElmt.add(yellow_coral);
-    Ground.getGroundArray(i, j, yellow_coral.id);
+    element = floorElements.getObjectByName("yellow").clone();
+    element.position.set(x, -BOXSIZE/2, z);
+    displayFloorElmt.add(element);
+    // Ground.getGroundArray(i, j, yellow_coral.id);
     //console.log('yellow_coral ', x, ' ', z);
 
   }
+
+  // Red coral
   if (typeElement == 3) {
-    let red_coral = floorElements.children[2].clone();
-    red_coral.position.set(x, -240, z);
-    displayFloorElmt.add(red_coral);
-    Ground.getGroundArray(i, j, red_coral.id);
+    element = floorElements.getObjectByName("red").clone();
+    element.position.set(x, -BOXSIZE/2, z);
+    displayFloorElmt.add(element);
+    // Ground.getGroundArray(i, j, red_coral.id);
     //console.log('red_coral ', x, ' ', z);
 
   }
+
+  if(element) Ground.groundArray[i][j].e_id_3d_object = element.id;
 }
 
 

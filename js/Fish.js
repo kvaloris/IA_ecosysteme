@@ -150,7 +150,7 @@ export class Fish {
     // Separation
     separate(fishes, c) {
 
-        const dmin = 30;
+        const dmin = 50;
 
         let v = { x: 0, y: 0, z: 0 };
 
@@ -242,11 +242,11 @@ export class Fish {
 
     // Update the position of fish
     move(fishes, c_ag, c_s, c_al) {
-        // this.velocity = addV3(this.velocity, this.separate(fishes, c_s));
-        // this.velocity = addV3(this.velocity, this.aggregate(fishes, c_ag));
-        // this.velocity = addV3(this.velocity, this.align(fishes, c_al));
-        // this.velocity = addV3(this.velocity, this.bound());
-        this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));
+        this.velocity = addV3(this.velocity, this.separate(fishes, c_s));
+        this.velocity = addV3(this.velocity, this.aggregate(fishes, c_ag));
+        this.velocity = addV3(this.velocity, this.align(fishes, c_al));
+        this.velocity = addV3(this.velocity, this.bound());
+        // this.velocity = addV3(addV3(addV3(addV3(this.velocity, this.aggregate(fishes, c_ag)), this.separate(fishes, c_s)), this.bound()), this.align(fishes, c_al));
     }
 
     // Return true if fish is no longer searching for food
@@ -277,7 +277,8 @@ export class Fish {
             if(getDistance(this.x, this.y, this.z, x, y, z) <= 10) { // If very close, eats
                 this.hunger=false;
                 // this.eatObjectifCoordinate = false;
-                console.log("Fish " + this.id + " of color " + this.color + " has eaten coral (" + this.eatObjectifCoordinate.i + ", " + this.eatObjectifCoordinate.j + ") of type " + Ground.getTypeElement(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j));
+                const type = Ground.getTypeElement(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j);
+                console.log("Fish " + this.id + " of color " + this.color + " has eaten coral (" + this.eatObjectifCoordinate.i + ", " + this.eatObjectifCoordinate.j + ") of type " + type);
                 Ground.eatCoral(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j); 
                 return true;
             }
@@ -294,14 +295,14 @@ export class Fish {
         this.z = position.z;
     }
 
-    // updatePosition(fishes, c_ag, c_s, c_a) {
-    //     this.move(fishes, c_ag, c_s, c_a);
-    //     this.limitSpeed();
-    //     let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
-    //     this.x = position.x;
-    //     this.y = position.y;
-    //     this.z = position.z;
-    // }
+    updatePosition(fishes, c_ag, c_s, c_a) {
+        this.move(fishes, c_ag, c_s, c_a);
+        this.limitSpeed();
+        let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
+        this.x = position.x;
+        this.y = position.y;
+        this.z = position.z;
+    }
     
     getSpecie() {
         // Normalize

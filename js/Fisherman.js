@@ -17,13 +17,13 @@ export class Fisherman{
     static yearsOldTarget = 4;
     static yearsOldFactor = 0;
 
-    static goFishing(){
+    static goFishing(fishesGroup){
         
         var i=0;
         while (i< fishesArray.length) {
             var tmp = fishesArray[i].getScoreToHuman();
             if (this.isAGoodFish(i)){
-                FishShoal.removeFish(i)
+                FishShoal.removeFish(i, fishesGroup);
             }else{
                 i++;
             }
