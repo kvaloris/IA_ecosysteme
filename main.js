@@ -184,6 +184,7 @@ function loadObjectSeparate(){
     tail1.position.set(2, 0, 1);
     tail2.rotation.set(0,-0.5,0);
     tail2.position.set(2, 0, 1.4);
+
     switch(appearance[1]){ //add tails
       case 1:
         tails.add(tail);
@@ -202,6 +203,8 @@ function loadObjectSeparate(){
         tails.position.set(-0.4,-0.2,0.1);
         break;
     }
+
+
     switch(appearance[2]){//add fins
       case 1:
         fins.add(fin);
@@ -223,6 +226,7 @@ function loadObjectSeparate(){
         fins.add(couple2);
         break;
     }
+
     switch(appearance[0]){//add eyes
       case 1:
         eyes.add(eye);
@@ -244,10 +248,14 @@ function loadObjectSeparate(){
         eyes.add(couple2);
         break;
     }
+
+
     assembleFish.add(body);
     assembleFish.add(tails);
     assembleFish.add(fins);
     assembleFish.add(eyes);
+
+    
     return assembleFish;
   }
 
