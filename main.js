@@ -59,7 +59,7 @@ const manager = new THREE.LoadingManager();
 manager.onLoad = function ( ) {
 
   console.log( 'Loading complete!');
-  FishShoal.init(30);
+  FishShoal.init(4);
   //console.log(FishShoal.getNbFishToString());
   console.log('moyenne score poisson peche: ' +Fisherman.getMeanScoreFish());
   console.log( 'nb poisson qui vont etre peche: '+ Fisherman.getNbGoodFish());
@@ -306,7 +306,6 @@ scene.add(fishesGroup);
 // CONTROL
 
 var controls = new OrbitControls(camera, renderer.domElement);
-controls.maxDistance = 380;
 
 // LIGHT
 
