@@ -91,6 +91,12 @@ const listener = new THREE.AudioListener();
 camera.add(listener);
 const sound = new THREE.Audio(listener);
 const audioLoader = new THREE.AudioLoader();
+audioLoader.load('./sound/underwater.wav', function (buffer) {
+  sound.setBuffer(buffer);
+  sound.setLoop(true);
+  sound.setVolume(0.5);
+});
+
 
 // SLIDERS
 
@@ -143,13 +149,8 @@ btnSound.addEventListener('click', () => {
   
   if(playSound == false){
     imageSound.setAttribute("src", "/assets/volume.png");
-    audioLoader.load('./sound/underwater.wav', function (buffer) {
-      sound.setBuffer(buffer);
-      sound.setLoop(true);
-      sound.setVolume(0.5);
-      sound.play();
-    });
-    playSound = true;
+    playSound = true; 
+    sound.play();
     
   }
   else {
