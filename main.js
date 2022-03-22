@@ -87,18 +87,10 @@ scene.add(pointLight);
 scene.add(directionalLight);
 
 //SOUND
-
 const listener = new THREE.AudioListener();
 camera.add(listener);
 const sound = new THREE.Audio(listener);
 const audioLoader = new THREE.AudioLoader();
-audioLoader.load('./sound/underwater.wav', function (buffer) {
-  sound.setBuffer(buffer);
-  sound.setLoop(true);
-  sound.setVolume(0.5);
-});
-
-
 
 // SLIDERS
 
@@ -148,10 +140,17 @@ const btnSound = document.querySelector("#sound-btn");
 let playSound = false;
 let imageSound = document.getElementById("soundImg");
 btnSound.addEventListener('click', () => {
+  
   if(playSound == false){
     imageSound.setAttribute("src", "/assets/volume.png");
+    audioLoader.load('./sound/underwater.wav', function (buffer) {
+      sound.setBuffer(buffer);
+      sound.setLoop(true);
+      sound.setVolume(0.5);
+      sound.play();
+    });
     playSound = true;
-    sound.play();
+    
   }
   else {
     imageSound.setAttribute("src", "/assets/mute.png");
