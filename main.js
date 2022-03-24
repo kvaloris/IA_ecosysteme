@@ -170,20 +170,14 @@ const infoBtn = document.querySelector('#info-btn');
 infoBtn.addEventListener('click', () => showPopup(presentation));
 
 const slidersBtn = document.querySelector('#sliders-btn');
-const sliders = document.querySelector(".sliders");
-const btnBottom = document.querySelector(".buttons-bottom");
 slidersBtn.addEventListener('click', () => {
-  if(window.screen.width > 768) handleSlidersConsoleDisplay(true);
-  else {
-    handleSlidersConsoleDisplay(false);
-    btnBottom.classList.remove('goDownButtons');
-  } 
+  if(window.screen.width > 600) handleSlidersConsoleDisplay(false);
+  else handleSlidersConsoleDisplay(true); 
 });
 
 const slidersMobileBtn = document.querySelector('#sliders-mobile-btn');
 slidersMobileBtn.addEventListener('click', () => {
-  handleSlidersConsoleDisplay(true);
-  btnBottom.classList.add('goDownButtons');
+  handleSlidersConsoleDisplay(false);
 })
 
 const fishingConsole = document.querySelector('#fishing-console-wp');
