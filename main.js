@@ -13,7 +13,6 @@ const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerH
 camera.position.set(-100, -200, -300);
 const canvas = document.querySelector('#canvas-1');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-// renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector("#display-1").appendChild(renderer.domElement);
 
 // SKYBOX
