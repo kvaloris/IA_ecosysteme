@@ -116,6 +116,12 @@
   background-color: var(--white);
 }
 
+#species-close-btn:hover {
+  background-color: var(--dark-blue);
+  color: var(--dark-blue);
+  font-weight: bold;
+}
+
 
 
 
@@ -169,9 +175,11 @@
   bottom: 0;
   opacity: 0;
   transition: 1s;
+  font-family: "Smooch Sans";
+  letter-spacing: 5px;
 }
 
-#next-year-btn:hover .text-curved, #fishing-console-btn:hover .text-curved {
+#next-year-btn:hover .text-curved, #fishing-console-btn:hover .text-curved, #sound-btn:hover .text-curved {
   opacity: 1;
 }
 
