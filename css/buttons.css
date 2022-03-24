@@ -156,7 +156,11 @@
 }
 
 
+/* DISPLAY SLIDERS BUTTON */
 
+#sliders-btn:hover+.sliders {
+  background-color: var(--blue);
+}
 
 
 /* NEXT YEAR BUTTON */
@@ -181,9 +185,6 @@
 }
 
 
-
-
-
 /* BUTTON SOUND */
 
 #sound-btn {
@@ -206,12 +207,7 @@
 
 
 
-
   /* DISPLAY SLIDERS BUTTON */
-
-  #sliders-btn:hover+.sliders {
-    background-color: var(--blue);
-  }
 
   #sliders-btn {
     position: relative;
@@ -279,8 +275,6 @@
   }
 
   .buttons-bottom {
-    display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
     width: 540px;

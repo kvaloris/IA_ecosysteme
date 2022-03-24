@@ -8,7 +8,7 @@
   align-items: flex-end;
 
   /* Transition */
-  transition: 1s;
+  transition: transform 1s;
 }
 
 .sliders {
@@ -76,8 +76,8 @@ input[type="range"]::-webkit-slider-thumb {
 
   .sliders-console {
     position: absolute;
-    left: 50%; top: 0;
-    transform: translate(-50%, -100%);
+    left: 50%; bottom: 0;
+    transform: translate(-50%, calc(-110px - 25px - 100px));
   }
   
   .sliders {
@@ -95,12 +95,8 @@ input[type="range"]::-webkit-slider-thumb {
     border-width: 7px;
   }
 
-  .goUp {
-    transform: translate(-50%, -100%);
-  }
-
   .goDown {
-    transform: translate(-50%, calc(100px + 25px + 110px));
+    transform: translate(-50%, 100%);
   }
 }
 

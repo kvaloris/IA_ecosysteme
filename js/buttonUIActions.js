@@ -71,14 +71,23 @@ export function showPopup(node) {
 }
 
 // Close and display sliders console
-export function handleSlidersConsoleDisplay(changeImg) {
+export function handleSlidersConsoleDisplay(wait) {
   const slidersBtnImg = document.querySelector('#sliders-btn > img');
   const slidersConsole = document.querySelector('.sliders-console');
+  const btnBottom = document.querySelector(".buttons-bottom");
   slidersConsole.classList.toggle('goDown');
-  if(changeImg) {
-    const btnImgPath = slidersConsole.className.includes('goDown') ? "/assets/slider.png" : "/assets/arrow.png";
+  btnBottom.classList.toggle('goDownButtons');
+  
+  const btnImgPath = slidersConsole.className.includes('goDown') ? "/assets/slider.png" : "/assets/arrow.png";
+  if(!wait) {
     slidersBtnImg.setAttribute('src', btnImgPath);
     slidersBtnImg.setAttribute('style', 'transform: rotate(180deg)');
+  }
+  else{
+    setTimeout(() => {
+      slidersBtnImg.setAttribute('src', btnImgPath);
+      slidersBtnImg.setAttribute('style', 'transform: rotate(180deg)');
+    }, 1000)
   }
 }
 
