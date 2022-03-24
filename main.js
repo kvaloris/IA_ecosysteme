@@ -6,13 +6,14 @@ import { Fisherman } from './js/Fisherman.js';
 import { Ground } from './js/Ground.js';
 import { displaySpecies, closeSpeciesDisplay } from './js/displaySpecies.js';
 import { animateChangeYear, closePopup, showPopup, handleSlidersConsoleDisplay, fillFishingOptions, updateFishingResult } from './js/buttonUIActions.js';
+import { RedFormat } from 'three';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 45, 10000);
 camera.position.set(-100, -200, -300);
 const canvas = document.querySelector('#canvas-1');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+// renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector("#display-1").appendChild(renderer.domElement);
 
 // SKYBOX
@@ -171,7 +172,21 @@ const infoBtn = document.querySelector('#info-btn');
 infoBtn.addEventListener('click', () => showPopup(presentation));
 
 const slidersBtn = document.querySelector('#sliders-btn');
-slidersBtn.addEventListener('click', handleSlidersConsoleDisplay);
+const sliders = document.querySelector(".sliders");
+const btnBottom = document.querySelector(".buttons-bottom");
+slidersBtn.addEventListener('click', () => {
+  if(window.screen.width > 768) handleSlidersConsoleDisplay(true);
+  else {
+    handleSlidersConsoleDisplay(false);
+    btnBottom.classList.remove('goDownButtons');
+  } 
+});
+
+const slidersMobileBtn = document.querySelector('#sliders-mobile-btn');
+slidersMobileBtn.addEventListener('click', () => {
+  handleSlidersConsoleDisplay(true);
+  btnBottom.classList.add('goDownButtons');
+})
 
 const fishingConsole = document.querySelector('#fishing-console-wp');
 
@@ -434,6 +449,12 @@ export function displayFishes(group) {
 loadObjectSeparate();
 
 scene.add(fishesGroup);
+
+
+
+
+
+// RESIZING
 
 export function resizeRendererToDisplaySize(renderer) {
   const canvas = renderer.domElement;

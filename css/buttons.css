@@ -51,8 +51,8 @@
 #species-display-btn, #species-close-btn {
   width: 35px;
   height: 70px;
-  border-top-right-radius: 70px;
-  border-bottom-right-radius: 70px;
+  border-top-right-radius: 200px;
+  border-bottom-right-radius: 200px;
   position: fixed;
   left: 0;
   top: 50%;
@@ -136,6 +136,7 @@
   flex-direction: row;
   gap: 25px;
   align-items: flex-end;
+  transition: 1s;
 }
 
 .buttons-bottom .button {
@@ -179,75 +180,163 @@
   letter-spacing: 5px;
 }
 
-#next-year-btn:hover .text-curved, #fishing-console-btn:hover .text-curved, #sound-btn:hover .text-curved {
-  opacity: 1;
-}
 
 
 
-
-/* DISPLAY SLIDERS BUTTON */
-
-#sliders-btn:hover+.sliders {
-  background-color: var(--blue);
-}
-
-#sliders-btn {
-  position: relative;
-}
-
-#sliders-btn::before {
-
-  /* Content */
-  content: "Parameters";
-
-  /* Position */
-  position: absolute;
-  left: 0;
-  transform: translateX(calc(-100% - 17px));
-
-  /* Transition */
-  opacity: 0;
-  transition: 1s;
-}
-
-#sliders-btn:hover::before {
-  opacity: 1;
-}
-
-.goDown {
-  transform: translateX(calc(-100% - 25px)) translateY(calc(100% - 25px));
-}
-
-
-
-
-
-/* DISPLAY PRESENTATION POPUP BUTTON */
-
-#info-btn::after {
-
-  /* Content */
-  content: "About the project";
-  width: max-content;
-
-  /* Position */
-  position: absolute;
-  right: 0;
-  transform: translateX(calc(100% + 17px));
-
-  /* Transition */
-  opacity: 0;
-  transition: 1s;
-}
-
-#info-btn:hover::after {
-  opacity: 1;
-}
 
 /* BUTTON SOUND */
 
 #sound-btn {
   right:0px;
   border: none;
+}
+
+
+
+
+
+
+
+@media (min-device-width: 600px) {
+  
+  #next-year-btn:hover .text-curved, #fishing-console-btn:hover .text-curved, #sound-btn:hover .text-curved {
+    opacity: 1;
+  }
+ 
+
+
+
+
+  /* DISPLAY SLIDERS BUTTON */
+
+  #sliders-btn:hover+.sliders {
+    background-color: var(--blue);
+  }
+
+  #sliders-btn {
+    position: relative;
+  }
+
+  #sliders-btn::before {
+
+    /* Content */
+    content: "Parameters";
+
+    /* Position */
+    position: absolute;
+    left: 0;
+    transform: translateX(calc(-100% - 17px));
+
+    /* Transition */
+    opacity: 0;
+    transition: 1s;
+  }
+
+  #sliders-btn:hover::before {
+    opacity: 1;
+  }
+
+
+
+
+
+  /* DISPLAY PRESENTATION POPUP BUTTON */
+
+  #info-btn::after {
+
+    /* Content */
+    content: "About the project";
+    width: max-content;
+
+    /* Position */
+    position: absolute;
+    right: 0;
+    transform: translateX(calc(100% + 17px));
+
+    /* Transition */
+    opacity: 0;
+    transition: 1s;
+  }
+
+  #info-btn:hover::after {
+    opacity: 1;
+  }
+}
+
+
+
+
+#sliders-mobile-btn {
+  display: none;
+}
+
+
+
+@media (max-device-width: 767px) and (orientation : portrait) {
+
+  .text-button {
+    font-size: 35px;
+  }
+
+  .buttons-bottom {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 540px;
+    transform: translateX(calc(-540px / 2));
+  }
+
+  #sliders-mobile-btn {
+    order: 1;
+  }
+
+  #info-btn {
+    order: 2;
+  }
+
+  #sound-btn {
+    order: 3;
+  }
+
+  #next-year-btn {
+    order: 4;
+  }
+
+  #fishing-console-btn {
+    order: 5;
+  }
+
+  .buttons-bottom .button:not(#sliders-btn) {
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+  }
+
+  #sliders-btn {
+    width: 100px;
+    height: 50px;
+  } 
+
+  .btn-lg {
+    width: 220px !important;
+    height: 110px !important;
+    border-top-left-radius: 300px !important;
+    border-top-right-radius: 300px !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+
+  #species-display-btn, #species-close-btn {
+    width: 110px;
+    height: 220px;
+  }
+  
+  .goDownButtons {
+    transform: translateX(calc(-540px / 2)) translateY(100%);
+  }
+
+  #sliders-mobile-btn {
+    display: flex;
+  }
 }
