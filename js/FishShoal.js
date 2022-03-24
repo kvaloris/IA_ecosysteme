@@ -94,7 +94,8 @@ function updatePosition(c_ag, c_s, c_al, fishesGroup) {
                 fish.move(unhungry_fishes, c_ag, c_s, c_al);
             }
             else { // Fish is still searching for food
-                fish.separate(hungry_fishes, c_s);
+                const v = fish.separate(hungry_fishes, c_s);
+                fish.velocity = addV3(fish.velocity, v);
                 endEatingPeriod = false;
             }
             fish.update();

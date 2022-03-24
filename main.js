@@ -60,9 +60,9 @@ manager.onLoad = function () {
   console.log('Loading complete!');
 
   // Initialize and display fishes and floor
-  FishShoal.init(30);
+  FishShoal.init(10);
   displayFishes(fishesGroup);
-  createFloor(20);
+  createFloor(10);
 
   FishShoal.setMutChance(slider_mutChance.value);
   

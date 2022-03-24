@@ -8,8 +8,9 @@
   align-items: flex-end;
 
   /* Transition */
-  position: relative;
+  position: absolute;
   bottom: 0;
+  transform: translateX(calc(-100% - 25px));
   transition: 1s;
 }
 
