@@ -71,13 +71,15 @@ export function showPopup(node) {
 }
 
 // Close and display sliders console
-export function handleSlidersConsoleDisplay() {
+export function handleSlidersConsoleDisplay(changeImg) {
   const slidersBtnImg = document.querySelector('#sliders-btn > img');
   const slidersConsole = document.querySelector('.sliders-console');
   slidersConsole.classList.toggle('goDown');
-  const btnImgPath = slidersConsole.className.includes('goDown') ? "/assets/slider.png" : "/assets/arrow.png";
-  slidersBtnImg.setAttribute('src', btnImgPath);
-  slidersBtnImg.setAttribute('style', 'transform: rotate(180deg)');
+  if(changeImg) {
+    const btnImgPath = slidersConsole.className.includes('goDown') ? "/assets/slider.png" : "/assets/arrow.png";
+    slidersBtnImg.setAttribute('src', btnImgPath);
+    slidersBtnImg.setAttribute('style', 'transform: rotate(180deg)');
+  }
 }
 
 // Fill html inputs dynamically with values

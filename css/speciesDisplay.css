@@ -33,7 +33,7 @@
 
 .empty-grid {
   font-size: 24px;
-  margin-top: 130px;
+  margin: 130px auto 0;
 }
 
 
@@ -44,7 +44,7 @@
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .diagram {
@@ -139,11 +139,10 @@
   position: relative;
   display: flex;
   justify-content: center;
-  gap: 40px;
   font-size: 24px;
   flex-wrap: wrap;
-  row-gap: 10px;
-  margin: 15px 0;
+  gap: 2.5em;
+  margin: 1em 0;
 }
 
 .species-tabs>*:hover {
@@ -163,10 +162,10 @@
 
 .specie-icon-wp {
   border: solid 1px var(--white);
-  width: 100px;
-  height: 50px;
-  border-top-left-radius: 100px;
-  border-top-right-radius: 100px;
+  width: 6em;
+  height: 3em;
+  border-top-left-radius: 6em;
+  border-top-right-radius: 6em;
 
   /* Center img inside button */
   display: flex;
@@ -182,4 +181,26 @@
   width: 100%;
   background-color: var(--white);
   height: 1px;
+}
+
+
+
+
+
+@media (max-device-width: 767px) and (orientation : portrait) {
+  #container-2, .species-tabs {
+    font-size: 50px;
+  }
+
+  .diagram {
+    width: 270px; height: 270px;
+  }
+
+  .fish-stats {
+    font-size: 24px;
+  }
+
+  .fish-stat img {
+    height: 24px;
+  }
 }

@@ -238,7 +238,6 @@ export class Fish {
         this.velocity = addV3(this.velocity, this.separate(fishes, c_s));
         this.velocity = addV3(this.velocity, this.aggregate(fishes, c_ag));
         this.velocity = addV3(this.velocity, this.align(fishes, c_al));
-        this.velocity = addV3(this.velocity, this.bound());
     }
 
     // Return true if fish is no longer searching for food
@@ -260,9 +259,8 @@ export class Fish {
             const coralPositionVector = {x: x, y: y, z: z};
             
             let v = substractV3(coralPositionVector, {x: this.x, y: this.y, z: this.z});
-            v = multiplyV3(v, 0.01);
-            this.velocity = addV3(this.velocity, v);
-            
+            this.velocity = multiplyV3(v, 0.1);
+
             if(getDistance(this.x, this.y, this.z, x, y, z) <= 10) { // If very close, eats
                 this.hunger=false;
                 Ground.eatCoral(this.eatObjectifCoordinate.i, this.eatObjectifCoordinate.j); 
@@ -274,6 +272,7 @@ export class Fish {
     }
 
     update(){
+        this.velocity = addV3(this.velocity, this.bound());
         this.limitSpeed();
         let position = addV3({ x: this.x, y: this.y, z: this.z }, this.velocity);
         this.x = position.x;

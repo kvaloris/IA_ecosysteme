@@ -12,7 +12,6 @@ const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerH
 camera.position.set(-100, -200, -300);
 const canvas = document.querySelector('#canvas-1');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
 document.querySelector("#display-1").appendChild(renderer.domElement);
 
 // SKYBOX
@@ -60,9 +59,9 @@ manager.onLoad = function () {
   console.log('Loading complete!');
 
   // Initialize and display fishes and floor
-  FishShoal.init(30);
+  FishShoal.init(10);
   displayFishes(fishesGroup);
-  createFloor(20);
+  createFloor(10);
 
   FishShoal.setMutChance(slider_mutChance.value);
   
@@ -171,7 +170,21 @@ const infoBtn = document.querySelector('#info-btn');
 infoBtn.addEventListener('click', () => showPopup(presentation));
 
 const slidersBtn = document.querySelector('#sliders-btn');
-slidersBtn.addEventListener('click', handleSlidersConsoleDisplay);
+const sliders = document.querySelector(".sliders");
+const btnBottom = document.querySelector(".buttons-bottom");
+slidersBtn.addEventListener('click', () => {
+  if(window.screen.width > 768) handleSlidersConsoleDisplay(true);
+  else {
+    handleSlidersConsoleDisplay(false);
+    btnBottom.classList.remove('goDownButtons');
+  } 
+});
+
+const slidersMobileBtn = document.querySelector('#sliders-mobile-btn');
+slidersMobileBtn.addEventListener('click', () => {
+  handleSlidersConsoleDisplay(true);
+  btnBottom.classList.add('goDownButtons');
+})
 
 const fishingConsole = document.querySelector('#fishing-console-wp');
 
@@ -434,6 +447,12 @@ export function displayFishes(group) {
 loadObjectSeparate();
 
 scene.add(fishesGroup);
+
+
+
+
+
+// RESIZING
 
 export function resizeRendererToDisplaySize(renderer) {
   const canvas = renderer.domElement;

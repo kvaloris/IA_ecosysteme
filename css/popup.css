@@ -16,7 +16,7 @@
   /* Appearance */
   background-color: var(--blue-transparent);
   width: 500px;
-  padding: 40px;
+  padding: 2.5em;
   border-radius: 7px;
 
   /* Center vertically and horizontally */
@@ -62,7 +62,39 @@
 }
 
 #fishing-options {
+  width: 100%;
   display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+  gap: 2em;
+  justify-content: space-between;
+}
+
+#fishing-options > div {
+  display: flex;
+  flex-direction: column;
+  gap: .7em;
+  width: 4.5em;
+  align-items: center;
+}
+
+.fishing-opt {
+  width: 100%;
+  box-sizing: border-box;
+  height: 1.5em;
+}
+
+
+
+@media (max-device-width: 767px) and (orientation : portrait) {
+  .popup {
+    font-size: 35px;
+    width: 640px;
+  }
+
+  #fishing-console {
+    gap: 55px;
+  }
+
+  .fishing-opt {
+    font-size: 35px;
+  }
 }
