@@ -13,7 +13,6 @@ body {
   margin: 0;
   font-family: "Smooch Sans", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: var(--white);
-  overflow: hidden;
   letter-spacing: 5px;
 }
 
@@ -28,6 +27,11 @@ body {
   height: 100vh;
 }
 
+#display-1 {
+  position: relative;
+  overflow: hidden;
+}
+
 #display-1>* {
   position: absolute;
 }
@@ -36,14 +40,8 @@ body {
   z-index: 1;
 }
 
-/* .nbPoisson{
-    position: absolute;
-    width: 35vw;
-    top: 20px;
-    left: 20px;
-    font-size: 15px;
-    color: #ffffff;
-} */
+
+
 
 
 /* DISPLAY YEAR AND ANIMATION */
