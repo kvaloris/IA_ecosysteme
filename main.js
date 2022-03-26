@@ -454,11 +454,16 @@ export function resizeRendererToDisplaySize(renderer) {
   const height = canvas.clientHeight;
   const needResize = canvas.width !== width || canvas.height !== height;
   if (needResize) {
+    console.log("w = ", width, " h = ", height);
     renderer.setSize(width, height, false);
   }
   return needResize;
 }
 
+window.addEventListener('orientationchange', () => {
+  camera.aspect = window.innerHeight / window.innerWidth;
+  camera.updateProjectionMatrix();
+});
 
 
 

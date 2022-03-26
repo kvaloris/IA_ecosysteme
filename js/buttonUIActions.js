@@ -96,9 +96,10 @@ export function fillFishingOptions() {
 
   function fillOption(inputNode, minValue, maxValue) {
     for(let i=minValue; i<=maxValue; i++) {
-      inputNode.setAttribute('min', minValue);
-      inputNode.setAttribute('max', maxValue);
-      inputNode.setAttribute('value', minValue);
+      const opt = document.createElement('option');
+      opt.setAttribute('value', i);
+      opt.innerText = i;
+      inputNode.appendChild(opt);
     }
   }
 
